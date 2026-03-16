@@ -3066,6 +3066,15 @@ body.theme-light .left_contact_details .media .media-body a {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.mobile_explore_dock {
+  display: none;
+}
+
+.mobile_dock_btn {
+  border: 0;
+  background: transparent;
+}
+
 .modern_progress_nav .progress_track {
   width: 3px;
   height: 120px;
@@ -7048,6 +7057,10 @@ body.interaction-micro .service_item:focus-visible {
     overflow-x: hidden;
   }
 
+  body {
+    padding-bottom: 84px;
+  }
+
   section,
   .service_area,
   .contact_area,
@@ -7123,10 +7136,39 @@ body.interaction-micro .service_item:focus-visible {
   }
 
   .service_area .modern_toolbar {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
     flex-wrap: wrap;
     overflow-x: visible;
-    justify-content: center;
+    justify-content: center !important;
+    align-items: center;
     row-gap: 8px;
+  }
+
+  .service_area .modern_toolbar .modern_filter_btn {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .about_person_area .person_details,
+  #about .person_details {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .about_person_area .person_details p,
+  #about .person_details > p,
+  .service_area .service_inner .service_item p {
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  .service_area .service_inner .service_item {
+    text-align: left;
   }
 
   .playbook_steps:before,
@@ -7176,6 +7218,42 @@ body.interaction-micro .service_item:focus-visible {
     min-height: 220px;
     max-height: 56vh;
   }
+
+  .mobile_explore_dock {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    z-index: 10002;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    background: linear-gradient(145deg, rgba(6, 14, 27, 0.93) 0%, rgba(10, 18, 33, 0.9) 100%);
+    box-shadow: 0 16px 26px rgba(2, 8, 23, 0.32);
+    backdrop-filter: blur(8px);
+  }
+
+  .mobile_dock_btn {
+    min-height: 38px;
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    background: rgba(15, 23, 42, 0.58);
+    color: #dbeafe;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    text-transform: uppercase;
+  }
+
+  .mobile_dock_btn.is-active {
+    color: #f8fbff;
+    border-color: rgba(125, 211, 252, 0.92);
+    background: linear-gradient(120deg, rgba(14, 165, 164, 0.95) 0%, rgba(2, 132, 199, 0.95) 100%);
+    box-shadow: 0 8px 18px rgba(14, 165, 164, 0.36);
+  }
 }
 
 @media (max-width: 479px) {
@@ -7188,10 +7266,28 @@ body.interaction-micro .service_item:focus-visible {
     font-size: 24px;
   }
 
+  .mobile_explore_dock {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    gap: 5px;
+    padding: 7px;
+  }
+
+  .mobile_dock_btn {
+    min-height: 36px;
+    font-size: 10px;
+    padding: 6px 4px;
+  }
+
   .playbook_steps,
   .modern_toolbar,
   .ai_blueprint_tabs {
     gap: 6px;
+  }
+
+  .service_area .modern_toolbar {
+    justify-content: center !important;
   }
 
   .playbook_step,
