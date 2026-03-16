@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-label="Semantic mask for all geometric objects">
+  <rect width="1200" height="760" fill="#000000" />
+  <circle cx="300" cy="400" r="145" fill="#ffffff" />
+  <ellipse cx="760" cy="335" rx="120" ry="52" fill="#ffffff" />
+  <rect x="640" y="335" width="240" height="215" fill="#ffffff" />
+  <ellipse cx="760" cy="550" rx="120" ry="52" fill="#ffffff" />
+  <polygon points="1020,250 900,550 1140,550" fill="#ffffff" />
+</svg>
