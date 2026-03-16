@@ -27,9 +27,6 @@
     { name: "PostgreSQL", icon: "img/tech/postgresql.svg", url: "https://www.postgresql.org/", category: "java", project: "Global Sales Dashboard", context: "Transactional relational datastore for service workloads." },
     { name: "Redis", icon: "img/tech/redis.svg", url: "https://redis.io/", category: "java", project: "Global Sales Dashboard", context: "Low-latency caching for faster API responses." },
     { name: "Docker", icon: "img/tech/docker.svg", url: "https://www.docker.com/", category: "java", project: "Global Sales Dashboard", context: "Containerized Java services for consistent releases." },
-    { name: "AWS ECS", icon: "img/tech/aws.svg", url: "https://aws.amazon.com/ecs/", category: "java", project: "Global Sales Dashboard", context: "Container orchestration for scalable production services." },
-    { name: "AWS EC2", icon: "img/tech/aws.svg", url: "https://aws.amazon.com/ec2/", category: "java", project: "Global Sales Dashboard", context: "Compute infrastructure for backend workloads and services." },
-    { name: "AWS Lambda", icon: "img/tech/aws.svg", url: "https://aws.amazon.com/lambda/", category: "java", project: "Global Sales Dashboard", context: "Serverless jobs for periodic background processing." },
     { name: "Angular 16/14", icon: "img/tech/angular.svg", url: "https://angular.io/", category: "java", project: "Global Sales Dashboard", context: "Interactive frontend dashboards for equity and vesting analytics." },
     { name: "Angular CLI", icon: "img/tech/angular.svg", url: "https://angular.io/cli", category: "java", project: "Global Sales Dashboard", context: "Scaffold and build tooling for Angular development lifecycle." },
     { name: "RxJS", icon: "img/tech/rxjs.svg", url: "https://rxjs.dev/", category: "java", project: "Global Sales Dashboard", context: "Reactive streams for real-time data updates and UI reactivity." },
@@ -222,7 +219,7 @@
 
   function spherePoint(index, total) {
     var p = Math.PI * (3 - Math.sqrt(5));
-    var y = 1 - (index / Math.max(total - 1, 1)) * 2;
+    var y = 1 - ((index + 0.5) / Math.max(total, 1)) * 2;
     var r = Math.sqrt(Math.max(0, 1 - y * y));
     var t = p * index;
     return { x: Math.cos(t) * r, y: y, z: Math.sin(t) * r };
@@ -389,7 +386,7 @@
     container.appendChild(svg);
 
     var nodes = stacks.map(function(stack, i) {
-      var y = 1 - (i / Math.max(stacks.length - 1, 1)) * 2;
+      var y = 1 - ((i + 0.5) / Math.max(stacks.length, 1)) * 2;
       var rr = Math.sqrt(Math.max(0, 1 - y * y));
       var theta = phi * i;
       var p = {
@@ -625,7 +622,7 @@
 
   function fibonacciPoint(i, n) {
     var phi = Math.PI * (3 - Math.sqrt(5));
-    var y = 1 - (i / (n - 1)) * 2;
+    var y = 1 - ((i + 0.5) / Math.max(n, 1)) * 2;
     var r = Math.sqrt(1 - y * y);
     var theta = phi * i;
     return new THREE.Vector3(Math.cos(theta) * r, y, Math.sin(theta) * r);

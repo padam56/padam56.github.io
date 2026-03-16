@@ -24,7 +24,6 @@
   function NetworkBackground(canvasId) {
     this.canvas = document.getElementById(canvasId);
     if (!this.canvas) {
-      console.error("Canvas element not found:", canvasId);
       return;
     }
 
@@ -46,8 +45,18 @@
     this.pointer = {
       x: window.innerWidth * 0.5,
       y: window.innerHeight * 0.5,
+      tx: window.innerWidth * 0.5,
+      ty: window.innerHeight * 0.5,
       active: false
     };
+    this.pointerLastMove = 0;
+    this.idleField = {
+      phaseX: rand(0, Math.PI * 2),
+      phaseY: rand(0, Math.PI * 2),
+      radiusX: rand(110, 190),
+      radiusY: rand(80, 160)
+    };
+    this.lastAmbientPulse = 0;
 
     this.resize = this.resize.bind(this);
     this.animate = this.animate.bind(this);
@@ -75,6 +84,7 @@
     this.onVisualModeChange();
     this.resize();
     this.seedNodes();
+    this.pointerLastMove = performance.now();
     window.addEventListener("resize", this.resize, { passive: true });
     window.addEventListener("mousemove", this.onPointerMove, { passive: true });
     window.addEventListener("mouseleave", this.onPointerLeave, { passive: true });
@@ -169,13 +179,48 @@
   };
 
   NetworkBackground.prototype.onPointerMove = function(evt) {
-    this.pointer.x = evt.clientX;
-    this.pointer.y = evt.clientY;
+    this.pointer.tx = evt.clientX;
+    this.pointer.ty = evt.clientY;
     this.pointer.active = true;
+    this.pointerLastMove = performance.now();
   };
 
   NetworkBackground.prototype.onPointerLeave = function() {
     this.pointer.active = false;
+    this.pointerLastMove = performance.now() - 220;
+  };
+
+  NetworkBackground.prototype.updatePointerField = function() {
+    var now = performance.now();
+    var idle = !this.pointer.active && (now - this.pointerLastMove > 220);
+
+    if (idle) {
+      var t = this.time * 0.0012;
+      var targetX = this.width * 0.5 + Math.cos(t + this.idleField.phaseX) * this.idleField.radiusX;
+      var targetY = this.height * 0.5 + Math.sin(t * 0.86 + this.idleField.phaseY) * this.idleField.radiusY;
+      this.pointer.tx = clamp(targetX, 30, this.width - 30);
+      this.pointer.ty = clamp(targetY, 30, this.height - 30);
+
+      if ((this.time - this.lastAmbientPulse) > 900 && Math.random() < 0.1) {
+        this.lastAmbientPulse = this.time;
+        var pulseCount = this.isCompact ? 1 : 2;
+        for (var i = 0; i < pulseCount; i += 1) {
+          var a = rand(0, Math.PI * 2);
+          var d = rand(6, 22);
+          var pulseNode = this.createNode(this.pointer.tx + Math.cos(a) * d, this.pointer.ty + Math.sin(a) * d, true);
+          pulseNode.vx = Math.cos(a) * rand(0.22, 0.52);
+          pulseNode.vy = Math.sin(a) * rand(0.22, 0.52);
+          pulseNode.alpha = 0.9;
+          pulseNode.radius = rand(1.5, 2.8);
+          pulseNode.ttl = rand(95, 170);
+          this.nodes.push(pulseNode);
+        }
+      }
+    }
+
+     var smooth = this.pointer.active ? 0.95 : 0.04;
+    this.pointer.x += (this.pointer.tx - this.pointer.x) * smooth;
+    this.pointer.y += (this.pointer.ty - this.pointer.y) * smooth;
   };
 
   NetworkBackground.prototype.onWindowClick = function(evt) {
@@ -239,19 +284,28 @@
       node.alpha = Math.max(0, node.alpha - 0.0038);
     }
 
+    var interactionRadius = this.pointer.active ? 320 : 210;
+    var d2 = distSq(this.pointer.x, this.pointer.y, node.x, node.y);
+    if (d2 < interactionRadius * interactionRadius) {
+      var d = Math.max(1, Math.sqrt(d2));
+      var force = (interactionRadius - d) / interactionRadius;
+      var dx = this.pointer.x - node.x;
+      var dy = this.pointer.y - node.y;
+      var pull = this.pointer.active ? 0.000014 : 0.000005;
+      var swirl = this.pointer.active ? 0.0000065 : 0.0000024;
+      node.vx += dx * pull * force;
+      node.vy += dy * pull * force;
+      node.vx += -dy * swirl * force;
+      node.vy += dx * swirl * force;
+      node.alpha = Math.min(1, node.alpha + force * (this.pointer.active ? 0.017 : 0.007));
+    }
+
     if (this.pointer.active) {
-      var d2 = distSq(this.pointer.x, this.pointer.y, node.x, node.y);
-      if (d2 < 28900) {
-        var d = Math.sqrt(d2);
-        var force = (170 - d) / 170;
-        node.vx += (this.pointer.x - node.x) * 0.000006 * force;
-        node.vy += (this.pointer.y - node.y) * 0.000006 * force;
-      }
-      node.vx = clamp(node.vx, -0.9, 0.9);
-      node.vy = clamp(node.vy, -0.9, 0.9);
+      node.vx = clamp(node.vx, -0.94, 0.94);
+      node.vy = clamp(node.vy, -0.94, 0.94);
     } else {
-      node.vx = clamp(node.vx, -0.78, 0.78);
-      node.vy = clamp(node.vy, -0.78, 0.78);
+      node.vx = clamp(node.vx, -0.8, 0.8);
+      node.vy = clamp(node.vy, -0.8, 0.8);
     }
   };
 
@@ -322,6 +376,15 @@
         var d = Math.sqrt(d2);
 
         var alpha = (1 - d / this.linkDistance) * 0.74 * Math.min(a.alpha, b.alpha);
+        var midX = (a.x + b.x) * 0.5;
+        var midY = (a.y + b.y) * 0.5;
+        var pointerRange = this.pointer.active ? 320 : 180;
+        var pointerD2 = distSq(this.pointer.x, this.pointer.y, midX, midY);
+        if (pointerD2 < pointerRange * pointerRange) {
+          var pointerBoost = (1 - Math.sqrt(pointerD2) / pointerRange) * (this.pointer.active ? 0.28 : 0.14);
+          alpha += pointerBoost;
+        }
+        alpha = clamp(alpha, 0, 0.95);
         drawPair(a, b, d, alpha, 1);
         linkCount[i] += 1;
         linkCount[j] += 1;
@@ -396,6 +459,7 @@
     this.ctx.clearRect(0, 0, this.width, this.height);
 
     this.drawAurora();
+    this.updatePointerField();
 
     for (var i = this.nodes.length - 1; i >= 0; i -= 1) {
       var n = this.nodes[i];
@@ -420,13 +484,16 @@
     this.drawNodes();
   };
 
+  // Initialize only on pages that include the network canvas.
+  function initNetworkBackground() {
+    if (!document.getElementById("network-canvas")) return;
+    new NetworkBackground("network-canvas");
+  }
+
   // Initialize immediately or on DOMContentLoaded
   if (document.readyState === "loading") {
-
-    document.addEventListener("DOMContentLoaded", function() {
-      new NetworkBackground("network-canvas");
-    });
+    document.addEventListener("DOMContentLoaded", initNetworkBackground);
   } else {
-    new NetworkBackground("network-canvas");
+    initNetworkBackground();
   }
 })();

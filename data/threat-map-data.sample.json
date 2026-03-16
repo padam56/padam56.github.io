@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "updatedAt": "2026-03-16T18:00:00Z",
+    "source": "my-threat-pipeline-v1"
+  },
+  "views": {
+    "campaign": {
+      "kpis": [
+        { "value": "41", "label": "campaign clusters in current window" },
+        { "value": "2.7k", "label": "domains triaged and enrichment-complete" },
+        { "value": "118", "label": "cross-campaign infrastructure overlaps" }
+      ],
+      "victimTitle": "Campaign Exposure Origin Pattern (Pipeline)",
+      "victimIntro": "Generated from pipeline joins across incident reports and infrastructure telemetry.",
+      "victimBars": [
+        { "region": "North America", "pct": 29 },
+        { "region": "Europe", "pct": 25 },
+        { "region": "Asia Pacific", "pct": 30 },
+        { "region": "Latin America", "pct": 10 },
+        { "region": "Africa and Middle East", "pct": 6 }
+      ],
+      "infraPoints": [
+        { "label": "Cluster A infra", "lon": -73.9, "lat": 40.7, "tone": "cyan" },
+        { "label": "Cluster B sinkhole", "lon": 2.3, "lat": 48.8, "tone": "green" },
+        { "label": "Cluster C overlap", "lon": 103.8, "lat": 1.3, "tone": "blue" }
+      ],
+      "victimPoints": [
+        { "label": "Victim concentration NA", "lon": -98.0, "lat": 38.0, "tone": "amber" },
+        { "label": "Victim concentration EU", "lon": 11.0, "lat": 50.0, "tone": "amber" },
+        { "label": "Victim concentration APAC", "lon": 111.0, "lat": 15.0, "tone": "amber" }
+      ],
+      "flows": [
+        { "from": [-73.9, 40.7], "to": [-98.0, 38.0], "tone": "cyan" },
+        { "from": [2.3, 48.8], "to": [11.0, 50.0], "tone": "green" },
+        { "from": [103.8, 1.3], "to": [111.0, 15.0], "tone": "blue" }
+      ]
+    }
+  }
+}

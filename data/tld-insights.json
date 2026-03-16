@@ -1,0 +1,206 @@
+{
+  "generatedAt": "2026-03-16T22:58:31.976527+00:00",
+  "source": {
+    "name": "Tranco Top-1M",
+    "id": "6GY4X",
+    "url": "https://tranco-list.eu/top-1m.csv.zip",
+    "sampleSize": 200000,
+    "maxRows": 200000
+  },
+  "summary": {
+    "distinctTlds": 788,
+    "ccTldCount": 68083,
+    "gTldCount": 131917,
+    "ccTldPct": 34.04,
+    "gTldPct": 65.96,
+    "riskyTldCount": 2107,
+    "riskyTldPct": 1.05,
+    "topTldConcentrationPct": 71.06
+  },
+  "topTlds": [
+    {
+      "tld": "com",
+      "count": 89210,
+      "pct": 44.6
+    },
+    {
+      "tld": "net",
+      "count": 12311,
+      "pct": 6.16
+    },
+    {
+      "tld": "org",
+      "count": 8542,
+      "pct": 4.27
+    },
+    {
+      "tld": "ru",
+      "count": 7912,
+      "pct": 3.96
+    },
+    {
+      "tld": "de",
+      "count": 5166,
+      "pct": 2.58
+    },
+    {
+      "tld": "io",
+      "count": 3590,
+      "pct": 1.8
+    },
+    {
+      "tld": "jp",
+      "count": 3228,
+      "pct": 1.61
+    },
+    {
+      "tld": "uk",
+      "count": 2902,
+      "pct": 1.45
+    },
+    {
+      "tld": "br",
+      "count": 2786,
+      "pct": 1.39
+    },
+    {
+      "tld": "xyz",
+      "count": 2315,
+      "pct": 1.16
+    },
+    {
+      "tld": "in",
+      "count": 2160,
+      "pct": 1.08
+    },
+    {
+      "tld": "cn",
+      "count": 1990,
+      "pct": 1.0
+    }
+  ],
+  "riskyTlds": [
+    {
+      "tld": "top",
+      "count": 1597,
+      "pct": 0.799
+    },
+    {
+      "tld": "click",
+      "count": 163,
+      "pct": 0.082
+    },
+    {
+      "tld": "lol",
+      "count": 81,
+      "pct": 0.04
+    },
+    {
+      "tld": "work",
+      "count": 64,
+      "pct": 0.032
+    },
+    {
+      "tld": "cam",
+      "count": 46,
+      "pct": 0.023
+    },
+    {
+      "tld": "fit",
+      "count": 29,
+      "pct": 0.015
+    },
+    {
+      "tld": "rest",
+      "count": 24,
+      "pct": 0.012
+    },
+    {
+      "tld": "buzz",
+      "count": 21,
+      "pct": 0.011
+    },
+    {
+      "tld": "mom",
+      "count": 20,
+      "pct": 0.01
+    },
+    {
+      "tld": "zip",
+      "count": 12,
+      "pct": 0.006
+    },
+    {
+      "tld": "support",
+      "count": 11,
+      "pct": 0.006
+    },
+    {
+      "tld": "ml",
+      "count": 10,
+      "pct": 0.005
+    }
+  ],
+  "concentrationCurve": [
+    {
+      "tld": "com",
+      "count": 89210,
+      "cumulativePct": 44.6
+    },
+    {
+      "tld": "net",
+      "count": 12311,
+      "cumulativePct": 50.76
+    },
+    {
+      "tld": "org",
+      "count": 8542,
+      "cumulativePct": 55.03
+    },
+    {
+      "tld": "ru",
+      "count": 7912,
+      "cumulativePct": 58.99
+    },
+    {
+      "tld": "de",
+      "count": 5166,
+      "cumulativePct": 61.57
+    },
+    {
+      "tld": "io",
+      "count": 3590,
+      "cumulativePct": 63.37
+    },
+    {
+      "tld": "jp",
+      "count": 3228,
+      "cumulativePct": 64.98
+    },
+    {
+      "tld": "uk",
+      "count": 2902,
+      "cumulativePct": 66.43
+    },
+    {
+      "tld": "br",
+      "count": 2786,
+      "cumulativePct": 67.82
+    },
+    {
+      "tld": "xyz",
+      "count": 2315,
+      "cumulativePct": 68.98
+    },
+    {
+      "tld": "in",
+      "count": 2160,
+      "cumulativePct": 70.06
+    },
+    {
+      "tld": "cn",
+      "count": 1990,
+      "cumulativePct": 71.06
+    }
+  ]
+}

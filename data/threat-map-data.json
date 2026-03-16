@@ -1,0 +1,152 @@
+{
+  "meta": {
+    "updatedAt": "2026-03-16T21:00:00Z",
+    "source": "public-source-fusion-template-v2"
+  },
+  "views": {
+    "campaign": {
+      "kpis": [
+        { "value": "78/100", "label": "global campaign pressure index from public-report fusion" },
+        { "value": "11.2B", "label": "reported cyber-enabled losses cited in IC3 2023 annual reporting" },
+        { "value": "23", "label": "cross-source infrastructure overlap corridors in current model" }
+      ],
+      "victimTitle": "Campaign Exposure Origin Pattern (Public-Source Fusion)",
+      "victimIntro": "Regional weighting built from public complaint and threat reporting references, normalized for visual comparison.",
+      "victimBars": [
+        { "region": "North America", "pct": 33 },
+        { "region": "Europe", "pct": 23 },
+        { "region": "Asia Pacific", "pct": 27 },
+        { "region": "Latin America", "pct": 10 },
+        { "region": "Africa and Middle East", "pct": 7 }
+      ],
+      "infraPoints": [
+        { "label": "North Atlantic lure hosting corridor", "lon": -74.0, "lat": 40.7, "tone": "cyan" },
+        { "label": "EU sinkhole/takedown operations", "lon": 8.7, "lat": 50.1, "tone": "green" },
+        { "label": "APAC scam kit distribution hub", "lon": 103.8, "lat": 1.3, "tone": "blue" }
+      ],
+      "victimPoints": [
+        { "label": "North America report concentration", "lon": -98.0, "lat": 38.0, "tone": "amber" },
+        { "label": "Europe report concentration", "lon": 11.0, "lat": 50.0, "tone": "amber" },
+        { "label": "APAC report concentration", "lon": 111.0, "lat": 15.0, "tone": "amber" }
+      ],
+      "flows": [
+        { "from": [-74.0, 40.7], "to": [-98.0, 38.0], "tone": "cyan" },
+        { "from": [8.7, 50.1], "to": [11.0, 50.0], "tone": "green" },
+        { "from": [103.8, 1.3], "to": [111.0, 15.0], "tone": "blue" }
+      ],
+      "sourceRefs": [
+        { "label": "FBI IC3 Annual Report", "url": "https://www.ic3.gov/AnnualReport/Reports/2023_IC3Report.pdf" },
+        { "label": "FTC Consumer Sentinel Data Book", "url": "https://www.ftc.gov/reports/consumer-sentinel-network-data-book-2023" },
+        { "label": "APWG Trends Reports", "url": "https://apwg.org/trendsreports/" }
+      ],
+      "liveContexts": [
+        { "summary": "Phishing kit reuse clusters continue to target wallet onboarding journeys.", "region": "North America", "timestamp": "Rolling 7-day snapshot", "severity": "high", "lon": -97.0, "lat": 38.0, "tone": "cyan" },
+        { "summary": "Sinkhole-backed takedown coordination increased in multi-country cooperation lanes.", "region": "Europe", "timestamp": "Current quarter", "severity": "medium", "lon": 7.0, "lat": 50.0, "tone": "green" },
+        { "summary": "Fraud-landing redirect meshes observed across APAC ad abuse channels.", "region": "Asia Pacific", "timestamp": "Current month", "severity": "high", "lon": 114.0, "lat": 14.0, "tone": "blue" }
+      ]
+    },
+    "crypto": {
+      "kpis": [
+        { "value": "9.9B", "label": "estimated scam revenue tracked in public blockchain forensics summaries" },
+        { "value": "34%", "label": "modeled victim-origin concentration in North America" },
+        { "value": "4", "label": "primary drainer/lure infrastructure corridors tracked" }
+      ],
+      "victimTitle": "Crypto Wallet Fraud Origins (Public Data Aligned)",
+      "victimIntro": "Regional concentration model aligned to complaint reporting and crypto-crime public research datasets.",
+      "victimBars": [
+        { "region": "North America", "pct": 34 },
+        { "region": "Europe", "pct": 25 },
+        { "region": "Asia Pacific", "pct": 25 },
+        { "region": "Latin America", "pct": 10 },
+        { "region": "Africa and Middle East", "pct": 6 }
+      ],
+      "infraPoints": [
+        { "label": "Wallet drainer lure infrastructure", "lon": -77.0, "lat": 39.0, "tone": "cyan" },
+        { "label": "Fake support relay cluster", "lon": 2.3, "lat": 48.8, "tone": "green" },
+        { "label": "Seed phrase theft landing mesh", "lon": 121.4, "lat": 31.2, "tone": "blue" }
+      ],
+      "victimPoints": [
+        { "label": "Victim report cluster NA", "lon": -99.0, "lat": 38.0, "tone": "amber" },
+        { "label": "Victim report cluster EU", "lon": 10.0, "lat": 51.0, "tone": "amber" },
+        { "label": "Victim report cluster APAC", "lon": 113.0, "lat": 16.0, "tone": "amber" }
+      ],
+      "flows": [
+        { "from": [-77.0, 39.0], "to": [-99.0, 38.0], "tone": "cyan" },
+        { "from": [2.3, 48.8], "to": [10.0, 51.0], "tone": "green" },
+        { "from": [121.4, 31.2], "to": [113.0, 16.0], "tone": "blue" }
+      ],
+      "sourceRefs": [
+        { "label": "Chainalysis Crypto Crime Research", "url": "https://www.chainalysis.com/crypto-crime/" },
+        { "label": "FBI IC3 Annual Report", "url": "https://www.ic3.gov/AnnualReport/Reports/2023_IC3Report.pdf" },
+        { "label": "FTC Consumer Sentinel Data Book", "url": "https://www.ftc.gov/reports/consumer-sentinel-network-data-book-2023" }
+      ],
+      "liveContexts": [
+        { "summary": "Wallet drainer pages rotate domains quickly after public reporting bursts.", "region": "Global", "timestamp": "Rolling 30-day pattern", "severity": "high", "lon": -20.0, "lat": 30.0, "tone": "cyan" },
+        { "summary": "Support impersonation clusters targeting exchange users remain active.", "region": "Europe", "timestamp": "Recent incident windows", "severity": "medium", "lon": 8.0, "lat": 48.0, "tone": "green" }
+      ]
+    },
+    "phishing": {
+      "kpis": [
+        { "value": "3.4M", "label": "phishing attacks observed by anti-phishing community reporting in 2023" },
+        { "value": "73%", "label": "waves reusing known kit templates in current model" },
+        { "value": "11", "label": "credential-phishing wave families represented" }
+      ],
+      "sourceRefs": [
+        { "label": "APWG Trends Reports", "url": "https://apwg.org/trendsreports/" },
+        { "label": "CISA Phishing Guidance", "url": "https://www.cisa.gov/topics/cyber-threats-and-advisories/phishing" },
+        { "label": "ENISA Threat Landscape", "url": "https://www.enisa.europa.eu/publications/enisa-threat-landscape-2023" }
+      ],
+      "liveContexts": [
+        { "summary": "Credential capture pages increasingly mimic enterprise SSO patterns.", "region": "North America", "timestamp": "Current month", "severity": "high", "lon": -97.0, "lat": 37.0, "tone": "cyan" },
+        { "summary": "Cloud-themed lure templates spread via multilingual campaigns.", "region": "Europe", "timestamp": "Rolling 7-day snapshot", "severity": "medium", "lon": 11.0, "lat": 48.0, "tone": "blue" }
+      ]
+    },
+    "tld": {
+      "kpis": [
+        { "value": "32", "label": "TLD groups monitored for elevated abuse density" },
+        { "value": "84%", "label": "suspect domains outside Tranco top-1M baseline" },
+        { "value": "9", "label": "persistent high abuse-to-volume namespaces" }
+      ],
+      "sourceRefs": [
+        { "label": "ICANN DAAR", "url": "https://www.icann.org/octo-ssr/daar" },
+        { "label": "Tranco Ranking", "url": "https://tranco-list.eu/" },
+        { "label": "ICANN CZDS", "url": "https://czds.icann.org/" }
+      ],
+      "liveContexts": [
+        { "summary": "Abuse density spikes continue in low-cost registration funnels.", "region": "Asia Pacific", "timestamp": "Quarter-to-date", "severity": "medium", "lon": 116.0, "lat": 18.0, "tone": "blue" },
+        { "summary": "Registrar concentration impacts downstream takedown speed.", "region": "Europe", "timestamp": "Current analysis cycle", "severity": "low", "lon": 12.0, "lat": 50.0, "tone": "green" }
+      ]
+    },
+    "drainers": {
+      "kpis": [
+        { "value": "17", "label": "wallet drainer kit variants in monitored corpus" },
+        { "value": "61", "label": "campaign pages imitating major wallet brands" },
+        { "value": "4", "label": "high-reuse operator clusters" }
+      ],
+      "sourceRefs": [
+        { "label": "Chainalysis Crypto Crime Research", "url": "https://www.chainalysis.com/crypto-crime/" },
+        { "label": "FBI IC3 Annual Report", "url": "https://www.ic3.gov/AnnualReport/Reports/2023_IC3Report.pdf" },
+        { "label": "Europol IOCTA", "url": "https://www.europol.europa.eu/media-press/publications/internet-organised-crime-threat-assessment-iocta-2023" }
+      ],
+      "liveContexts": [
+        { "summary": "Brand-impersonation drainer templates show high infrastructure reuse between campaigns.", "region": "Europe", "timestamp": "Latest monthly cycle", "severity": "high", "lon": 19.0, "lat": 52.0, "tone": "green" },
+        { "summary": "Fast-flux domain shifts accelerate after abuse feed publication windows.", "region": "Latin America", "timestamp": "Rolling 14-day view", "severity": "medium", "lon": -46.6, "lat": -23.5, "tone": "blue" }
+      ]
+    },
+    "social": {
+      "kpis": [
+        { "value": "19", "label": "social-scam campaign archetypes represented" },
+        { "value": "260", "label": "suspicious account-market listings modeled" },
+        { "value": "41", "label": "donation-abuse entities flagged" }
+      ],
+      "sourceRefs": [
+        { "label": "FTC Consumer Sentinel Data Book", "url": "https://www.ftc.gov/reports/consumer-sentinel-network-data-book-2023" },
+        { "label": "Europol IOCTA", "url": "https://www.europol.europa.eu/media-press/publications/internet-organised-crime-threat-assessment-iocta-2023" },
+        { "label": "APWG Trends Reports", "url": "https://apwg.org/trendsreports/" }
+      ],
+      "liveContexts": [
+        { "summary": "Account resale markets continue feeding scam-campaign bootstrap operations.", "region": "Middle East", "timestamp": "Current quarter", "severity": "medium", "lon": 55.3, "lat": 25.2, "tone": "cyan" }
+      ]
+    }
+  }
+}

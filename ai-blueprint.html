@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI Delivery Blueprint - Padam Jung Thapa">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="icon" href="img/Pattern_Light.png" type="image/x-icon">
+  <title>AI Delivery Blueprint | Padam Jung Thapa</title>
+  <link href="css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="vendors/animate-css/animate.css" rel="stylesheet">
+  <link href="css/style.css?v=20260316-11" rel="stylesheet">
+  <link href="css/responsive.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/colors/default.css" title="default">
+</head>
+<body class="light_bg theme-dark interaction-micro">
+  <div class="sorting_lab_page">
+    <div class="sorting_lab_wrap">
+      <div class="sorting_lab_topbar">
+        <a class="sorting_lab_back" href="index.html">Back To Home</a>
+        <div>
+          <h1 class="sorting_lab_title">AI Delivery Blueprint</h1>
+          <p class="sorting_lab_subtitle">Dedicated full-page experience for lifecycle, readiness, segmentation, explainability, synthetic data, classical ML, and sorting demos.</p>
+        </div>
+      </div>
+      <div class="blueprint_quick_nav" aria-label="Quick lab navigation">
+        <a href="ai-blueprint.html?view=lifecycle#ai-blueprint" data-blueprint-view="lifecycle">Lifecycle</a>
+        <a href="ai-blueprint.html?view=readiness#ai-blueprint" data-blueprint-view="readiness">Readiness</a>
+        <a href="ai-blueprint.html?view=seg#ai-blueprint" data-blueprint-view="seg">Segmentation Lab</a>
+        <a href="ai-blueprint.html?view=xai#ai-blueprint" data-blueprint-view="xai">Explainability</a>
+        <a href="ai-blueprint.html?view=aug#ai-blueprint" data-blueprint-view="aug">Synthetic Data</a>
+        <a href="ai-blueprint.html?view=ml#ai-blueprint" data-blueprint-view="ml">Classical ML</a>
+        <a href="sorting-lab.html">Sorting Lab</a>
+      </div>
+      <section class="ai_blueprint_area pad" id="ai-blueprint">
+        <div class="main_title"><h2>AI Delivery Blueprint</h2><p class="section_lead">A single view of how research ideas become deployable ML systems, from experimentation to monitored production delivery.</p></div>
+
+        <div class="ai_blueprint_shell wow fadeInUp animated" data-wow-delay="0.1s">
+          <div class="ai_blueprint_tabs" role="tablist" aria-label="AI blueprint views">
+            <button class="ai_blueprint_tab is-active" type="button" role="tab" aria-selected="true" aria-controls="ai-view-lifecycle" data-ai-view="lifecycle">Model Lifecycle</button>
+            <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-cv" data-ai-view="cv">CV Pipeline</button>
+            <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-readiness" data-ai-view="readiness">Deployment Readiness</button>
+            <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-seg" data-ai-view="seg">Segmentation Workflow Lab</button>
+            <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-xai" data-ai-view="xai">Seg Explainability</button>
+            <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-aug" data-ai-view="aug">Synthetic Data Booster</button>
+            <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-ml" data-ai-view="ml">Classical ML Demos</button>
+            <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-edge" data-ai-view="edge">Sorting Algorithms Live Demo</button>
+          </div>
+
+          <div class="ai_blueprint_panel is-active" id="ai-view-lifecycle" role="tabpanel">
+            <div class="ml_lifecycle_track" aria-label="Model lifecycle timeline">
+              <article class="ml_stage_card is-active" tabindex="0" data-stage="Problem" data-detail="Define task scope, operating constraints, and measurable outcome targets before training begins." data-artifact="Success Metric Sheet"><h4>Problem</h4><p>Scope risk and define measurable success criteria.</p><span>Artifact: Success Metric Sheet</span></article>
+              <article class="ml_stage_card" tabindex="0" data-stage="Data" data-detail="Build representative datasets, run quality checks, and validate labels for training confidence." data-artifact="Dataset Snapshot and Label Audit"><h4>Data</h4><p>Assemble and validate representative training data.</p><span>Artifact: Dataset Snapshot and Label Audit</span></article>
+              <article class="ml_stage_card" tabindex="0" data-stage="Training" data-detail="Track experiment configurations, compare runs, and lock best candidates for evaluation." data-artifact="Experiment Run Log"><h4>Training</h4><p>Run controlled experiments with tracked configurations.</p><span>Artifact: Experiment Run Log</span></article>
+              <article class="ml_stage_card" tabindex="0" data-stage="Evaluation" data-detail="Inspect confusion patterns, failure buckets, and robustness before production release." data-artifact="Confusion Matrix and Error Buckets"><h4>Evaluation</h4><p>Stress-test for precision, recall, and failure modes.</p><span>Artifact: Confusion Matrix and Error Buckets</span></article>
+              <article class="ml_stage_card" tabindex="0" data-stage="Deployment" data-detail="Serve models via versioned APIs with latency budgets, rollback plans, and release checks." data-artifact="API Latency and Throughput Report"><h4>Deployment</h4><p>Package model service with latency-aware API paths.</p><span>Artifact: API Latency and Throughput Report</span></article>
+              <article class="ml_stage_card" tabindex="0" data-stage="Monitoring" data-detail="Observe drift, reliability, and model quality signals to trigger safe retraining workflows." data-artifact="Drift Dashboard and Alert Rules"><h4>Monitoring</h4><p>Track drift and trigger safe retraining workflows.</p><span>Artifact: Drift Dashboard and Alert Rules</span></article>
+            </div>
+            <div class="ml_lifecycle_detail" aria-live="polite">
+              <h4 id="ml-stage-title">Problem</h4>
+              <p id="ml-stage-detail">Define task scope, operating constraints, and measurable outcome targets before training begins.</p>
+              <span id="ml-stage-artifact">Primary Artifact: Success Metric Sheet</span>
+            </div>
+          </div>
+
+          <div class="ai_blueprint_panel" id="ai-view-cv" role="tabpanel" hidden>
+            <div class="cv_pipeline_graph is-flowing" aria-label="Computer vision pipeline diagram">
+              <div class="cv_node">Data Ingestion</div>
+              <div class="cv_arrow" aria-hidden="true"><span>&rarr;</span><i class="cv_flow_dot"></i></div>
+              <div class="cv_node">Preprocessing</div>
+              <div class="cv_arrow" aria-hidden="true"><span>&rarr;</span><i class="cv_flow_dot"></i></div>
+              <div class="cv_node">Augmentation</div>
+              <div class="cv_arrow" aria-hidden="true"><span>&rarr;</span><i class="cv_flow_dot"></i></div>
+              <div class="cv_node">Model Training and Tuning</div>
+              <div class="cv_arrow" aria-hidden="true"><span>&rarr;</span><i class="cv_flow_dot"></i></div>
+              <div class="cv_node">Post-Processing</div>
+              <div class="cv_arrow" aria-hidden="true"><span>&rarr;</span><i class="cv_flow_dot"></i></div>
+              <div class="cv_node">Alert and UI Integration</div>
+            </div>
+            <p class="ai_blueprint_note">Built for the same style of end-to-end CV workflows used in segmentation and detection projects from MS research and production engineering practice.</p>
+          </div>
+
+          <div class="ai_blueprint_panel" id="ai-view-readiness" role="tabpanel" hidden>
+            <div class="readiness_lens" role="tablist" aria-label="Readiness matrix lenses">
+              <button class="readiness_lens_btn is-active" type="button" data-readiness-lens="all" aria-selected="true">Full View</button>
+              <button class="readiness_lens_btn" type="button" data-readiness-lens="research" aria-selected="false">Research Lens</button>
+              <button class="readiness_lens_btn" type="button" data-readiness-lens="production" aria-selected="false">Production Lens</button>
+            </div>
+            <div class="readiness_showcase" id="readiness-showcase">
+              <div class="readiness_stage_row" role="tablist" aria-label="Readiness maturity stages">
+                <button class="readiness_stage_btn is-active" type="button" data-readiness-stage="prototype" aria-selected="true">Prototype</button>
+                <button class="readiness_stage_btn" type="button" data-readiness-stage="pilot" aria-selected="false">Pilot</button>
+                <button class="readiness_stage_btn" type="button" data-readiness-stage="production" aria-selected="false">Production</button>
+                <button class="readiness_stage_btn" type="button" data-readiness-stage="scale" aria-selected="false">Scale</button>
+              </div>
+
+              <div class="readiness_capability_grid" aria-label="Readiness capabilities">
+                <article class="readiness_capability" data-capability="Data Quality and Label Governance" data-score-all="78" data-score-research="72" data-score-production="84" data-note="Label QA checks, drift-aware sampling, and error-bucket audits are consistently active.">
+                  <h5>Data Quality</h5>
+                  <p>Label checks, split hygiene, and shift-aware validation.</p>
+                  <div class="readiness_meter"><span></span></div>
+                  <strong class="readiness_value">78</strong>
+                </article>
+                <article class="readiness_capability" data-capability="Model Reliability and Explainability" data-score-all="74" data-score-research="81" data-score-production="70" data-note="Excellent experiment insight in research; production explainability and threshold governance need tighter automation.">
+                  <h5>Model Reliability</h5>
+                  <p>Calibrated confidence, explainability checks, and boundary QA.</p>
+                  <div class="readiness_meter"><span></span></div>
+                  <strong class="readiness_value">74</strong>
+                </article>
+                <article class="readiness_capability" data-capability="MLOps and Delivery Automation" data-score-all="82" data-score-research="68" data-score-production="91" data-note="CI/CD, versioned artifacts, and staged rollouts are strong in production pathways.">
+                  <h5>MLOps Delivery</h5>
+                  <p>CI/CD, model registry, rollback, and release guardrails.</p>
+                  <div class="readiness_meter"><span></span></div>
+                  <strong class="readiness_value">82</strong>
+                </article>
+                <article class="readiness_capability" data-capability="Monitoring, Drift, and Response" data-score-all="76" data-score-research="66" data-score-production="86" data-note="Monitoring maturity improves significantly in production with alerting, incident runbooks, and retraining triggers.">
+                  <h5>Monitoring and Drift</h5>
+                  <p>Quality monitoring, drift alerts, and retraining policy.</p>
+                  <div class="readiness_meter"><span></span></div>
+                  <strong class="readiness_value">76</strong>
+                </article>
+              </div>
+
+              <p id="readiness-summary" class="readiness_summary" aria-live="polite">Prototype view: stronger in experimental model analysis; delivery automation still evolving.</p>
+            </div>
+          </div>
+
+          <div class="ai_blueprint_panel" id="ai-view-seg" role="tabpanel" hidden>
+            <div class="seg_workflow_shell" data-stage="setup">
+              <div class="seg_workflow_header">
+                <h4>End-to-End Segmentation Experience Lab</h4>
+                <p>A simple segmentation demo on one fixed geometric scene. Pick a mode, run segmentation, and compare outputs.</p>
+              </div>
+
+              <div class="seg_mode_switch" role="tablist" aria-label="Segmentation mode selector">
+                <button class="seg_mode_btn is-active" type="button" data-seg-mode="semantic" aria-selected="true">Semantic</button>
+                <button class="seg_mode_btn" type="button" data-seg-mode="instance" aria-selected="false">Instance</button>
+                <button class="seg_mode_btn" type="button" data-seg-mode="panoptic" aria-selected="false">Panoptic</button>
+              </div>
+              <p id="seg-mode-detail" class="seg_mode_detail">Semantic mode: one foreground class for geometric objects over background.</p>
+
+              <div class="seg_demo_layout">
+                <div class="seg_demo_canvas_wrap">
+                  <canvas id="seg-demo-canvas" class="seg_demo_canvas" aria-label="Geometric segmentation workflow canvas"></canvas>
+                  <img id="seg-demo-image" src="img/segmentation/geometric-scene.svg" alt="Geometric segmentation scene" hidden>
+                  <img id="seg-demo-mask-semantic" src="img/segmentation/geometric-mask-semantic.svg" alt="Ground truth semantic segmentation mask" hidden>
+                  <img id="seg-demo-mask-instance-primary" src="img/segmentation/geometric-mask-instance-primary.svg" alt="Primary instance mask" hidden>
+                  <img id="seg-demo-mask-instance-secondary" src="img/segmentation/geometric-mask-instance-secondary.svg" alt="Secondary instance mask" hidden>
+                  <img id="seg-demo-mask-instance-tertiary" src="img/segmentation/geometric-mask-instance-tertiary.svg" alt="Tertiary instance mask" hidden>
+                  <div class="seg_canvas_legend">
+                    <span><i class="seg_legend_dot dot-mask"></i>Segmentation overlay</span>
+                    <span><i class="seg_legend_dot dot-edge"></i>Object boundary</span>
+                  </div>
+                </div>
+
+                <div class="seg_demo_controls">
+                  <div class="seg_param_stack">
+                    <label for="seg-sensitivity">Mask Sensitivity</label>
+                    <input id="seg-sensitivity" type="range" min="20" max="130" value="70">
+                    <label for="seg-opacity">Overlay Opacity</label>
+                    <input id="seg-opacity" type="range" min="25" max="90" value="58">
+                  </div>
+
+                  <div class="seg_demo_actions">
+                    <button id="seg-reset" type="button">Reset Lab</button>
+                    <button id="seg-run" type="button">Run Segmentation</button>
+                  </div>
+                  <p id="seg-status" class="seg_status" aria-live="polite">Ready. Choose a mode and click Run Segmentation.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ai_blueprint_panel" id="ai-view-xai" role="tabpanel" hidden>
+            <div class="demo_lab_shell">
+              <div class="demo_lab_head">
+                <h4>Explainability for Segmentation</h4>
+                <p>Live Grad-CAM and attention overlay simulation to inspect boundary failures and confidence hotspots.</p>
+              </div>
+              <div class="demo_lab_layout">
+                <div class="demo_lab_canvas_wrap">
+                  <canvas id="xai-demo-canvas" class="demo_lab_canvas" aria-label="Grad-CAM and attention overlay demo"></canvas>
+                </div>
+                <div class="demo_lab_controls">
+                  <label for="xai-overlay-mode">Explainability View</label>
+                  <select id="xai-overlay-mode">
+                    <option value="mask-vs-gt">Prediction vs GT</option>
+                    <option value="gradcam">Grad-CAM</option>
+                    <option value="attention">Attention Map</option>
+                    <option value="boundary-error">Boundary Error Heatmap</option>
+                  </select>
+                  <button id="xai-toggle-failure" type="button">Inject Boundary Failure</button>
+                  <p id="xai-status" class="demo_lab_status" aria-live="polite">Loading parrot scene... then rendering explainability overlays.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ai_blueprint_panel" id="ai-view-aug" role="tabpanel" hidden>
+            <div class="demo_lab_shell">
+              <div class="demo_lab_head">
+                <h4>Synthetic Data Booster (Albumentations)</h4>
+                <p>Live hard-case augmentation simulation with 30-45 policy recipes and estimated generalization gain.</p>
+              </div>
+              <div class="demo_lab_layout">
+                <div class="demo_lab_canvas_wrap">
+                  <canvas id="aug-demo-canvas" class="demo_lab_canvas" aria-label="Synthetic data augmentation preview"></canvas>
+                </div>
+                <div class="demo_lab_controls">
+                  <label for="aug-condition">Albumentations Transform</label>
+                  <select id="aug-condition"></select>
+                  <label for="aug-recipes">Albumentations Recipes: <span id="aug-recipe-count">36</span></label>
+                  <input id="aug-recipes" type="range" min="30" max="45" value="36">
+                  <button id="aug-randomize" type="button">Randomize Sample</button>
+                  <div id="aug-transform-gallery" class="aug_transform_gallery" aria-label="Albumentations transform library"></div>
+                  <div class="demo_metric_grid">
+                    <div><span>Baseline mIoU</span><strong id="aug-miou-base">0.68</strong></div>
+                    <div><span>Boosted mIoU</span><strong id="aug-miou-boost">0.77</strong></div>
+                    <div><span>Generalization Gain</span><strong id="aug-gain">+0.09</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ai_blueprint_panel" id="ai-view-ml" role="tabpanel" hidden>
+            <div class="demo_lab_shell">
+              <div class="demo_lab_head">
+                <h4>Classical ML Algorithms Live Demo</h4>
+                <p>A practical decision guide: choose an algorithm by problem shape, data volume, and explainability needs, with live examples teams can quickly map to real product scenarios.</p>
+                <p id="ml-live-note" class="ml_live_note">Live scenario mode: algorithm behavior, split quality, and diagnostics update continuously.</p>
+              </div>
+              <div class="demo_lab_layout">
+                <div class="demo_lab_canvas_wrap">
+                  <canvas id="ml-demo-canvas" class="demo_lab_canvas" aria-label="Classical machine learning algorithm visualization"></canvas>
+                </div>
+                <div class="demo_lab_controls">
+                  <label for="ml-algo">Algorithm</label>
+                  <select id="ml-algo">
+                    <option value="logistic">Logistic Regression</option>
+                    <option value="svm">SVM</option>
+                    <option value="knn">KNN</option>
+                    <option value="naive-bayes">Naive Bayes</option>
+                    <option value="gp-classifier">Gaussian Process Classifier</option>
+                    <option value="lda">LDA (Linear Discriminant Analysis)</option>
+                    <option value="qda">QDA (Quadratic Discriminant Analysis)</option>
+                    <option value="xgboost">XGBoost</option>
+                    <option value="lightgbm">LightGBM</option>
+                    <option value="catboost">CatBoost</option>
+                    <option value="extra-trees">Extra Trees</option>
+                    <option value="adaboost">AdaBoost</option>
+                    <option value="dbscan">DBSCAN Clustering</option>
+                    <option value="agglomerative">Hierarchical Agglomerative Clustering</option>
+                    <option value="one-class-svm">One-Class SVM (Anomaly)</option>
+                    <option value="isolation-forest">Isolation Forest (Anomaly)</option>
+                    <option value="decision-tree">Decision Tree</option>
+                    <option value="random-forest">Random Forest</option>
+                    <option value="kmeans">K-Means</option>
+                    <option value="linear-regression">Linear Regression</option>
+                    <option value="gp-regressor">Gaussian Process Regressor</option>
+                    <option value="ridge">Ridge Regression</option>
+                    <option value="lasso">Lasso Regression</option>
+                    <option value="elastic-net">Elastic Net Regression</option>
+                  </select>
+                  <p id="ml-algo-note" class="ml_algo_note">Scenario: binary conversion risk scoring with constrained latency and explainability needs.</p>
+                  <label for="ml-noise">Noise</label>
+                  <input id="ml-noise" type="range" min="0" max="40" value="12">
+                  <div class="ml_inline_controls">
+                    <button id="ml-noise-toggle" type="button">Pause Noise</button>
+                    <label for="ml-noise-speed">Noise Speed</label>
+                    <select id="ml-noise-speed">
+                      <option value="slow">Slow</option>
+                      <option value="normal" selected>Normal</option>
+                      <option value="fast">Fast</option>
+                    </select>
+                  </div>
+                  <label for="ml-preset">Dataset Preset</label>
+                  <select id="ml-preset">
+                    <option value="linear" selected>Linear Separable</option>
+                    <option value="moons">Two Moons</option>
+                    <option value="xor">XOR Quadrants</option>
+                    <option value="concentric">Concentric Rings</option>
+                  </select>
+                  <label for="ml-imbalance">Class Imbalance (Class 1): <span id="ml-imbalance-value">50%</span></label>
+                  <input id="ml-imbalance" type="range" min="20" max="80" value="50">
+                  <div class="ml_toggle_row">
+                    <label><input id="ml-outliers" type="checkbox"> Add Outliers</label>
+                    <label><input id="ml-scale" type="checkbox" checked> Scale Features</label>
+                  </div>
+                  <label for="ml-split">Train Split: <span id="ml-split-value">80%</span></label>
+                  <input id="ml-split" type="range" min="50" max="90" value="80">
+                  <label for="ml-depth">Tree Depth: <span id="ml-depth-value">3</span></label>
+                  <input id="ml-depth" type="range" min="1" max="6" value="3">
+                  <label for="ml-forest-trees">Forest Trees: <span id="ml-forest-value">7</span></label>
+                  <input id="ml-forest-trees" type="range" min="3" max="21" step="2" value="7">
+                  <button id="ml-regenerate" type="button">Regenerate Dataset</button>
+                  <div class="demo_metric_grid ml_usecase_grid" aria-label="Algorithm selection guide">
+                    <div><span>Use When</span><strong id="ml-metric-acc">Linearity is acceptable and you need interpretable baselines.</strong></div>
+                    <div><span>Best Fit</span><strong id="ml-metric-f1">Small-to-medium tabular datasets with clean features.</strong></div>
+                    <div><span>Delivery Impact</span><strong id="ml-metric-auc">Fast iteration from baseline to production candidate with clear trade-offs.</strong></div>
+                  </div>
+                  <div class="demo_metric_grid ml_diag_grid" aria-label="Model diagnostics">
+                    <div><span>Confusion Matrix</span><strong id="ml-confusion">TP 0 | FP 0 | TN 0 | FN 0</strong></div>
+                    <div><span>Validation Snapshot</span><strong id="ml-validation">Split 80/20 | AUC 0.00</strong></div>
+                    <div><span>Feature Signal</span><strong id="ml-feature-signal">x: 0.00 | y: 0.00</strong></div>
+                  </div>
+                  <p id="ml-status" class="demo_lab_status" aria-live="polite">Switch algorithms to see when each one should be used in a delivery workflow, not just how it scores.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ai_blueprint_panel" id="ai-view-edge" role="tabpanel" hidden>
+            <div class="demo_lab_shell sorting_demo_shell sorting_teaser_shell">
+              <div class="demo_lab_head">
+                <h4>Sorting Algorithms Live Demo</h4>
+                <p>The full sorting lab now opens on a dedicated page so this blueprint stays clean and focused.</p>
+              </div>
+              <div class="sorting_teaser_body">
+                <p>Includes: Bubble, Selection, Insertion, Merge, Quick, Heap, Counting, and Radix with canvas animation, diagnostics, stability signals, and scenario-based guidance.</p>
+                <a class="sorting_teaser_btn" href="sorting-lab.html">Open Full Sorting Lab</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project_playbook wow fadeInUp animated" data-wow-delay="0.16s">
+          <div class="playbook_head">
+            <h3>This Is How I Work on Projects</h3>
+            <p>A practical delivery loop blending MS research habits with production engineering discipline.</p>
+          </div>
+
+          <div class="playbook_steps" role="tablist" aria-label="Project workflow steps">
+            <button class="playbook_step is-active" type="button" data-step-title="Discovery and Scope" data-step-detail="Understand problem boundaries, users, constraints, and risk. Translate requirements into measurable success criteria before implementation." data-step-output="Output: problem framing doc, measurable KPIs" aria-selected="true">01 Discover</button>
+            <button class="playbook_step" type="button" data-step-title="Design and Mockups" data-step-detail="Create architecture sketches, data flows, wireframes, and experiment plans to visualize the system before heavy build effort." data-step-output="Output: architecture draft, data flow map, interface mockups" aria-selected="false">02 Design</button>
+            <button class="playbook_step" type="button" data-step-title="Build and Integrate" data-step-detail="Develop model pipelines and service interfaces incrementally. Integrate backend, model serving, and UI with versioned checkpoints." data-step-output="Output: integrated prototype with tracked versions" aria-selected="false">03 Build</button>
+            <button class="playbook_step" type="button" data-step-title="Evaluate and Refine" data-step-detail="Stress-test against edge cases, inspect failure buckets, tune performance, and close quality gaps before release decisions." data-step-output="Output: evaluation report, risk/failure checklist" aria-selected="false">04 Validate</button>
+            <button class="playbook_step" type="button" data-step-title="Deploy and Monitor" data-step-detail="Release with CI/CD, monitor reliability and drift signals, and iterate using operational feedback loops from real usage." data-step-output="Output: monitored deployment with retraining triggers" aria-selected="false">05 Operate</button>
+          </div>
+
+          <div class="playbook_detail" aria-live="polite">
+            <h4 id="playbook-step-title">Discovery and Scope</h4>
+            <p id="playbook-step-detail">Understand problem boundaries, users, constraints, and risk. Translate requirements into measurable success criteria before implementation.</p>
+            <span id="playbook-step-output">Output: problem framing doc, measurable KPIs</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="js/jquery-2.1.4.min.js" defer></script>
+  <script src="js/bootstrap.min.js" defer></script>
+  <script src="vendors/counter-up/waypoints.min.js" defer></script>
+  <script src="vendors/animate-css/wow.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js" defer></script>
+  <script src="js/theme-toggle.js" defer></script>
+  <script src="js/theme.js" defer></script>
+</body>
+</html>

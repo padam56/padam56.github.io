@@ -72,12 +72,12 @@
         margin-top: 40px;
     }
     .footer_copyright .pull-left{
-        float: none !important;
-        text-align: center;
+        float: left !important;
+        text-align: left;
     }
     .footer_copyright .pull-right{
         float: none !important;
-        text-align: center;
+        text-align: left;
     }
     .footer_copyright .pull-right .navbar-nav{
         float: none !important;
@@ -92,6 +92,7 @@
     }
     .footer_copyright .pull-left h5 {
         line-height: 45px;
+        text-align: left;
     }
 }
 @media (max-width: 767px){
@@ -216,6 +217,58 @@
     }
 }
 
+@media (max-width: 991px){
+    .intel_map_grid {
+        grid-template-columns: 1fr;
+    }
+    .intel_live_context {
+        margin-top: 2px;
+    }
+    .intel_live_feed_top {
+        display: block;
+    }
+    .intel_live_feed_top p {
+        margin-top: 4px;
+    }
+}
+
+@media (max-width: 767px){
+    .intel_map_grid {
+        gap: 10px;
+    }
+    .intel_map_grid .intel_view_selector {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 10px;
+    }
+    .intel_map_grid .intel_view_selector h3 {
+        margin: 0;
+        white-space: nowrap;
+    }
+    .intel_map_grid .intel_view_btn {
+        width: auto;
+        min-width: max-content;
+        margin: 0;
+    }
+    .intel_map_grid .intel_live_feed_card {
+        padding: 11px;
+    }
+    .threat_marker_label {
+        font-size: 8.8px;
+    }
+    .intel_source_list li {
+        margin-bottom: 6px;
+    }
+    .intel_live_feed_metrics {
+        grid-template-columns: 1fr;
+    }
+    .intel_live_feed_list {
+        max-height: 280px;
+    }
+}
+
 /* Final mobile nav polish override (responsive.css loads after style.css) */
 @media (max-width: 767px){
     .header_area .navbar.navbar-default .navbar-collapse {
@@ -268,5 +321,208 @@
     .service_area .service_inner .col-md-12 {
         padding-left: 0;
         padding-right: 0;
+    }
+}
+
+/* Mobile alignment hardening pass */
+@media (max-width: 767px){
+    .container {
+        width: 100%;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .main_container {
+        width: 100% !important;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .content_inner_bg {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .pad {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    .about_person_area .person_details {
+        margin-left: 0;
+    }
+
+    .about_person_area .person_details h3 {
+        font-size: 30px;
+        line-height: 1.25;
+    }
+
+    .about_person_area .person_details h4 {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .about_person_area .person_details .person_information {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2px;
+        padding-bottom: 18px;
+    }
+
+    .about_person_area .person_details .person_information ul + ul {
+        padding-left: 0;
+    }
+
+    .about_person_area .person_details .person_information ul li a {
+        line-height: 1.6;
+        word-break: break-word;
+    }
+
+    .social_icon {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 0;
+    }
+
+    .social_icon li {
+        margin-right: 0;
+        margin-bottom: 0;
+    }
+
+    .quick_cta {
+        gap: 8px;
+    }
+
+    .quick_cta .cta_chip {
+        min-width: 0;
+    }
+
+    .quick_cta .cta_resume {
+        width: calc(100% - 104px);
+        justify-content: center;
+    }
+
+    .quick_cta .cta_icon_only {
+        flex: 0 0 44px;
+    }
+
+    .technology_cloud_wrap {
+        padding: 14px;
+    }
+
+    .tech_cloud_controls {
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+    }
+
+    .tech_mode_btn {
+        white-space: nowrap;
+    }
+
+    #tagcloud {
+        min-height: 220px;
+    }
+
+    .journey_grid .col-md-6 {
+        margin-bottom: 12px;
+    }
+
+    .intel_map_grid {
+        gap: 12px;
+    }
+
+    .threat_map_shell {
+        padding: 12px;
+    }
+
+    .threat_world_map {
+        width: 100%;
+        min-height: 220px;
+        height: auto;
+    }
+
+    .threat_map_legend {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .intel_stats.row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .intel_stats .col-sm-4 {
+        padding-left: 0;
+        padding-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .intel_live_feed_card,
+    .victim_origin_card {
+        padding: 12px;
+    }
+
+    .victim_origin_list li {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px;
+    }
+
+    .victim_origin_list li em {
+        margin-top: 6px;
+    }
+
+    .spotlight_copy h2 {
+        font-size: 24px;
+        line-height: 1.25;
+    }
+
+    .spotlight_cta {
+        padding: 12px;
+    }
+
+    .ai_blueprint_shell {
+        padding: 12px;
+    }
+
+    .ai_blueprint_panel {
+        padding: 10px;
+    }
+
+    .demo_lab_controls,
+    .seg_demo_controls {
+        padding: 10px;
+    }
+
+    .demo_lab_canvas,
+    .seg_demo_canvas {
+        width: 100%;
+        height: auto;
+    }
+
+    .footer_copyright .pull-left,
+    .footer_copyright .pull-right {
+        float: none !important;
+        text-align: center;
+    }
+
+    .footer_copyright .pull-left h5,
+    .footer_copyright .pull-right .navbar-nav li a {
+        line-height: 1.6;
+        padding: 10px 0;
+    }
+}
+
+@media (max-width: 479px){
+    .quick_cta .cta_resume {
+        width: 100%;
+    }
+
+    .theme_toggle {
+        top: auto;
+        bottom: 12px;
+        right: 12px;
     }
 }

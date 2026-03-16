@@ -1,0 +1,145 @@
+{
+  "generatedAt": "2026-03-16T22:51:24.243Z",
+  "sources": [
+    {
+      "name": "CISA Known Exploited Vulnerabilities Catalog",
+      "url": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+      "lastUpdated": "2026-03-16T16:37:30.6422Z",
+      "catalogVersion": "2026.03.16",
+      "status": "ok"
+    },
+    {
+      "name": "Tranco Top-1M Permanent List ID",
+      "url": "https://tranco-list.eu/top-1m-id",
+      "value": "6GY4X",
+      "status": "ok"
+    }
+  ],
+  "metrics": {
+    "kevTotal": 1543,
+    "kevAddedLast30d": 25,
+    "kevKnownRansomwareUse": 312
+  },
+  "liveItems": [
+    {
+      "cve": "CVE-2025-47813",
+      "vendor": "Wing FTP Server",
+      "product": "Wing FTP Server",
+      "name": "Wing FTP Server Information Disclosure Vulnerability",
+      "dateAdded": "2026-03-16",
+      "dateAddedIso": "2026-03-16T00:00:00.000Z",
+      "knownRansomwareCampaignUse": "Unknown",
+      "dueDate": "2026-03-30",
+      "summary": "Wing FTP Server contains a generation of error message containing sensitive information vulnerability when using a long value in the UID cookie.",
+      "referenceUrl": "https://www.wftpserver.com/serverhistory.htm"
+    },
+    {
+      "cve": "CVE-2026-3910",
+      "vendor": "Google",
+      "product": "Chromium V8",
+      "name": "Google Chromium V8 Improper Restriction of Operations Within the Bounds of a Memory Buffer Vulnerability",
+      "dateAdded": "2026-03-13",
+      "dateAddedIso": "2026-03-13T00:00:00.000Z",
+      "knownRansomwareCampaignUse": "Unknown",
+      "dueDate": "2026-03-27",
+      "summary": "Google Chromium V8 contains an improper restriction of operations within the bounds of a memory buffer vulnerability that could allow a remote attacker to execute arbitrary code...",
+      "referenceUrl": "https://chromereleases.googleblog.com/2026/03/stable-channel-update-for-desktop_12.html"
+    },
+    {
+      "cve": "CVE-2026-3909",
+      "vendor": "Google",
+      "product": "Skia",
+      "name": "Google Skia Out-of-Bounds Write Vulnerability",
+      "dateAdded": "2026-03-13",
+      "dateAddedIso": "2026-03-13T00:00:00.000Z",
+      "knownRansomwareCampaignUse": "Unknown",
+      "dueDate": "2026-03-27",
+      "summary": "Google Skia contains an out-of-bounds write vulnerability that could allow a remote attacker to perform out of bounds memory access via a crafted HTML page. This vulnerability a...",
+      "referenceUrl": "https://chromereleases.googleblog.com/2026/03/stable-channel-update-for-desktop_12.html#:~:text=Google%20is%20aware"
+    },
+    {
+      "cve": "CVE-2025-68613",
+      "vendor": "n8n",
+      "product": "n8n",
+      "name": "n8n Improper Control of Dynamically-Managed Code Resources Vulnerability",
+      "dateAdded": "2026-03-11",
+      "dateAddedIso": "2026-03-11T00:00:00.000Z",
+      "knownRansomwareCampaignUse": "Unknown",
+      "dueDate": "2026-03-25",
+      "summary": "n8n contains an improper control of dynamically managed code resources vulnerability in its workflow expression evaluation system that allows for remote code execution.",
+      "referenceUrl": "https://github.com/n8n-io/n8n/security/advisories/GHSA-v98v-ff95-f3cp"
+    },
+    {
+      "cve": "CVE-2021-22054",
+      "vendor": "Omnissa",
+      "product": "Workspace One UEM",
+      "name": "Omnissa Workspace ONE Server-Side Request Forgery",
+      "dateAdded": "2026-03-09",
+      "dateAddedIso": "2026-03-09T00:00:00.000Z",
+      "knownRansomwareCampaignUse": "Unknown",
+      "dueDate": "2026-03-23",
+      "summary": "Omnissa Workspace One UEM formerly known as VMware Workspace One UEM contains a server-side request forgery (SSRF) vulnerability that could allow a malicious actor with network ...",
+      "referenceUrl": "https://web.archive.org/web/20211222154335/https://www.vmware.com/security/advisories/VMSA-2021-0029.html"
+    },
+    {
+      "cve": "CVE-2025-26399",
+      "vendor": "SolarWinds",
+      "product": "Web Help Desk",
+      "name": "SolarWinds Web Help Desk Deserialization of Untrusted Data Vulnerability",
+      "dateAdded": "2026-03-09",
+      "dateAddedIso": "2026-03-09T00:00:00.000Z",
+      "knownRansomwareCampaignUse": "Unknown",
+      "dueDate": "2026-03-12",
+      "summary": "SolarWinds Web Help Desk contain a deserialization of untrusted data vulnerability in AjaxProxy that could allow an attacker to run commands on the host machine.",
+      "referenceUrl": "https://www.solarwinds.com/trust-center/security-advisories/cve-2025-26399"
+    },
+    {
+      "cve": "CVE-2026-1603",
+      "vendor": "Ivanti",
+      "product": " Endpoint Manager (EPM)",
+      "name": "Ivanti Endpoint Manager (EPM) Authentication Bypass Vulnerability",
+      "dateAdded": "2026-03-09",
+      "dateAddedIso": "2026-03-09T00:00:00.000Z",
+      "knownRansomwareCampaignUse": "Unknown",
+      "dueDate": "2026-03-23",
+      "summary": "Ivanti Endpoint Manager (EPM) contains an authentication bypass using an alternate path or channel vulnerability that could allow a remote unauthenticated attacker to leak speci...",
+      "referenceUrl": "https://hub.ivanti.com/s/article/Security-Advisory-EPM-February-2026-for-EPM-2024?language=en_US"
+    },
+    {
+      "cve": "CVE-2017-7921",
+      "vendor": "Hikvision",
+      "product": "Multiple Products",
+      "name": "Hikvision Multiple Products Improper Authentication Vulnerability",
+      "dateAdded": "2026-03-05",
+      "dateAddedIso": "2026-03-05T00:00:00.000Z",
+      "knownRansomwareCampaignUse": "Unknown",
+      "dueDate": "2026-03-26",
+      "summary": "Multiple Hikvision products contain an improper authentication vulnerability that could allow a malicious user to escalate privileges on the system and gain access to sensitive ...",
+      "referenceUrl": "https://www.hikvision.com/us-en/support/document-center/special-notices/privilege-escalating-vulnerability-in-certain-hikvision-ip-cameras/"
+    },
+    {
+      "cve": "CVE-2021-22681",
+      "vendor": "Rockwell",
+      "product": "Multiple Products",
+      "name": "Rockwell Multiple Products Insufficient Protected Credentials Vulnerability",
+      "dateAdded": "2026-03-05",
+      "dateAddedIso": "2026-03-05T00:00:00.000Z",
+      "knownRansomwareCampaignUse": "Unknown",
+      "dueDate": "2026-03-26",
+      "summary": "Multiple Rockwell products contain an insufficient protected credentials vulnerability. Studio 5000 Logix Designer software may allow a key to be discovered. This key is used to...",
+      "referenceUrl": "https://support.rockwellautomation.com/app/answers/answer_view/a_id/1130301/~/cve-2021-22681%3A-authentication-bypass-vulnerability-found-in-logix-controllers-"
+    },
+    {
+      "cve": "CVE-2023-43000",
+      "vendor": "Apple",
+      "product": "Multiple Products",
+      "name": "Apple Multiple products Use-After-Free Vulnerability",
+      "dateAdded": "2026-03-05",
+      "dateAddedIso": "2026-03-05T00:00:00.000Z",
+      "knownRansomwareCampaignUse": "Unknown",
+      "dueDate": "2026-03-26",
+      "summary": "Apple macOS, iOS, iPadOS, and Safari 16.6 contain a use-after-free vulnerability due to the processing of maliciously crafted web content that may lead to memory corruption.",
+      "referenceUrl": "https://support.apple.com/en-us/120324"
+    }
+  ]
+}

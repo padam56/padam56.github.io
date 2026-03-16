@@ -2,8 +2,9 @@
   "use strict";
 
   var MAP_DATA_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+  var LIVE_FEED_DATA_URL = "data/threat-live.json";
 
-  var VIEW_CONFIGS = {
+  var TEMPLATE_VIEW_CONFIGS = {
     campaign: {
       kpis: [
         { value: "23", label: "active campaign clusters tracked this quarter" },
@@ -99,37 +100,6 @@
         { from: [-95, 37], to: [-100, 40], tone: "cyan" },
         { from: [5, 51], to: [10, 49], tone: "green" },
         { from: [78, 22], to: [110, 14], tone: "blue" }
-      ]
-    },
-    tld: {
-      kpis: [
-        { value: "32", label: "TLDs monitored for elevated abuse density (template)" },
-        { value: "9", label: "TLDs with persistent high abuse-to-volume ratio" },
-        { value: "84%", label: "suspect domains outside Tranco top-1M baseline" }
-      ],
-      victimTitle: "ICANN/Tranco-Informed TLD Abuse Concentration (Template)",
-      victimIntro: "Use this panel to compare abusive registration concentration against benign popularity baselines (e.g., Tranco).",
-      victimBars: [
-        { region: "North America", pct: 24 },
-        { region: "Europe", pct: 28 },
-        { region: "Asia Pacific", pct: 31 },
-        { region: "Latin America", pct: 10 },
-        { region: "Africa and Middle East", pct: 7 }
-      ],
-      infraPoints: [
-        { label: "Registry ops concentration", lon: -0.1, lat: 51.5, tone: "green" },
-        { label: "Registrar concentration", lon: 14.4, lat: 50.1, tone: "cyan" },
-        { label: "Namespace abuse surge", lon: 121.5, lat: 25, tone: "blue" }
-      ],
-      victimPoints: [
-        { label: "Affected traffic region APAC", lon: 116, lat: 18, tone: "amber" },
-        { label: "Affected traffic region EU", lon: 12, lat: 50, tone: "amber" },
-        { label: "Affected traffic region NA", lon: -96, lat: 39, tone: "amber" }
-      ],
-      flows: [
-        { from: [-0.1, 51.5], to: [12, 50], tone: "green" },
-        { from: [14.4, 50.1], to: [-96, 39], tone: "cyan" },
-        { from: [121.5, 25], to: [116, 18], tone: "blue" }
       ]
     },
     social: {
@@ -351,6 +321,192 @@
     }
   };
 
+  var PIPELINE_DATA_URL = "data/threat-map-data.json";
+
+  function deepClone(data) {
+    return JSON.parse(JSON.stringify(data));
+  }
+
+  function toNum(value, fallback) {
+    var parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  }
+
+  function clampPct(value, fallback) {
+    var pct = toNum(value, fallback);
+    if (!Number.isFinite(pct)) return 0;
+    return Math.max(0, Math.min(100, Math.round(pct)));
+  }
+
+  function toneOrDefault(tone) {
+    var valid = { cyan: true, green: true, amber: true, blue: true };
+    return valid[tone] ? tone : "cyan";
+  }
+
+  function normalizePoint(point, fallbackLabel) {
+    if (!point) return null;
+    var lon = toNum(point.lon, null);
+    var lat = toNum(point.lat, null);
+    if (!Number.isFinite(lon) || !Number.isFinite(lat)) return null;
+    return {
+      label: String(point.label || fallbackLabel || "Intel point"),
+      lon: Math.max(-180, Math.min(180, lon)),
+      lat: Math.max(-90, Math.min(90, lat)),
+      tone: toneOrDefault(point.tone)
+    };
+  }
+
+  function normalizeFlow(flow) {
+    if (!flow || !flow.from || !flow.to) return null;
+    if (!Array.isArray(flow.from) || !Array.isArray(flow.to)) return null;
+    if (flow.from.length < 2 || flow.to.length < 2) return null;
+
+    var fromLon = toNum(flow.from[0], null);
+    var fromLat = toNum(flow.from[1], null);
+    var toLon = toNum(flow.to[0], null);
+    var toLat = toNum(flow.to[1], null);
+    if (!Number.isFinite(fromLon) || !Number.isFinite(fromLat) || !Number.isFinite(toLon) || !Number.isFinite(toLat)) return null;
+
+    return {
+      from: [Math.max(-180, Math.min(180, fromLon)), Math.max(-90, Math.min(90, fromLat))],
+      to: [Math.max(-180, Math.min(180, toLon)), Math.max(-90, Math.min(90, toLat))],
+      tone: toneOrDefault(flow.tone)
+    };
+  }
+
+  function normalizeSourceRef(item) {
+    if (!item || typeof item !== "object") return null;
+    var label = item.label ? String(item.label) : "Reference";
+    var url = item.url ? String(item.url) : "";
+    if (!/^https?:\/\//i.test(url)) return null;
+    return { label: label, url: url };
+  }
+
+  function normalizeLiveContext(item) {
+    if (!item || typeof item !== "object") return null;
+    var summary = item.summary ? String(item.summary) : "Threat activity update";
+    var region = item.region ? String(item.region) : "Global";
+    var timestamp = item.timestamp ? String(item.timestamp) : "ongoing";
+    var severity = item.severity ? String(item.severity).toLowerCase() : "medium";
+    if (["low", "medium", "high"].indexOf(severity) === -1) severity = "medium";
+
+    var point = normalizePoint({
+      label: item.label || summary,
+      lon: item.lon,
+      lat: item.lat,
+      tone: item.tone || "cyan"
+    }, "Live context");
+
+    return {
+      summary: summary,
+      region: region,
+      timestamp: timestamp,
+      severity: severity,
+      lon: point ? point.lon : null,
+      lat: point ? point.lat : null,
+      tone: point ? point.tone : "cyan"
+    };
+  }
+
+  function mergePipelineView(baseView, incomingView) {
+    var view = deepClone(baseView);
+    if (!incomingView || typeof incomingView !== "object") return view;
+
+    if (Array.isArray(incomingView.kpis)) {
+      var kpis = incomingView.kpis.slice(0, 3).map(function(kpi, idx) {
+        var fallback = view.kpis[idx] || { value: "0", label: "pipeline metric" };
+        return {
+          value: String(kpi && kpi.value != null ? kpi.value : fallback.value),
+          label: String(kpi && kpi.label ? kpi.label : fallback.label)
+        };
+      });
+      while (kpis.length < 3) {
+        kpis.push(view.kpis[kpis.length] || { value: "0", label: "pipeline metric" });
+      }
+      view.kpis = kpis;
+    }
+
+    if (incomingView.victimTitle) view.victimTitle = String(incomingView.victimTitle);
+    if (incomingView.victimIntro) view.victimIntro = String(incomingView.victimIntro);
+
+    if (Array.isArray(incomingView.victimBars)) {
+      view.victimBars = incomingView.victimBars.map(function(item, idx) {
+        var fallback = view.victimBars[idx] || { region: "Region", pct: 0 };
+        return {
+          region: String(item && item.region ? item.region : fallback.region),
+          pct: clampPct(item && item.pct, fallback.pct)
+        };
+      }).filter(function(item) {
+        return item.region;
+      });
+    }
+
+    if (Array.isArray(incomingView.infraPoints)) {
+      view.infraPoints = incomingView.infraPoints.map(function(point, idx) {
+        return normalizePoint(point, "Infra point " + (idx + 1));
+      }).filter(Boolean);
+    }
+
+    if (Array.isArray(incomingView.victimPoints)) {
+      view.victimPoints = incomingView.victimPoints.map(function(point, idx) {
+        return normalizePoint(point, "Victim point " + (idx + 1));
+      }).filter(Boolean);
+    }
+
+    if (Array.isArray(incomingView.flows)) {
+      view.flows = incomingView.flows.map(normalizeFlow).filter(Boolean);
+    }
+
+    if (Array.isArray(incomingView.sourceRefs)) {
+      view.sourceRefs = incomingView.sourceRefs.map(normalizeSourceRef).filter(Boolean);
+    }
+
+    if (Array.isArray(incomingView.liveContexts)) {
+      view.liveContexts = incomingView.liveContexts.map(normalizeLiveContext).filter(Boolean);
+    }
+
+    return view;
+  }
+
+  function buildViewConfigsFromPipeline(pipelineData) {
+    var viewConfigs = deepClone(TEMPLATE_VIEW_CONFIGS);
+    if (!pipelineData || typeof pipelineData !== "object" || !pipelineData.views || typeof pipelineData.views !== "object") {
+      return viewConfigs;
+    }
+
+    Object.keys(viewConfigs).forEach(function(viewKey) {
+      if (!pipelineData.views[viewKey]) return;
+      viewConfigs[viewKey] = mergePipelineView(viewConfigs[viewKey], pipelineData.views[viewKey]);
+    });
+
+    return viewConfigs;
+  }
+
+  function loadPipelineData() {
+    if (window.THREAT_PIPELINE_DATA && typeof window.THREAT_PIPELINE_DATA === "object") {
+      return Promise.resolve({
+        data: window.THREAT_PIPELINE_DATA,
+        mode: "pipeline",
+        source: "window.THREAT_PIPELINE_DATA"
+      });
+    }
+
+    return fetch(PIPELINE_DATA_URL, { cache: "no-store" }).then(function(resp) {
+      if (!resp.ok) return null;
+      return resp.json().then(function(data) {
+        return {
+          data: data,
+          mode: "pipeline",
+          source: PIPELINE_DATA_URL
+        };
+      }).catch(function() {
+        return null;
+      });
+    }).catch(function() {
+      return null;
+    });
+  }
+
   function markerOffset(index) {
     var offsets = [
       { x: 12, y: -10 },
@@ -362,6 +518,20 @@
     return offsets[index % offsets.length];
   }
 
+  function labelCandidates(index) {
+    var base = markerOffset(index);
+    return [
+      { x: base.x, y: base.y },
+      { x: 14, y: -14 },
+      { x: 14, y: 16 },
+      { x: -14, y: -14 },
+      { x: -14, y: 16 },
+      { x: 18, y: 0 },
+      { x: -18, y: 0 },
+      { x: 0, y: -18 }
+    ];
+  }
+
   function toneClass(tone) {
     return tone ? "tone-" + tone : "tone-cyan";
   }
@@ -369,6 +539,24 @@
   function setText(id, value) {
     var el = document.getElementById(id);
     if (el) el.textContent = value;
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function loadLiveThreatFeed() {
+    return fetch(LIVE_FEED_DATA_URL, { cache: "no-store" }).then(function(resp) {
+      if (!resp.ok) return null;
+      return resp.json().catch(function() { return null; });
+    }).catch(function() {
+      return null;
+    });
   }
 
   function renderThreatMap() {
@@ -381,9 +569,23 @@
     var height = 450;
     var mapMode = "globe";
     var currentView = "campaign";
+    var viewConfigs = deepClone(TEMPLATE_VIEW_CONFIGS);
+    var dataNoteEl = document.querySelector(".intel_data_note");
+    var liveContextTextEl = document.getElementById("intel-live-context-text");
+    var liveContextMetaEl = document.getElementById("intel-live-context-meta");
+    var sourceListEl = document.getElementById("intel-source-list");
+    var liveFeedListEl = document.getElementById("intel-live-feed-list");
+    var liveFeedUpdatedEl = document.getElementById("intel-live-feed-updated");
+    var liveKevTotalEl = document.getElementById("intel-live-kev-total");
+    var liveKev30El = document.getElementById("intel-live-kev-30d");
+    var liveKevRansomEl = document.getElementById("intel-live-kev-ransom");
     var globeRotation = [-15, -18, 0];
     var isDragging = false;
     var rotationTimer = null;
+    var contextTimer = null;
+    var liveFeedTimer = null;
+    var viewRotateTimer = null;
+    var contextIndex = 0;
 
     var svg = d3.select(svgEl);
     svg.selectAll("*").remove();
@@ -454,8 +656,64 @@
     var atmosphere = baseLayer.append("path").datum({ type: "Sphere" }).attr("class", "threat_map_atmosphere");
     var grid = baseLayer.append("path").datum(graticule).attr("class", "threat_map_graticule");
 
+    function renderLiveFeed(feed) {
+      if (!liveFeedListEl) return;
+
+      if (!feed || !Array.isArray(feed.liveItems)) {
+        liveFeedListEl.innerHTML = '<li><span>Live feed unavailable. Run the scraper to refresh local data.</span></li>';
+        if (liveFeedUpdatedEl) liveFeedUpdatedEl.textContent = "No live snapshot available";
+        if (liveKevTotalEl) liveKevTotalEl.textContent = "-";
+        if (liveKev30El) liveKev30El.textContent = "-";
+        if (liveKevRansomEl) liveKevRansomEl.textContent = "-";
+        return;
+      }
+
+      if (liveKevTotalEl) liveKevTotalEl.textContent = String(feed.metrics && feed.metrics.kevTotal != null ? feed.metrics.kevTotal : "-");
+      if (liveKev30El) liveKev30El.textContent = String(feed.metrics && feed.metrics.kevAddedLast30d != null ? feed.metrics.kevAddedLast30d : "-");
+      if (liveKevRansomEl) liveKevRansomEl.textContent = String(feed.metrics && feed.metrics.kevKnownRansomwareUse != null ? feed.metrics.kevKnownRansomwareUse : "-");
+
+      if (liveFeedUpdatedEl) {
+        var dt = feed.generatedAt ? new Date(feed.generatedAt) : null;
+        liveFeedUpdatedEl.textContent = dt && !Number.isNaN(dt.getTime())
+          ? "Live snapshot: " + dt.toLocaleString()
+          : "Live snapshot timestamp unavailable";
+      }
+
+      var items = feed.liveItems.slice(0, 8);
+      liveFeedListEl.innerHTML = items.map(function(item) {
+        var ref = item.referenceUrl ? '<a href="' + escapeHtml(item.referenceUrl) + '" target="_blank" rel="noopener noreferrer">Reference</a>' : "";
+        var cve = escapeHtml(item.cve || "N/A");
+        var title = escapeHtml(item.name || "Known exploited vulnerability");
+        var vendor = escapeHtml(item.vendor || "Unknown");
+        var dateAdded = escapeHtml(item.dateAdded || "");
+        var dueDate = escapeHtml(item.dueDate || "");
+        var summary = escapeHtml(item.summary || "");
+        var ransomware = escapeHtml(item.knownRansomwareCampaignUse || "Unknown");
+
+        return '<li>' +
+          '<div class="intel_live_feed_head"><strong>' + cve + '</strong><span>' + dateAdded + '</span></div>' +
+          '<p>' + title + '</p>' +
+          '<small>Vendor: ' + vendor + ' | Ransomware use: ' + ransomware + (dueDate ? ' | Due: ' + dueDate : '') + '</small>' +
+          '<em>' + summary + '</em>' +
+          (ref ? '<div class="intel_live_feed_ref">' + ref + '</div>' : '') +
+          '</li>';
+      }).join("");
+    }
+
+    function updateDataModeNote(meta) {
+      if (!dataNoteEl) return;
+      if (!meta || meta.mode !== "pipeline") {
+        dataNoteEl.textContent = "Data mode: template dataset. Add your pipeline output via data/threat-map-data.json or window.THREAT_PIPELINE_DATA.";
+        return;
+      }
+
+      var source = meta.source || "custom dataset";
+      var updated = meta.updatedAt ? " | Updated: " + meta.updatedAt : "";
+      dataNoteEl.textContent = "Data mode: pipeline dataset loaded from " + source + updated + ".";
+    }
+
     function getViewData() {
-      return VIEW_CONFIGS[currentView] || VIEW_CONFIGS.campaign;
+      return viewConfigs[currentView] || viewConfigs.campaign;
     }
 
     function applyViewData() {
@@ -474,12 +732,59 @@
       victimList.innerHTML = data.victimBars.map(function(item) {
         return '<li><span>' + item.region + '</span><strong>' + item.pct + '%</strong><em style="--bar:' + item.pct + '%"></em></li>';
       }).join("");
+
+      if (sourceListEl) {
+        var refs = Array.isArray(data.sourceRefs) ? data.sourceRefs : [];
+        sourceListEl.innerHTML = refs.length
+          ? refs.map(function(ref) {
+            return '<li><a href="' + ref.url + '" target="_blank" rel="noopener noreferrer">' + ref.label + '</a></li>';
+          }).join("")
+          : '<li><span>No external references provided for this view.</span></li>';
+      }
+
+      contextIndex = 0;
+      renderLiveContext(data);
+    }
+
+    function renderLiveContext(data) {
+      if (!liveContextTextEl || !liveContextMetaEl) return;
+      var contexts = Array.isArray(data.liveContexts) ? data.liveContexts : [];
+      if (!contexts.length) {
+        liveContextTextEl.textContent = "No live context entries for this view yet. Add liveContexts in your pipeline data.";
+        liveContextMetaEl.textContent = "Severity: n/a | Region: n/a | Time: n/a";
+        return;
+      }
+
+      var item = contexts[contextIndex % contexts.length];
+      liveContextTextEl.textContent = item.summary;
+      liveContextMetaEl.textContent = "Severity: " + item.severity.toUpperCase() + " | Region: " + item.region + " | Time: " + item.timestamp;
     }
 
     function setViewButtons() {
       document.querySelectorAll(".intel_view_btn").forEach(function(btn) {
         btn.classList.toggle("is-active", btn.getAttribute("data-intel-view") === currentView);
       });
+    }
+
+    function getAvailableViewOrder() {
+      return Array.prototype.slice.call(document.querySelectorAll(".intel_view_btn")).map(function(btn) {
+        return btn.getAttribute("data-intel-view");
+      }).filter(function(viewId) {
+        return !!viewConfigs[viewId];
+      });
+    }
+
+    function startViewAutoRotate(countries) {
+      if (viewRotateTimer) window.clearInterval(viewRotateTimer);
+      viewRotateTimer = window.setInterval(function() {
+        var order = getAvailableViewOrder();
+        if (order.length < 2) return;
+        var idx = order.indexOf(currentView);
+        currentView = order[(idx + 1) % order.length];
+        setViewButtons();
+        applyViewData();
+        drawAll(countries);
+      }, 5000);
     }
 
     function isVisible(lonLat) {
@@ -569,6 +874,7 @@
       markersEnter.append("circle").attr("class", "threat_marker_core").attr("r", 4).attr("filter", "url(#intel-map-glow)");
       markersEnter.append("line").attr("class", "threat_marker_link");
       markersEnter.append("text").attr("class", "threat_marker_label");
+      markersEnter.append("title");
 
       hotspotLayer.selectAll("g.threat_marker")
         .attr("transform", function(d) {
@@ -579,19 +885,52 @@
           return isVisible([d.lon, d.lat]) ? null : "none";
         });
 
-      hotspotLayer.selectAll("g.threat_marker line.threat_marker_link")
-        .attr("x1", 0)
-        .attr("y1", 0)
-        .attr("x2", function(_, i) { return markerOffset(i).x - 4; })
-        .attr("y2", function(_, i) {
-          var y = markerOffset(i).y;
-          return y > 0 ? y - 6 : y + 6;
-        });
-
-      hotspotLayer.selectAll("g.threat_marker text.threat_marker_label")
-        .attr("x", function(_, i) { return markerOffset(i).x; })
-        .attr("y", function(_, i) { return markerOffset(i).y; })
+      hotspotLayer.selectAll("g.threat_marker title")
         .text(function(d) { return d.label; });
+
+      var placedBoxes = [];
+      hotspotLayer.selectAll("g.threat_marker").each(function(d, i) {
+        var marker = d3.select(this);
+        if (marker.style("display") === "none") return;
+
+        var label = marker.select("text.threat_marker_label");
+        var link = marker.select("line.threat_marker_link");
+        var raw = String(d.label || "");
+        var textValue = raw.length > 30 ? raw.slice(0, 28) + "..." : raw;
+        label.text(textValue).attr("opacity", 1);
+        link.attr("opacity", 1);
+
+        var chosen = null;
+        var candidates = labelCandidates(i);
+        for (var cidx = 0; cidx < candidates.length; cidx += 1) {
+          var c = candidates[cidx];
+          label.attr("x", c.x).attr("y", c.y);
+          var box = label.node().getBBox();
+          var padded = { x: box.x - 3, y: box.y - 2, w: box.width + 6, h: box.height + 4 };
+          var out = padded.x < 2 || padded.y < 2 || (padded.x + padded.w) > (width - 2) || (padded.y + padded.h) > (height - 2);
+          var overlap = placedBoxes.some(function(p) {
+            return !(padded.x + padded.w < p.x || p.x + p.w < padded.x || padded.y + padded.h < p.y || p.y + p.h < padded.y);
+          });
+          if (!out && !overlap) {
+            chosen = { offset: c, box: padded };
+            break;
+          }
+        }
+
+        if (!chosen) {
+          label.attr("opacity", 0);
+          link.attr("opacity", 0);
+          return;
+        }
+
+        placedBoxes.push(chosen.box);
+        var y = chosen.offset.y;
+        link
+          .attr("x1", 0)
+          .attr("y1", 0)
+          .attr("x2", chosen.offset.x > 0 ? chosen.offset.x - 4 : chosen.offset.x + 4)
+          .attr("y2", y > 0 ? y - 6 : y + 6);
+      });
     }
 
     function startAutoRotate(countries) {
@@ -608,6 +947,16 @@
       var activeData = getViewData();
       var pool = activeData.infraPoints.concat(activeData.victimPoints);
       if (!pool.length) return;
+
+      if (Array.isArray(activeData.liveContexts) && activeData.liveContexts.length && liveContextTextEl && liveContextMetaEl) {
+        contextIndex = (contextIndex + 1) % activeData.liveContexts.length;
+        renderLiveContext(activeData);
+        var livePick = activeData.liveContexts[contextIndex];
+        if (livePick && Number.isFinite(livePick.lon) && Number.isFinite(livePick.lat)) {
+          pool = [{ lon: livePick.lon, lat: livePick.lat, tone: livePick.tone || "cyan" }];
+        }
+      }
+
       var pick = pool[Math.floor(Math.random() * pool.length)];
       var c = projection([pick.lon, pick.lat]);
       if (!c || !isVisible([pick.lon, pick.lat])) return;
@@ -627,22 +976,50 @@
         .remove();
     }
 
-    d3.json(MAP_DATA_URL).then(function(world) {
+    Promise.all([d3.json(MAP_DATA_URL), loadPipelineData(), loadLiveThreatFeed()]).then(function(results) {
+      var world = results[0];
+      var pipelinePayload = results[1];
+      var liveFeedPayload = results[2];
+      if (pipelinePayload && pipelinePayload.data) {
+        viewConfigs = buildViewConfigsFromPipeline(pipelinePayload.data);
+      }
+      renderLiveFeed(liveFeedPayload);
+
+      if (!viewConfigs[currentView]) currentView = "campaign";
+      updateDataModeNote({
+        mode: pipelinePayload && pipelinePayload.mode ? pipelinePayload.mode : "template",
+        source: pipelinePayload && pipelinePayload.data && pipelinePayload.data.meta && pipelinePayload.data.meta.source
+          ? String(pipelinePayload.data.meta.source)
+          : (pipelinePayload && pipelinePayload.source ? pipelinePayload.source : "template"),
+        updatedAt: pipelinePayload && pipelinePayload.data && pipelinePayload.data.meta && pipelinePayload.data.meta.updatedAt
+          ? String(pipelinePayload.data.meta.updatedAt)
+          : ""
+      });
+
       var countries = topojson.feature(world, world.objects.countries);
       applyViewData();
       setViewButtons();
       drawAll(countries);
       startAutoRotate(countries);
-      setInterval(spawnLiveBlink, 700);
+      if (contextTimer) window.clearInterval(contextTimer);
+      contextTimer = window.setInterval(spawnLiveBlink, 2200);
+      if (liveFeedTimer) window.clearInterval(liveFeedTimer);
+      liveFeedTimer = window.setInterval(function() {
+        loadLiveThreatFeed().then(function(payload) {
+          renderLiveFeed(payload);
+        });
+      }, 300000);
+      startViewAutoRotate(countries);
 
       document.querySelectorAll(".intel_view_btn").forEach(function(btn) {
         btn.addEventListener("click", function() {
           var nextView = btn.getAttribute("data-intel-view");
-          if (!VIEW_CONFIGS[nextView]) return;
+          if (!viewConfigs[nextView]) return;
           currentView = nextView;
           setViewButtons();
           applyViewData();
           drawAll(countries);
+          startViewAutoRotate(countries);
         });
       });
 

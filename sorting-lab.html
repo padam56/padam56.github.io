@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorting Algorithms Live Lab</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="sorting_lab_page">
+  <main class="sorting_lab_wrap">
+    <div class="sorting_lab_topbar">
+      <a class="sorting_lab_back" href="ai-blueprint.html">Back To AI Blueprint</a>
+      <div>
+        <h1 class="sorting_lab_title">Sorting Algorithms Live Lab</h1>
+        <p class="sorting_lab_subtitle">Interactive canvas walkthrough with practical use-cases, stability insights, and operation-level diagnostics.</p>
+      </div>
+    </div>
+
+    <section class="demo_lab_shell sorting_demo_shell">
+      <div class="demo_lab_head">
+        <h4>Full Sorting Playground</h4>
+        <p>Visualize how each sorting strategy transforms an array over time and compare implementation trade-offs beyond just Big-O notation.</p>
+      </div>
+      <div class="demo_lab_layout">
+        <div class="demo_lab_canvas_wrap sorting_demo_board">
+          <canvas id="sort-demo-canvas" class="demo_lab_canvas" width="960" height="420" aria-label="Sorting algorithm visualization canvas"></canvas>
+          <p id="sort-algo-note" class="ml_algo_note">Scenario: choose a stable sorter for transaction feeds where duplicate keys must preserve upstream ordering.</p>
+        </div>
+        <div class="demo_lab_controls">
+          <label for="sort-algo">Sorting Algorithm</label>
+          <select id="sort-algo">
+            <option value="bubble">Bubble Sort</option>
+            <option value="selection">Selection Sort</option>
+            <option value="insertion" selected>Insertion Sort</option>
+            <option value="merge">Merge Sort</option>
+            <option value="quick">Quick Sort</option>
+            <option value="heap">Heap Sort</option>
+            <option value="counting">Counting Sort</option>
+            <option value="radix">Radix Sort (LSD Base-10)</option>
+          </select>
+
+          <label for="sort-pattern">Input Pattern</label>
+          <select id="sort-pattern">
+            <option value="random" selected>Random</option>
+            <option value="nearly">Nearly Sorted</option>
+            <option value="reversed">Reverse Sorted</option>
+            <option value="few-unique">Few Unique Values</option>
+          </select>
+
+          <label for="sort-size">Array Size: <span id="sort-size-value">56</span></label>
+          <input id="sort-size" type="range" min="20" max="140" value="56">
+
+          <label for="sort-speed">Animation Speed: <span id="sort-speed-value">42</span></label>
+          <input id="sort-speed" type="range" min="8" max="100" value="42">
+
+          <div class="sort_demo_actions">
+            <button id="sort-run" type="button">Run Sort</button>
+            <button id="sort-shuffle" type="button">Shuffle Data</button>
+          </div>
+
+          <div class="demo_metric_grid ml_usecase_grid" aria-label="Sorting algorithm use guide">
+            <div><span>Use When</span><strong id="sort-use-when">Dataset is almost sorted and online inserts happen frequently.</strong></div>
+            <div><span>Best Fit</span><strong id="sort-best-fit">Small or near-sorted sequences where low overhead is critical.</strong></div>
+            <div><span>Delivery Impact</span><strong id="sort-impact">Quick, stable behavior for real-time ranked feed maintenance.</strong></div>
+          </div>
+
+          <div class="demo_metric_grid ml_diag_grid" aria-label="Sorting run diagnostics">
+            <div><span>Comparisons</span><strong id="sort-comparisons">0</strong></div>
+            <div><span>Writes and Swaps</span><strong id="sort-writes">0</strong></div>
+            <div><span>Complexity Snapshot</span><strong id="sort-complexity">Best O(n), Avg O(n^2)</strong></div>
+            <div><span>Stability</span><strong id="sort-stability">Stable</strong></div>
+          </div>
+          <p id="sort-status" class="demo_lab_status" aria-live="polite">Ready: choose an algorithm, generate data, and run to inspect each strategy step-by-step.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/sorting-lab.js"></script>
+</body>
+</html>

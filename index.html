@@ -11,14 +11,26 @@
   <link href="css/font-awesome.min.css" rel="stylesheet">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="vendors/animate-css/animate.css" rel="stylesheet">
-  <link href="css/style.css?v=20260316-1" rel="stylesheet">
-  <link href="css/responsive.css" rel="stylesheet">
+  <link href="css/style.css?v=20260316-17" rel="stylesheet">
+  <link href="css/responsive.css?v=20260316-3" rel="stylesheet">
   <link rel="stylesheet" href="css/colors/default.css" title="default">
 </head>
 <body class="light_bg theme-dark interaction-choreo interaction-micro" data-spy="scroll" data-target="#bs-example-navbar-collapse-1" data-offset="80" data-scroll-animation="true" data-visual-mode="network">
   <div id="top-progress" class="top_progress" aria-hidden="true"><div class="top_progress_fill"></div></div>
   <canvas id="network-canvas" class="network_canvas" aria-hidden="true"></canvas>
-  <div id="preloader"><div id="preloader_spinner"><div class="spinner"></div></div></div>
+  <div id="preloader" aria-hidden="true">
+    <div id="preloader_spinner" class="preload_core">
+      <div class="wave_container">
+        <div class="wave_line wave_line_1"></div>
+        <div class="wave_line wave_line_2"></div>
+        <div class="wave_line wave_line_3"></div>
+      </div>
+      <div class="energy_pulse energy_pulse_1"></div>
+      <div class="energy_pulse energy_pulse_2"></div>
+      <div class="energy_pulse energy_pulse_3"></div>
+      <div class="center_core"></div>
+    </div>
+  </div>
   <script>
     (function() {
       "use strict";
@@ -32,7 +44,12 @@
 
       function hidePreloaderFallback() {
         var preloader = document.getElementById("preloader");
-        if (preloader) preloader.style.display = "none";
+        if (preloader) {
+          preloader.classList.add("is-hidden");
+          window.setTimeout(function() {
+            preloader.style.display = "none";
+          }, 760);
+        }
         document.body.style.overflow = "visible";
       }
 
@@ -61,7 +78,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
             <li class="active"><a href="#about">About Me</a></li>
-            <li><a href="#seg-lab-spotlight">Seg Lab</a></li>
+            <li><a href="#ai-blueprint">Live Demos</a></li>
             <li><a href="#skill">Skills</a></li>
             <li><a href="#journey">Journey</a></li>
             <li><a href="#service">Projects</a></li>
@@ -79,9 +96,11 @@
           <div class="col-md-4">
             <div class="person_img"><img src="img/member/Mr.Padam.jpg" alt="Padam Jung Thapa portrait" loading="lazy"></div>
             <div class="about_media_meta">
-              <div class="focus_tags wow fadeInUp animated" data-wow-delay="0.2s"><span>Internet Security Research</span><span>Web Measurement</span><span>Java Microservices</span><span>MLOps and Cloud</span></div>
+              <div class="focus_tags wow fadeInUp animated" data-wow-delay="0.2s" aria-live="polite">
+                <span class="focus_typewriter_text" id="focus-typewriter-text">Full-Stack Software Engineer</span>
+              </div>
               <div class="quick_cta">
-                <a class="cta_chip cta_resume" href="CV.docx" target="_blank" rel="noopener noreferrer"><i class="fa fa-file-text-o" aria-hidden="true"></i><span>Resume</span></a>
+                <a class="cta_chip cta_resume" href="CV.docx" target="_blank" rel="noopener noreferrer"><i class="fa fa-file-text-o cta_primary_icon" aria-hidden="true"></i><span class="resume_label">CV</span><i class="fa fa-download cta_hover_icon" aria-hidden="true"></i></a>
                 <a class="cta_chip cta_icon_only" href="https://github.com/padam56" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><i class="fa fa-github" aria-hidden="true"></i></a>
                 <a class="cta_chip cta_icon_only" href="https://www.linkedin.com/in/padamjung/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
               </div>
@@ -125,7 +144,7 @@
       </section>
 
       <section class="myskill_area pad" id="skill">
-        <div class="main_title"><h2>My Skills</h2><p class="section_lead">Tools and technologies I use to build robust AI systems from research to deployment.</p></div>
+        <div class="main_title"><h2>My Skills</h2><p class="section_lead">Tools and technologies I use to build robust, secure AI systems from research to deployment.</p></div>
         <div class="row">
           <div class="col-md-6 wow fadeInUp animated">
             <div class="skill_item_inner">
@@ -228,14 +247,14 @@
       </section>
 
       <section class="threat_map_area pad" id="intel-map">
-        <div class="main_title"><h2>Threat Intel Map</h2><p class="section_lead">Interactive view of campaign clusters, abuse infrastructure, and crypto-wallet fraud victim-origin patterns from public-report-aligned templates.</p></div>
+        <div class="main_title"><h2>Threat Intel Map</h2><p class="section_lead">Source-backed global view of campaign clusters, abuse infrastructure, and victim-origin patterns with live rotating context highlights.</p></div>
+
         <div class="intel_map_grid wow fadeInUp animated" data-wow-delay="0.1s">
           <aside class="intel_view_selector" aria-label="Threat intelligence views">
             <h3>Views</h3>
             <button class="intel_view_btn is-active" type="button" data-intel-view="campaign">Campaign Infrastructure</button>
             <button class="intel_view_btn" type="button" data-intel-view="crypto">Crypto Wallet Fraud</button>
             <button class="intel_view_btn" type="button" data-intel-view="expired">Expired Domains and Re-Registration</button>
-            <button class="intel_view_btn" type="button" data-intel-view="tld">TLD Abuse and Tranco Baseline</button>
             <button class="intel_view_btn" type="button" data-intel-view="social">Social Media Scam Markets</button>
             <button class="intel_view_btn" type="button" data-intel-view="brand">Brand Impersonation Attacks</button>
             <button class="intel_view_btn" type="button" data-intel-view="captcha">CAPTCHA Attack Ecosystems</button>
@@ -246,7 +265,11 @@
 
           <div class="threat_map_shell">
             <div class="threat_map_topline">
-              <p class="intel_data_note">Data mode: public-source-aligned template (not live telemetry). Replace dataset in <code>js/threat-map.js</code> with your own pipeline output.</p>
+              <div class="intel_live_context" aria-live="polite">
+                <strong>Live Context</strong>
+                <span id="intel-live-context-text">Loading context stream...</span>
+                <small id="intel-live-context-meta">Severity: n/a | Region: n/a | Time: n/a</small>
+              </div>
             </div>
             <svg id="threat-world-map" class="threat_world_map" viewBox="0 0 1000 450" role="img" aria-label="World map showing campaign clusters and abuse hotspots"></svg>
             <div class="threat_map_legend" aria-label="Threat map legend">
@@ -255,6 +278,19 @@
               <span><i class="dot dot-amber"></i>Victim-origin concentration</span>
               <span><i class="dot dot-blue"></i>Abuse hosting overlap</span>
             </div>
+          </div>
+
+          <div class="intel_live_feed_card">
+            <div class="intel_live_feed_top">
+              <h3>Live Exploited Vulnerability Feed</h3>
+              <p id="intel-live-feed-updated">Live snapshot: loading...</p>
+            </div>
+            <div class="intel_live_feed_metrics">
+              <div><span>KEV Total</span><strong id="intel-live-kev-total">-</strong></div>
+              <div><span>Added Last 30d</span><strong id="intel-live-kev-30d">-</strong></div>
+              <div><span>Known Ransomware Use</span><strong id="intel-live-kev-ransom">-</strong></div>
+            </div>
+            <ul id="intel-live-feed-list" class="intel_live_feed_list" aria-live="polite"></ul>
           </div>
         </div>
 
@@ -265,43 +301,24 @@
         </div>
 
         <div class="victim_origin_card">
-          <h3 id="intel-victim-title">Reported Crypto Wallet Fraud Victim Origins (Illustrative Template)</h3>
-          <p id="intel-victim-intro">Percent distribution should be replaced with your own complaint dataset. This structure is designed for FTC/IC3-style regional trend reporting.</p>
+          <h3 id="intel-victim-title">Reported Crypto Wallet Fraud Victim Origins</h3>
+          <p id="intel-victim-intro">Regional distribution for the selected view, driven by the loaded threat dataset and public-source references.</p>
           <ul id="intel-victim-list" class="victim_origin_list"></ul>
-          <p class="intel_source_note">Suggested reference sources: FBI IC3 annual report, FTC Consumer Sentinel fraud reports, Chainalysis geographic trend summaries, ICANN DAAR/CZDS, and Tranco ranking snapshots.</p>
-        </div>
-      </section>
-
-      <section class="seg_lab_spotlight pad" id="seg-lab-spotlight">
-        <div class="spotlight_shell wow fadeInUp animated" data-wow-delay="0.08s">
-          <div class="spotlight_copy">
-            <h2>Segmentation Experiences</h2>
-            <p>Explore my in-page Segmentation Lab plus my production-style live levee defect detection app with Human-in-the-Loop annotation support.</p>
-            <div class="spotlight_badges">
-              <span>Semantic</span>
-              <span>Instance</span>
-              <span>Panoptic</span>
-              <span>Annotation QA Loop</span>
-              <span>FastAPI + React</span>
-            </div>
-          </div>
-          <div class="spotlight_cta">
-            <a class="seg_lab_open_btn" href="#ai-blueprint">Open Segmentation Lab</a>
-            <a class="seg_lab_open_btn seg_lab_live_btn" href="https://huggingface.co/spaces/padam5699/levee-detection-app" target="_blank" rel="noopener noreferrer">Open Live Levee Detection App</a>
-            <p>Live app stack: FastAPI + React with HITL annotation workflows. Built and deployed by me.</p>
-          </div>
+          <p class="intel_source_note">Validated references for the active view:</p>
+          <ul id="intel-source-list" class="intel_source_list"></ul>
         </div>
       </section>
 
       <section class="ai_blueprint_area pad" id="ai-blueprint">
-        <div class="main_title"><h2>AI Delivery Blueprint</h2><p class="section_lead">A single view of how research ideas become deployable ML systems, from experimentation to monitored production delivery.</p></div>
+        <div class="main_title"><h2>AI Blueprint and Live Demos</h2><p class="section_lead">A compact view of production-minded ML workflows with hands-on demos.</p></div>
 
         <div class="ai_blueprint_shell wow fadeInUp animated" data-wow-delay="0.1s">
           <div class="ai_blueprint_tabs" role="tablist" aria-label="AI blueprint views">
             <button class="ai_blueprint_tab is-active" type="button" role="tab" aria-selected="true" aria-controls="ai-view-lifecycle" data-ai-view="lifecycle">Model Lifecycle</button>
             <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-cv" data-ai-view="cv">CV Pipeline</button>
-            <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-readiness" data-ai-view="readiness">Deployment Readiness</button>
             <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-seg" data-ai-view="seg">Segmentation Workflow Lab</button>
+            <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-ml" data-ai-view="ml">Classical ML Demos</button>
+            <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-edge" data-ai-view="edge">Sorting Algorithms Live Demo</button>
           </div>
 
           <div class="ai_blueprint_panel is-active" id="ai-view-lifecycle" role="tabpanel">
@@ -321,11 +338,7 @@
           </div>
 
           <div class="ai_blueprint_panel" id="ai-view-cv" role="tabpanel" hidden>
-            <div class="cv_pipeline_controls">
-              <button id="cv-flow-toggle" class="cv_flow_toggle" type="button" aria-pressed="false">Run Signal Flow</button>
-              <span class="cv_flow_note">Click to animate a live inference path through the pipeline.</span>
-            </div>
-            <div class="cv_pipeline_graph" aria-label="Computer vision pipeline diagram">
+            <div class="cv_pipeline_graph is-flowing" aria-label="Computer vision pipeline diagram">
               <div class="cv_node">Data Ingestion</div>
               <div class="cv_arrow" aria-hidden="true"><span>&rarr;</span><i class="cv_flow_dot"></i></div>
               <div class="cv_node">Preprocessing</div>
@@ -341,75 +354,267 @@
             <p class="ai_blueprint_note">Built for the same style of end-to-end CV workflows used in segmentation and detection projects from MS research and production engineering practice.</p>
           </div>
 
-          <div class="ai_blueprint_panel" id="ai-view-readiness" role="tabpanel" hidden>
-            <div class="readiness_lens" role="tablist" aria-label="Readiness matrix lenses">
-              <button class="readiness_lens_btn is-active" type="button" data-readiness-lens="all" aria-selected="true">Full View</button>
-              <button class="readiness_lens_btn" type="button" data-readiness-lens="research" aria-selected="false">Research Lens</button>
-              <button class="readiness_lens_btn" type="button" data-readiness-lens="production" aria-selected="false">Production Lens</button>
-            </div>
-            <div class="readiness_matrix_wrap">
-              <table class="readiness_matrix lens-all" aria-label="Deployment readiness matrix">
-                <thead>
-                  <tr>
-                    <th>Capability</th>
-                    <th>Research Prototype</th>
-                    <th>Production API</th>
-                    <th>Cloud Runtime</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td>CI/CD Automation</td><td>Partial</td><td>Enabled</td><td>Enabled</td></tr>
-                  <tr><td>Containerization</td><td>Optional</td><td>Enabled</td><td>Enabled</td></tr>
-                  <tr><td>Observability and Monitoring</td><td>Basic</td><td>Enabled</td><td>Enabled</td></tr>
-                  <tr><td>Drift Detection</td><td>Offline Checks</td><td>Scheduled</td><td>Continuous</td></tr>
-                  <tr><td>Rollback Strategy</td><td>Manual</td><td>Versioned</td><td>Automated</td></tr>
-                  <tr><td>Retraining Trigger</td><td>Ad hoc</td><td>Metric-based</td><td>Policy-driven</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
           <div class="ai_blueprint_panel" id="ai-view-seg" role="tabpanel" hidden>
             <div class="seg_workflow_shell" data-stage="setup">
               <div class="seg_workflow_header">
-                <h4>End-to-End Segmentation Experience Lab</h4>
-                <p>A simple segmentation demo on one fixed geometric scene. Pick a mode, run segmentation, and compare outputs.</p>
+                <div class="seg_workflow_header_main">
+                  <h4>End-to-End Segmentation Experience Lab</h4>
+                  <p>Use one scene across segmentation, explainability, and synthetic augmentation. Switch sub-views below without leaving this panel.</p>
+                </div>
+                <div class="seg_workflow_header_links" aria-label="Segmentation experience links">
+                  <a href="https://huggingface.co/spaces/padam5699/levee-detection-app" target="_blank" rel="noopener noreferrer">Live Levee Detection App</a>
+                </div>
               </div>
 
-              <div class="seg_mode_switch" role="tablist" aria-label="Segmentation mode selector">
-                <button class="seg_mode_btn is-active" type="button" data-seg-mode="semantic" aria-selected="true">Semantic</button>
-                <button class="seg_mode_btn" type="button" data-seg-mode="instance" aria-selected="false">Instance</button>
-                <button class="seg_mode_btn" type="button" data-seg-mode="panoptic" aria-selected="false">Panoptic</button>
+              <div class="readiness_lens" role="tablist" aria-label="Segmentation lab sub-views">
+                <button class="readiness_lens_btn seg_lab_sub_btn is-active" type="button" data-seg-lab-view="seg" aria-selected="true">Segmentation</button>
+                <button class="readiness_lens_btn seg_lab_sub_btn" type="button" data-seg-lab-view="xai" aria-selected="false">Seg Explainability</button>
+                <button class="readiness_lens_btn seg_lab_sub_btn" type="button" data-seg-lab-view="aug" aria-selected="false">Synthetic Data Booster</button>
               </div>
-              <p id="seg-mode-detail" class="seg_mode_detail">Semantic mode: one foreground class for geometric objects over background.</p>
 
-              <div class="seg_demo_layout">
-                <div class="seg_demo_canvas_wrap">
-                  <canvas id="seg-demo-canvas" class="seg_demo_canvas" aria-label="Geometric segmentation workflow canvas"></canvas>
-                  <img id="seg-demo-image" src="img/segmentation/geometric-scene.svg" alt="Geometric segmentation scene" hidden>
-                  <img id="seg-demo-mask-semantic" src="img/segmentation/geometric-mask-semantic.svg" alt="Ground truth semantic segmentation mask" hidden>
-                  <img id="seg-demo-mask-instance-primary" src="img/segmentation/geometric-mask-instance-primary.svg" alt="Primary instance mask" hidden>
-                  <img id="seg-demo-mask-instance-secondary" src="img/segmentation/geometric-mask-instance-secondary.svg" alt="Secondary instance mask" hidden>
-                  <img id="seg-demo-mask-instance-tertiary" src="img/segmentation/geometric-mask-instance-tertiary.svg" alt="Tertiary instance mask" hidden>
-                  <div class="seg_canvas_legend">
-                    <span><i class="seg_legend_dot dot-mask"></i>Segmentation overlay</span>
-                    <span><i class="seg_legend_dot dot-edge"></i>Object boundary</span>
+              <div class="seg_lab_subview is-active" id="seg-lab-view-seg">
+                <div class="seg_mode_switch" role="tablist" aria-label="Segmentation mode selector">
+                  <button class="seg_mode_btn is-active" type="button" data-seg-mode="semantic" aria-selected="true">Semantic</button>
+                  <button class="seg_mode_btn" type="button" data-seg-mode="instance" aria-selected="false">Instance</button>
+                  <button class="seg_mode_btn" type="button" data-seg-mode="panoptic" aria-selected="false">Panoptic</button>
+                </div>
+                <p id="seg-mode-detail" class="seg_mode_detail">Semantic mode: one foreground class for geometric objects over background.</p>
+
+                <div class="seg_demo_layout">
+                  <div class="seg_demo_canvas_wrap">
+                    <canvas id="seg-demo-canvas" class="seg_demo_canvas" aria-label="Geometric segmentation workflow canvas"></canvas>
+                    <img id="seg-demo-image" src="img/segmentation/geometric-scene.svg" alt="Geometric segmentation scene" hidden>
+                    <img id="seg-demo-mask-semantic" src="img/segmentation/geometric-mask-semantic.svg" alt="Ground truth semantic segmentation mask" hidden>
+                    <img id="seg-demo-mask-instance-primary" src="img/segmentation/geometric-mask-instance-primary.svg" alt="Primary instance mask" hidden>
+                    <img id="seg-demo-mask-instance-secondary" src="img/segmentation/geometric-mask-instance-secondary.svg" alt="Secondary instance mask" hidden>
+                    <img id="seg-demo-mask-instance-tertiary" src="img/segmentation/geometric-mask-instance-tertiary.svg" alt="Tertiary instance mask" hidden>
+                    <div class="seg_canvas_legend">
+                      <span><i class="seg_legend_dot dot-mask"></i>Segmentation overlay</span>
+                      <span><i class="seg_legend_dot dot-edge"></i>Object boundary</span>
+                    </div>
+                  </div>
+
+                  <div class="seg_demo_controls">
+                    <div class="seg_param_stack">
+                      <label for="seg-sensitivity">Mask Sensitivity</label>
+                      <input id="seg-sensitivity" type="range" min="20" max="130" value="70">
+                      <label for="seg-opacity">Overlay Opacity</label>
+                      <input id="seg-opacity" type="range" min="25" max="90" value="58">
+                    </div>
+
+                    <div class="seg_demo_actions">
+                      <button id="seg-reset" type="button">Reset Lab</button>
+                      <button id="seg-run" type="button">Run Segmentation</button>
+                    </div>
+                    <p id="seg-status" class="seg_status" aria-live="polite">Ready. Choose a mode and click Run Segmentation.</p>
                   </div>
                 </div>
+              </div>
 
-                <div class="seg_demo_controls">
-                  <div class="seg_param_stack">
-                    <label for="seg-sensitivity">Mask Sensitivity</label>
-                    <input id="seg-sensitivity" type="range" min="20" max="130" value="70">
-                    <label for="seg-opacity">Overlay Opacity</label>
-                    <input id="seg-opacity" type="range" min="25" max="90" value="58">
+              <div class="seg_lab_subview" id="seg-lab-view-xai" hidden>
+                <div class="demo_lab_shell">
+                  <div class="demo_lab_head">
+                    <h4>Explainability for Segmentation</h4>
+                    <p>Inspect prediction-vs-ground-truth drift, saliency, and boundary stress on the same geometric segmentation scene.</p>
+                  </div>
+                  <div class="demo_lab_layout">
+                    <div class="demo_lab_canvas_wrap">
+                      <canvas id="xai-demo-canvas" class="demo_lab_canvas" aria-label="Grad-CAM and attention overlay demo"></canvas>
+                      <img id="xai-demo-image" src="img/segmentation/geometric-scene.svg" alt="Segmentation scene for explainability" hidden>
+                    </div>
+                    <div class="demo_lab_controls">
+                      <label for="xai-overlay-mode">Explainability View</label>
+                      <select id="xai-overlay-mode">
+                        <option value="mask-vs-gt">Prediction vs GT</option>
+                        <option value="gradcam">Grad-CAM</option>
+                        <option value="attention">Attention Map</option>
+                        <option value="boundary-error">Boundary Error Heatmap</option>
+                      </select>
+                      <button id="xai-toggle-failure" type="button">Inject Boundary Failure</button>
+                      <p id="xai-status" class="demo_lab_status" aria-live="polite">Ready. Rendering explainability overlays on geometric scene.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="seg_lab_subview" id="seg-lab-view-aug" hidden>
+                <div class="demo_lab_shell">
+                  <div class="demo_lab_head">
+                    <h4>Synthetic Data Booster (Albumentations)</h4>
+                    <p>Preview hard-case augmentations directly on the same segmentation scene and estimate generalization gain.</p>
+                  </div>
+                  <div class="demo_lab_layout">
+                    <div class="demo_lab_canvas_wrap">
+                      <canvas id="aug-demo-canvas" class="demo_lab_canvas" aria-label="Synthetic data augmentation preview"></canvas>
+                      <img id="aug-demo-image" src="img/segmentation/geometric-scene.svg" alt="Segmentation scene for synthetic augmentation" hidden>
+                    </div>
+                    <div class="demo_lab_controls">
+                      <label for="aug-condition">Albumentations Transform</label>
+                      <select id="aug-condition"></select>
+                      <p id="aug-transform-note" class="ml_algo_note">Choose a transform to preview how it affects the segmentation scene patch.</p>
+                      <div class="aug_quick_presets" aria-label="Augmentation presets">
+                        <button type="button" class="aug_preset_btn" data-aug-preset="geometry">Geometry</button>
+                        <button type="button" class="aug_preset_btn" data-aug-preset="color">Color</button>
+                        <button type="button" class="aug_preset_btn" data-aug-preset="noise">Noise</button>
+                        <button type="button" class="aug_preset_btn" data-aug-preset="weather">Weather</button>
+                        <button type="button" class="aug_preset_btn" data-aug-preset="dropout">Dropout</button>
+                      </div>
+                      <label for="aug-intensity">Intensity: <span id="aug-intensity-value">55%</span></label>
+                      <input id="aug-intensity" type="range" min="0" max="100" value="55">
+                      <button id="aug-randomize" type="button">Resample Variation</button>
+                      <div id="aug-transform-gallery" class="aug_transform_gallery" aria-label="Live augmentation controls"></div>
+                      <p class="aug_live_metrics" aria-live="polite">Baseline mIoU: <strong id="aug-miou-base">0.68</strong> | Boosted mIoU: <strong id="aug-miou-boost">0.77</strong> | Generalization Gain: <strong id="aug-gain">+0.09</strong></p>
+                      <p id="aug-status" class="demo_lab_status" aria-live="polite">Ready. Live augmentation preview is active.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ai_blueprint_panel" id="ai-view-ml" role="tabpanel" hidden>
+            <div class="demo_lab_shell">
+              <div class="demo_lab_head">
+                <h4>Classical ML Algorithms Live Demo</h4>
+                <p>A practical decision guide: choose an algorithm by problem shape, data volume, and explainability needs, with live examples teams can quickly map to real product scenarios.</p>
+                <p id="ml-live-note" class="ml_live_note">Live scenario mode: algorithm behavior, split quality, and diagnostics update continuously.</p>
+              </div>
+              <div class="demo_lab_layout">
+                <div class="demo_lab_canvas_wrap">
+                  <canvas id="ml-demo-canvas" class="demo_lab_canvas" aria-label="Classical machine learning algorithm visualization"></canvas>
+                </div>
+                <div class="demo_lab_controls">
+                  <label for="ml-algo">Algorithm</label>
+                  <select id="ml-algo">
+                    <option value="logistic">Logistic Regression</option>
+                    <option value="svm">SVM</option>
+                    <option value="knn">KNN</option>
+                    <option value="naive-bayes">Naive Bayes</option>
+                    <option value="gp-classifier">Gaussian Process Classifier</option>
+                    <option value="lda">LDA (Linear Discriminant Analysis)</option>
+                    <option value="qda">QDA (Quadratic Discriminant Analysis)</option>
+                    <option value="xgboost">XGBoost</option>
+                    <option value="lightgbm">LightGBM</option>
+                    <option value="catboost">CatBoost</option>
+                    <option value="extra-trees">Extra Trees</option>
+                    <option value="adaboost">AdaBoost</option>
+                    <option value="dbscan">DBSCAN Clustering</option>
+                    <option value="agglomerative">Hierarchical Agglomerative Clustering</option>
+                    <option value="one-class-svm">One-Class SVM (Anomaly)</option>
+                    <option value="isolation-forest">Isolation Forest (Anomaly)</option>
+                    <option value="decision-tree">Decision Tree</option>
+                    <option value="random-forest">Random Forest</option>
+                    <option value="kmeans">K-Means</option>
+                    <option value="linear-regression">Linear Regression</option>
+                    <option value="gp-regressor">Gaussian Process Regressor</option>
+                    <option value="ridge">Ridge Regression</option>
+                    <option value="lasso">Lasso Regression</option>
+                    <option value="elastic-net">Elastic Net Regression</option>
+                  </select>
+                  <p id="ml-algo-note" class="ml_algo_note">Scenario: binary conversion risk scoring with constrained latency and explainability needs.</p>
+                  <label for="ml-noise">Noise</label>
+                  <input id="ml-noise" type="range" min="0" max="40" value="12">
+                  <div class="ml_inline_controls">
+                    <button id="ml-noise-toggle" type="button">Pause Noise</button>
+                    <label for="ml-noise-speed">Noise Speed</label>
+                    <select id="ml-noise-speed">
+                      <option value="slow">Slow</option>
+                      <option value="normal" selected>Normal</option>
+                      <option value="fast">Fast</option>
+                    </select>
+                  </div>
+                  <label for="ml-preset">Dataset Preset</label>
+                  <select id="ml-preset">
+                    <option value="linear" selected>Linear Separable</option>
+                    <option value="moons">Two Moons</option>
+                    <option value="xor">XOR Quadrants</option>
+                    <option value="concentric">Concentric Rings</option>
+                  </select>
+                  <label for="ml-imbalance">Class Imbalance (Class 1): <span id="ml-imbalance-value">50%</span></label>
+                  <input id="ml-imbalance" type="range" min="20" max="80" value="50">
+                  <div class="ml_toggle_row">
+                    <label><input id="ml-outliers" type="checkbox"> Add Outliers</label>
+                    <label><input id="ml-scale" type="checkbox" checked> Scale Features</label>
+                  </div>
+                  <label for="ml-split">Train Split: <span id="ml-split-value">80%</span></label>
+                  <input id="ml-split" type="range" min="50" max="90" value="80">
+                  <label for="ml-depth">Tree Depth: <span id="ml-depth-value">3</span></label>
+                  <input id="ml-depth" type="range" min="1" max="6" value="3">
+                  <label for="ml-forest-trees">Forest Trees: <span id="ml-forest-value">7</span></label>
+                  <input id="ml-forest-trees" type="range" min="3" max="21" step="2" value="7">
+                  <button id="ml-regenerate" type="button">Regenerate Dataset</button>
+                  <div class="demo_metric_grid ml_usecase_grid" aria-label="Algorithm selection guide">
+                    <div><span>Use When</span><strong id="ml-metric-acc">Linearity is acceptable and you need interpretable baselines.</strong></div>
+                    <div><span>Best Fit</span><strong id="ml-metric-f1">Small-to-medium tabular datasets with clean features.</strong></div>
+                    <div><span>Delivery Impact</span><strong id="ml-metric-auc">Fast iteration from baseline to production candidate with clear trade-offs.</strong></div>
+                  </div>
+                  <div class="demo_metric_grid ml_diag_grid" aria-label="Model diagnostics">
+                    <div><span>Confusion Matrix</span><strong id="ml-confusion">TP 0 | FP 0 | TN 0 | FN 0</strong></div>
+                    <div><span>Validation Snapshot</span><strong id="ml-validation">Split 80/20 | AUC 0.00</strong></div>
+                    <div><span>Feature Signal</span><strong id="ml-feature-signal">x: 0.00 | y: 0.00</strong></div>
+                  </div>
+                  <p id="ml-status" class="demo_lab_status" aria-live="polite">Switch algorithms to see when each one should be used in a delivery workflow, not just how it scores.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ai_blueprint_panel" id="ai-view-edge" role="tabpanel" hidden>
+            <div class="demo_lab_shell sorting_demo_shell">
+              <div class="demo_lab_head">
+                <h4>Sorting Algorithms Live Demo</h4>
+                <p>Visualize how each sorting strategy transforms an array over time and compare implementation trade-offs beyond just Big-O notation.</p>
+              </div>
+              <div class="demo_lab_layout">
+                <div class="demo_lab_canvas_wrap sorting_demo_board">
+                  <canvas id="sort-demo-canvas" class="demo_lab_canvas" width="760" height="340" aria-label="Sorting algorithm visualization canvas"></canvas>
+                  <p id="sort-algo-note" class="ml_algo_note">Scenario: choose a stable sorter for transaction feeds where duplicate keys must preserve upstream ordering.</p>
+                </div>
+                <div class="demo_lab_controls">
+                  <label for="sort-algo">Sorting Algorithm</label>
+                  <select id="sort-algo">
+                    <option value="bubble">Bubble Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="insertion" selected>Insertion Sort</option>
+                    <option value="merge">Merge Sort</option>
+                    <option value="quick">Quick Sort</option>
+                    <option value="heap">Heap Sort</option>
+                    <option value="counting">Counting Sort</option>
+                    <option value="radix">Radix Sort (LSD Base-10)</option>
+                  </select>
+
+                  <label for="sort-pattern">Input Pattern</label>
+                  <select id="sort-pattern">
+                    <option value="random" selected>Random</option>
+                    <option value="nearly">Nearly Sorted</option>
+                    <option value="reversed">Reverse Sorted</option>
+                    <option value="few-unique">Few Unique Values</option>
+                  </select>
+
+                  <label for="sort-size">Array Size: <span id="sort-size-value">56</span></label>
+                  <input id="sort-size" type="range" min="20" max="110" value="56">
+
+                  <label for="sort-speed">Animation Speed: <span id="sort-speed-value">42</span></label>
+                  <input id="sort-speed" type="range" min="8" max="90" value="42">
+
+                  <div class="sort_demo_actions">
+                    <button id="sort-run" type="button">Run Sort</button>
+                    <button id="sort-shuffle" type="button">Shuffle Data</button>
                   </div>
 
-                  <div class="seg_demo_actions">
-                    <button id="seg-reset" type="button">Reset Lab</button>
-                    <button id="seg-run" type="button">Run Segmentation</button>
+                  <div class="demo_metric_grid ml_usecase_grid" aria-label="Sorting algorithm use guide">
+                    <div><span>Use When</span><strong id="sort-use-when">Dataset is almost sorted and online inserts happen frequently.</strong></div>
+                    <div><span>Best Fit</span><strong id="sort-best-fit">Small or near-sorted sequences where low overhead is critical.</strong></div>
+                    <div><span>Delivery Impact</span><strong id="sort-impact">Quick, stable behavior for real-time ranked feed maintenance.</strong></div>
                   </div>
-                  <p id="seg-status" class="seg_status" aria-live="polite">Ready. Choose a mode and click Run Segmentation.</p>
+
+                  <div class="demo_metric_grid ml_diag_grid" aria-label="Sorting run diagnostics">
+                    <div><span>Comparisons</span><strong id="sort-comparisons">0</strong></div>
+                    <div><span>Writes and Swaps</span><strong id="sort-writes">0</strong></div>
+                    <div><span>Complexity Snapshot</span><strong id="sort-complexity">Best O(n), Avg O(n^2)</strong></div>
+                    <div><span>Stability</span><strong id="sort-stability">Stable</strong></div>
+                  </div>
+                  <p id="sort-status" class="demo_lab_status" aria-live="polite">Ready: choose an algorithm, generate data, and run to inspect each strategy step-by-step.</p>
                 </div>
               </div>
             </div>
@@ -437,7 +642,6 @@
           </div>
         </div>
       </section>
-
       <section class="service_area" id="service">
         <div class="main_title"><h2>Projects</h2></div>
         <div class="modern_toolbar" aria-label="Project filters">
@@ -515,7 +719,7 @@
                 </div>
                 <div class="media">
                   <div class="media-left"><i class="fa fa-globe"></i></div>
-                  <div class="media-body"><h4>Web and Scholar</h4><p><a href="https://padamjungthapa.com.np" target="_blank" rel="noopener noreferrer">padamjungthapa.com.np</a> | <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer">Google Scholar</a></p></div>
+                  <div class="media-body"><h4>Web and Scholar</h4><p><a href="https://padamjungthapa.com.np" target="_blank" rel="noopener noreferrer">padamjungthapa.com.np</a> | <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer">Google Scholar</a> | <a href="https://public.tableau.com/app/profile/padam.jung.thapa/vizzes" target="_blank" rel="noopener noreferrer">Tableau</a></p></div>
                 </div>
               </div>
             </div>
@@ -543,17 +747,7 @@
   <footer class="footer_area">
     <div class="footer_copyright">
       <div class="container">
-        <div class="pull-left"><h5>© <span id="current-year">2026</span> Padam Jung Thapa. Built for GitHub Pages.</h5></div>
-        <div class="pull-right">
-          <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="#about">About Me</a></li>
-            <li><a href="#seg-lab-spotlight">Seg Lab</a></li>
-            <li><a href="#skill">Skills</a></li>
-            <li><a href="#journey">Journey</a></li>
-            <li><a href="#service">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div>
+        <div class="pull-left"><h5>© <span id="current-year">2026</span> Padam Jung Thapa.</h5></div>
       </div>
     </div>
   </footer>
@@ -565,19 +759,9 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js" defer></script>
-  <script src="js/network-bg.js?v=20260316-1" defer></script>
-  <script src="js/threat-map.js?v=20260316-1" defer></script>
-  <script src="js/tech-tagcloud.js?v=20260316-1" defer></script>
-  <script src="js/theme.js?v=20260316-1" defer></script>
-
-  <div id="project-modal" class="modern_modal" aria-modal="true" role="dialog" aria-label="Project details">
-    <div class="modern_modal_backdrop"></div>
-    <div class="modern_modal_panel">
-      <button class="modern_modal_close" type="button" aria-label="Close project details">&times;</button>
-      <h3 data-modal-title>Project</h3>
-      <div class="project_tags" data-modal-tags></div>
-      <p data-modal-desc>Project details</p>
-    </div>
-  </div>
+  <script src="js/network-bg.js?v=20260316-3" defer></script>
+  <script src="js/threat-map.js?v=20260316-7" defer></script>
+  <script src="js/tech-tagcloud.js?v=20260316-2" defer></script>
+  <script src="js/theme.js?v=20260316-24" defer></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
     /*----------------------------------------------------*/
     /*  Menu scroll js
     /*----------------------------------------------------*/
-    var nav_offset_top = $('.header_area').offset().top;
+    var nav_offset_top = $('.header_area').length ? $('.header_area').offset().top : 0;
     function stickyHeader() {
 		if ($('.header_area').length) {
 			var strickyScrollPos = nav_offset_top;
@@ -19,10 +19,16 @@
 		}
 	}
     
-    // instance of fuction while Window Scroll event
-	$(window).on('scroll', function () {	
-		stickyHeader()
-	})
+    // Throttle sticky header updates to animation frames.
+    var stickyTicking = false;
+    $(window).on('scroll', function () {
+        if (stickyTicking) return;
+        stickyTicking = true;
+        window.requestAnimationFrame(function() {
+            stickyHeader();
+            stickyTicking = false;
+        });
+    })
     
     /*----------------------------------------------------*/
     /*  Skill js
@@ -130,11 +136,15 @@
 //        });
     
     
-    $('.header_area .nav.navbar-nav li a[href^="#"]:not([href="#"])').on('click', function(event) {
-        var $anchor = $(this);
-        $('html, body').stop().animate({
-            scrollTop: $($anchor.attr('href')).offset().top - 80
-        }, 1500);
+    $('.header_area .nav.navbar-nav li a[href^="#"]:not([href="#"]), .footer_copyright .nav.navbar-nav li a[href^="#"]:not([href="#"])').on('click', function(event) {
+        var targetId = $(this).attr('href');
+        var target = document.querySelector(targetId);
+        if (!target) return;
+        var top = target.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({
+            top: Math.max(0, top),
+            behavior: 'smooth'
+        });
         event.preventDefault();
     });
 
@@ -154,7 +164,16 @@
         });
     }
 
-    $(window).on('scroll', setActiveNav);
+    // Throttle nav state sync to animation frames.
+    var navTicking = false;
+    $(window).on('scroll', function() {
+        if (navTicking) return;
+        navTicking = true;
+        window.requestAnimationFrame(function() {
+            setActiveNav();
+            navTicking = false;
+        });
+    });
     
     
     function bodyScrollAnimation() {
@@ -169,10 +188,13 @@
     
     
     // preloader js
-        $(window).on('load', function() { // makes sure the whole site is loaded
-		$('#preloader_spinner').fadeOut(); // will first fade out the loading animation
-		$('#preloader').delay(150).fadeOut('slow'); // will fade out the white DIV that covers the website.
-		$('body').delay(150).css({'overflow':'visible'})
+        $(window).on('load', function() {
+                var $preloader = $('#preloader');
+                $preloader.addClass('is-hidden');
+                window.setTimeout(function() {
+                    $preloader.hide();
+                }, 760);
+                $('body').css({'overflow':'visible'})
                 setActiveNav();
 
                 var now = new Date().getFullYear();
@@ -222,14 +244,29 @@
     }
 
     function setupCardPointerGlow() {
+        var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+        if (reduced || coarsePointer) return;
+
         document.querySelectorAll(".service_item, .journey_card").forEach(function(card) {
-            card.addEventListener("mousemove", function(evt) {
+            var raf = 0;
+            var lastEvt = null;
+
+            function paint() {
+                raf = 0;
+                if (!lastEvt) return;
                 var rect = card.getBoundingClientRect();
-                var x = ((evt.clientX - rect.left) / rect.width) * 100;
-                var y = ((evt.clientY - rect.top) / rect.height) * 100;
+                var x = ((lastEvt.clientX - rect.left) / rect.width) * 100;
+                var y = ((lastEvt.clientY - rect.top) / rect.height) * 100;
                 card.style.setProperty("--mx", x.toFixed(2) + "%");
                 card.style.setProperty("--my", y.toFixed(2) + "%");
-            });
+            }
+
+            card.addEventListener("mousemove", function(evt) {
+                lastEvt = evt;
+                if (raf) return;
+                raf = window.requestAnimationFrame(paint);
+            }, { passive: true });
         });
     }
 
@@ -293,52 +330,6 @@
         apply(defaultBtn.getAttribute("data-filter"));
     }
 
-    function setupProjectModal() {
-        var modal = document.getElementById("project-modal");
-        if (!modal) return;
-
-        var title = modal.querySelector("[data-modal-title]");
-        var desc = modal.querySelector("[data-modal-desc]");
-        var tags = modal.querySelector("[data-modal-tags]");
-        var closeBtn = modal.querySelector(".modern_modal_close");
-        var backdrop = modal.querySelector(".modern_modal_backdrop");
-
-        function openFromCard(card) {
-            title.textContent = card.getAttribute("data-title") || "Project";
-            desc.textContent = card.getAttribute("data-description") || "No details provided.";
-            var list = (card.getAttribute("data-tags") || "").split(",").filter(Boolean);
-            tags.innerHTML = list.map(function(tag) {
-                return "<span>" + tag + "</span>";
-            }).join("");
-            modal.classList.add("is-open");
-            document.body.style.overflow = "hidden";
-        }
-
-        function close() {
-            modal.classList.remove("is-open");
-            document.body.style.overflow = "";
-        }
-
-        document.querySelectorAll(".service_item[data-title]").forEach(function(card) {
-            card.addEventListener("click", function() {
-                openFromCard(card);
-            });
-            card.setAttribute("tabindex", "0");
-            card.addEventListener("keydown", function(evt) {
-                if (evt.key === "Enter" || evt.key === " ") {
-                    evt.preventDefault();
-                    openFromCard(card);
-                }
-            });
-        });
-
-        closeBtn.addEventListener("click", close);
-        backdrop.addEventListener("click", close);
-        document.addEventListener("keydown", function(evt) {
-            if (evt.key === "Escape") close();
-        });
-    }
-
     function setupContactReveal() {
         var toggle = document.getElementById("contact-reveal-toggle");
         var panel = document.getElementById("contact-reveal-content");
@@ -353,29 +344,169 @@
         });
     }
 
+    var blueprintDemosLoadPromise = null;
+    function ensureBlueprintDemosLoaded() {
+        if (
+            typeof window.setupSegmentationDemo === "function" &&
+            typeof window.setupExplainabilityDemo === "function" &&
+            typeof window.setupSyntheticBoosterDemo === "function" &&
+            typeof window.setupClassicMlDemo === "function" &&
+            typeof window.setupEdgeBenchmarkDemo === "function"
+        ) {
+            return Promise.resolve();
+        }
+
+        if (blueprintDemosLoadPromise) return blueprintDemosLoadPromise;
+
+        blueprintDemosLoadPromise = new Promise(function(resolve, reject) {
+            var existing = document.querySelector('script[data-blueprint-demos="1"]');
+
+            function validateLoadedScript() {
+                if (
+                    typeof window.setupSegmentationDemo === "function" &&
+                    typeof window.setupExplainabilityDemo === "function" &&
+                    typeof window.setupSyntheticBoosterDemo === "function" &&
+                    typeof window.setupClassicMlDemo === "function" &&
+                    typeof window.setupEdgeBenchmarkDemo === "function"
+                ) {
+                    resolve();
+                } else {
+                    reject(new Error("Blueprint demos script loaded but setup functions are unavailable."));
+                }
+            }
+
+            function onLoad(evt) {
+                if (evt && evt.currentTarget && evt.currentTarget.setAttribute) {
+                    evt.currentTarget.setAttribute("data-loaded", "true");
+                }
+                validateLoadedScript();
+            }
+
+            function onError() {
+                reject(new Error("Failed to load js/blueprint-demos.js"));
+            }
+
+            if (existing) {
+                if (existing.getAttribute("data-loaded") === "true") {
+                    validateLoadedScript();
+                    return;
+                }
+                existing.addEventListener("load", onLoad, { once: true });
+                existing.addEventListener("error", onError, { once: true });
+                return;
+            }
+
+            var script = document.createElement("script");
+            script.src = "js/blueprint-demos.js?v=20260316-12";
+            script.async = true;
+            script.defer = true;
+            script.setAttribute("data-blueprint-demos", "1");
+            script.addEventListener("load", onLoad, { once: true });
+            script.addEventListener("error", onError, { once: true });
+            (document.head || document.body).appendChild(script);
+        }).catch(function(err) {
+            // Allow retry on the next interaction if loading fails once.
+            blueprintDemosLoadPromise = null;
+            throw err;
+        });
+
+        return blueprintDemosLoadPromise;
+    }
+
     function setupAiBlueprintTabs() {
         var tabs = document.querySelectorAll(".ai_blueprint_tab");
         var panels = document.querySelectorAll(".ai_blueprint_panel");
         if (!tabs.length || !panels.length) return;
 
-        function activate(view) {
+        var demoInitState = {
+            seg: false,
+            xai: false,
+            aug: false,
+            ml: false,
+            edge: false
+        };
+
+        function ensureDemoInitialized(view) {
+            if (!demoInitState.hasOwnProperty(view) || demoInitState[view]) return;
+
+            ensureBlueprintDemosLoaded().then(function() {
+                if (demoInitState[view]) return;
+
+                if (view === "seg") {
+                    if (typeof window.setupSegmentationDemo !== "function") {
+                        throw new Error("Missing initializer for blueprint view: seg");
+                    }
+                    window.setupSegmentationDemo();
+                    if (typeof window.setupExplainabilityDemo === "function") window.setupExplainabilityDemo();
+                    if (typeof window.setupSyntheticBoosterDemo === "function") window.setupSyntheticBoosterDemo();
+                    demoInitState.seg = true;
+                    demoInitState.xai = true;
+                    demoInitState.aug = true;
+                    return;
+                }
+
+                var initializer = null;
+                if (view === "xai") initializer = window.setupExplainabilityDemo;
+                else if (view === "aug") initializer = window.setupSyntheticBoosterDemo;
+                else if (view === "ml") initializer = window.setupClassicMlDemo;
+                else if (view === "edge") initializer = window.setupEdgeBenchmarkDemo;
+
+                if (typeof initializer !== "function") {
+                    throw new Error("Missing initializer for blueprint view: " + view);
+                }
+
+                initializer();
+                demoInitState[view] = true;
+            }).catch(function(err) {
+                // Keep app resilient if a single lab fails to initialize.
+                console.error("Failed to initialize demo view:", view, err);
+            });
+        }
+
+        function normalizeView(raw) {
+            if (!raw) return "";
+            return String(raw).toLowerCase().replace(/^ai-view-/, "").trim();
+        }
+
+        function resolveInitialView() {
+            var params = new URLSearchParams(window.location.search || "");
+            var viaQuery = normalizeView(params.get("view"));
+            if (viaQuery) return viaQuery;
+
+            var hash = normalizeView((window.location.hash || "").replace(/^#/, ""));
+            if (hash) return hash;
+            return "";
+        }
+
+        function activate(view, updateUrl) {
+            var normalized = normalizeView(view);
+            if (!normalized) return;
             tabs.forEach(function(tab) {
-                var isActive = tab.getAttribute("data-ai-view") === view;
+                var isActive = tab.getAttribute("data-ai-view") === normalized;
                 tab.classList.toggle("is-active", isActive);
                 tab.setAttribute("aria-selected", String(isActive));
             });
 
             panels.forEach(function(panel) {
                 var panelView = panel.id.replace("ai-view-", "");
-                var isActive = panelView === view;
+                var isActive = panelView === normalized;
                 panel.classList.toggle("is-active", isActive);
                 panel.hidden = !isActive;
             });
+
+            ensureDemoInitialized(normalized);
+
+            if (updateUrl && window.history && window.history.replaceState) {
+                var params = new URLSearchParams(window.location.search || "");
+                params.set("view", normalized);
+                var next = window.location.pathname + "?" + params.toString() + "#ai-blueprint";
+                window.history.replaceState(null, "", next);
+            }
         }
 
         tabs.forEach(function(tab) {
             tab.addEventListener("click", function() {
-                activate(tab.getAttribute("data-ai-view"));
+                activate(tab.getAttribute("data-ai-view"), true);
             });
         });
 
@@ -387,19 +518,39 @@
         }
 
         var defaultTab = document.querySelector(".ai_blueprint_tab.is-active") || tabs[0];
-        activate(defaultTab.getAttribute("data-ai-view"));
+        var initialView = resolveInitialView();
+        var exists = initialView && document.querySelector('.ai_blueprint_tab[data-ai-view="' + initialView + '"]');
+        activate(exists ? initialView : defaultTab.getAttribute("data-ai-view"), false);
+
+        var quickLinks = document.querySelectorAll("[data-blueprint-view]");
+        quickLinks.forEach(function(link) {
+            link.addEventListener("click", function(evt) {
+                var v = link.getAttribute("data-blueprint-view");
+                if (!v) return;
+                evt.preventDefault();
+                activate(v, true);
+                var root = document.getElementById("ai-blueprint");
+                if (root && root.scrollIntoView) root.scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+        });
     }
 
     function setupAiBlueprintInteractions() {
+        if (!document.querySelector(".ai_blueprint_area")) return;
+
         var stageCards = document.querySelectorAll(".ml_stage_card");
+        var lifecycleTrack = document.querySelector(".ml_lifecycle_track");
         var stageTitle = document.getElementById("ml-stage-title");
         var stageDetail = document.getElementById("ml-stage-detail");
         var stageArtifact = document.getElementById("ml-stage-artifact");
+        var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         function activateStage(card) {
             if (!card || !stageTitle || !stageDetail || !stageArtifact) return;
             stageCards.forEach(function(item) {
-                item.classList.toggle("is-active", item === card);
+                var active = item === card;
+                item.classList.toggle("is-active", active);
+                item.setAttribute("aria-selected", String(active));
             });
 
             stageTitle.textContent = card.getAttribute("data-stage") || "Stage";
@@ -423,45 +574,114 @@
         var defaultStage = document.querySelector(".ml_stage_card.is-active") || stageCards[0];
         activateStage(defaultStage);
 
-        var flowToggle = document.getElementById("cv-flow-toggle");
         var pipeline = document.querySelector(".cv_pipeline_graph");
-        if (flowToggle && pipeline) {
-            flowToggle.addEventListener("click", function() {
-                var active = pipeline.classList.toggle("is-flowing");
-                flowToggle.classList.toggle("is-active", active);
-                flowToggle.setAttribute("aria-pressed", String(active));
-                flowToggle.textContent = active ? "Pause Signal Flow" : "Run Signal Flow";
-            });
+        if (pipeline) {
+            pipeline.classList.add("is-flowing");
         }
 
-        var lensButtons = document.querySelectorAll(".readiness_lens_btn");
-        var readinessTable = document.querySelector(".readiness_matrix");
-        if (lensButtons.length && readinessTable) {
-            function applyLens(lens) {
-                readinessTable.classList.remove("lens-all", "lens-research", "lens-production");
-                readinessTable.classList.add("lens-" + lens);
+        var readinessWrap = document.getElementById("readiness-showcase");
+        var lensButtons = readinessWrap ? readinessWrap.querySelectorAll(".readiness_lens_btn") : [];
+        var readinessCards = readinessWrap ? readinessWrap.querySelectorAll(".readiness_capability") : [];
+        var readinessStages = readinessWrap ? readinessWrap.querySelectorAll(".readiness_stage_btn") : [];
+        var readinessSummary = document.getElementById("readiness-summary");
+        var readinessActiveCard = 0;
 
-                lensButtons.forEach(function(btn) {
-                    var active = btn.getAttribute("data-readiness-lens") === lens;
-                    btn.classList.toggle("is-active", active);
-                    btn.setAttribute("aria-selected", String(active));
-                });
-            }
-
+        function currentLens() {
+            var active = "all";
             lensButtons.forEach(function(btn) {
-                btn.addEventListener("click", function() {
-                    applyLens(btn.getAttribute("data-readiness-lens"));
-                });
+                if (btn.classList.contains("is-active")) active = btn.getAttribute("data-readiness-lens") || "all";
+            });
+            return active;
+        }
+
+        function currentStage() {
+            var stage = "prototype";
+            readinessStages.forEach(function(btn) {
+                if (btn.classList.contains("is-active")) stage = btn.getAttribute("data-readiness-stage") || "prototype";
+            });
+            return stage;
+        }
+
+        function stageBoost(stage) {
+            if (stage === "pilot") return 4;
+            if (stage === "production") return 9;
+            if (stage === "scale") return 12;
+            return 0;
+        }
+
+        function applyReadinessView() {
+            if (!readinessCards.length) return;
+            var lens = currentLens();
+            var stage = currentStage();
+            var boost = stageBoost(stage);
+
+            readinessCards.forEach(function(card, index) {
+                var base = parseInt(card.getAttribute("data-score-" + lens), 10);
+                if (isNaN(base)) base = parseInt(card.getAttribute("data-score-all"), 10) || 70;
+                var score = Math.max(45, Math.min(99, base + boost));
+                var meter = card.querySelector(".readiness_meter span");
+                var value = card.querySelector(".readiness_value");
+                if (meter) meter.style.width = score + "%";
+                if (value) value.textContent = String(score);
+                card.classList.toggle("is-active", index === readinessActiveCard);
             });
 
-            var defaultLens = document.querySelector(".readiness_lens_btn.is-active") || lensButtons[0];
-            applyLens(defaultLens.getAttribute("data-readiness-lens"));
+            var activeCard = readinessCards[readinessActiveCard];
+            if (readinessSummary && activeCard) {
+                var cap = activeCard.getAttribute("data-capability") || "Capability";
+                var note = activeCard.getAttribute("data-note") || "Readiness detail unavailable.";
+                readinessSummary.textContent = stage.charAt(0).toUpperCase() + stage.slice(1) + " stage, " + lens + " lens: " + cap + ". " + note;
+            }
+        }
+
+        function nextReadinessCard() {
+            if (!readinessCards.length) return;
+            readinessActiveCard = (readinessActiveCard + 1) % readinessCards.length;
+            applyReadinessView();
+        }
+
+        lensButtons.forEach(function(btn) {
+            btn.addEventListener("click", function() {
+                lensButtons.forEach(function(item) {
+                    var active = item === btn;
+                    item.classList.toggle("is-active", active);
+                    item.setAttribute("aria-selected", String(active));
+                });
+                applyReadinessView();
+            });
+        });
+
+        readinessStages.forEach(function(btn) {
+            btn.addEventListener("click", function() {
+                readinessStages.forEach(function(item) {
+                    var active = item === btn;
+                    item.classList.toggle("is-active", active);
+                    item.setAttribute("aria-selected", String(active));
+                });
+                applyReadinessView();
+            });
+        });
+
+        readinessCards.forEach(function(card, index) {
+            card.addEventListener("mouseenter", function() {
+                readinessActiveCard = index;
+                applyReadinessView();
+            });
+            card.addEventListener("focusin", function() {
+                readinessActiveCard = index;
+                applyReadinessView();
+            });
+        });
+
+        if (lensButtons.length || readinessCards.length) {
+            applyReadinessView();
         }
 
         var playbookSteps = document.querySelectorAll(".playbook_step");
         var playbookTitle = document.getElementById("playbook-step-title");
         var playbookDetail = document.getElementById("playbook-step-detail");
         var playbookOutput = document.getElementById("playbook-step-output");
+        var playbookShell = document.querySelector(".project_playbook");
 
         function activatePlaybook(step) {
             if (!step || !playbookTitle || !playbookDetail || !playbookOutput) return;
@@ -486,356 +706,352 @@
         var defaultPlaybook = document.querySelector(".playbook_step.is-active") || playbookSteps[0];
         if (defaultPlaybook) activatePlaybook(defaultPlaybook);
 
-        setupSegmentationDemo();
-    }
+        var lifecycleTimer = null;
+        var lifecycleResumeTimer = null;
+        var readinessLensTimer = null;
+        var readinessRowTimer = null;
+        var playbookTimer = null;
+        var playbookResumeTimer = null;
 
-    function setupSegmentationDemo() {
-        var canvas = document.getElementById("seg-demo-canvas");
-        var image = document.getElementById("seg-demo-image");
-        var semanticMaskImage = document.getElementById("seg-demo-mask-semantic");
-        var instancePrimaryMaskImage = document.getElementById("seg-demo-mask-instance-primary");
-        var instanceSecondaryMaskImage = document.getElementById("seg-demo-mask-instance-secondary");
-        var instanceTertiaryMaskImage = document.getElementById("seg-demo-mask-instance-tertiary");
-        var sensitivity = document.getElementById("seg-sensitivity");
-        var opacity = document.getElementById("seg-opacity");
-        var resetBtn = document.getElementById("seg-reset");
-        var runBtn = document.getElementById("seg-run");
-        var status = document.getElementById("seg-status");
-        var modeDetail = document.getElementById("seg-mode-detail");
-        var modeButtons = Array.prototype.slice.call(document.querySelectorAll(".seg_mode_btn"));
-
-        if (!canvas || !image || !semanticMaskImage || !instancePrimaryMaskImage || !instanceSecondaryMaskImage || !instanceTertiaryMaskImage || !sensitivity || !opacity || !resetBtn || !runBtn || !status || !modeDetail || !modeButtons.length) return;
-
-        var ctx = canvas.getContext("2d", { willReadFrequently: true });
-        if (!ctx) return;
-
-        var segMode = "semantic";
-        var drawWidth = 0;
-        var drawHeight = 0;
-        var baseData = null;
-        var modeMasks = {
-            semantic: null,
-            instancePrimary: null,
-            instanceSecondary: null,
-            instanceTertiary: null
-        };
-        var currentMask = null;
-        var currentLabelMap = null;
-
-        function setStatus(text) {
-            status.textContent = text;
+        function activePlaybookIndex() {
+            for (var i = 0; i < playbookSteps.length; i += 1) {
+                if (playbookSteps[i].classList.contains("is-active")) return i;
+            }
+            return 0;
         }
 
-        function copyMask(mask) {
-            return mask ? new Uint8Array(mask) : null;
+        function stopPlaybookLiveFlow() {
+            if (playbookTimer) {
+                window.clearInterval(playbookTimer);
+                playbookTimer = null;
+            }
+            if (playbookResumeTimer) {
+                window.clearTimeout(playbookResumeTimer);
+                playbookResumeTimer = null;
+            }
+            if (playbookShell) playbookShell.classList.remove("is-live");
         }
 
-        function buildMaskFromAsset(img) {
-            if (!drawWidth || !drawHeight || !img.naturalWidth || !img.naturalHeight) return null;
-            var maskCanvas = document.createElement("canvas");
-            maskCanvas.width = drawWidth;
-            maskCanvas.height = drawHeight;
-            var maskCtx = maskCanvas.getContext("2d", { willReadFrequently: true });
-            if (!maskCtx) return null;
-
-            maskCtx.drawImage(img, 0, 0, drawWidth, drawHeight);
-            var pixels = maskCtx.getImageData(0, 0, drawWidth, drawHeight).data;
-            var binary = new Uint8Array(drawWidth * drawHeight);
-            for (var i = 0; i < binary.length; i += 1) {
-                var idx = i * 4;
-                var luminance = pixels[idx] + pixels[idx + 1] + pixels[idx + 2];
-                binary[i] = (pixels[idx + 3] > 10 && luminance > 24) ? 1 : 0;
+        function activeStageIndex() {
+            for (var i = 0; i < stageCards.length; i += 1) {
+                if (stageCards[i].classList.contains("is-active")) return i;
             }
-            return binary;
+            return 0;
         }
 
-        function buildModeMasksFromAssets() {
-            modeMasks.semantic = buildMaskFromAsset(semanticMaskImage);
-            modeMasks.instancePrimary = buildMaskFromAsset(instancePrimaryMaskImage);
-            modeMasks.instanceSecondary = buildMaskFromAsset(instanceSecondaryMaskImage);
-            modeMasks.instanceTertiary = buildMaskFromAsset(instanceTertiaryMaskImage);
+        function stopLifecycleFlow() {
+            if (lifecycleTimer) {
+                window.clearInterval(lifecycleTimer);
+                lifecycleTimer = null;
+            }
+            if (lifecycleResumeTimer) {
+                window.clearTimeout(lifecycleResumeTimer);
+                lifecycleResumeTimer = null;
+            }
+            if (lifecycleTrack) lifecycleTrack.classList.remove("is-live");
         }
 
-        function applyModeText() {
-            if (segMode === "semantic") {
-                modeDetail.textContent = "Semantic mode: one class for all objects combined.";
-                return;
-            }
-
-            if (segMode === "instance") {
-                modeDetail.textContent = "Instance mode: each object has its own ID and color.";
-                return;
-            }
-
-            modeDetail.textContent = "Panoptic mode: objects plus background stuff classes (sky and floor).";
+        function startLifecycleFlow() {
+            if (prefersReducedMotion || stageCards.length < 2) return;
+            stopLifecycleFlow();
+            if (lifecycleTrack) lifecycleTrack.classList.add("is-live");
+            lifecycleTimer = window.setInterval(function() {
+                if (document.hidden) return;
+                var nextStage = (activeStageIndex() + 1) % stageCards.length;
+                activateStage(stageCards[nextStage]);
+            }, 3400);
         }
 
-        function panopticStuffLabelAt(index) {
-            var y = Math.floor(index / drawWidth);
-            return y < Math.floor(drawHeight * 0.66) ? 10 : 11;
+        function scheduleLifecycleResume() {
+            if (prefersReducedMotion || stageCards.length < 2) return;
+            if (lifecycleResumeTimer) window.clearTimeout(lifecycleResumeTimer);
+            lifecycleResumeTimer = window.setTimeout(startLifecycleFlow, 3600);
         }
 
-        function applySensitivityToThingMask(mask) {
-            if (!mask || !mask.length) return mask;
-
-            var level = parseInt(sensitivity.value, 10);
-            if (level >= 65 && level <= 75) return new Uint8Array(mask);
-
-            var out = new Uint8Array(mask.length);
-            for (var y = 1; y < drawHeight - 1; y += 1) {
-                for (var x = 1; x < drawWidth - 1; x += 1) {
-                    var idx = y * drawWidth + x;
-                    var votes = 0;
-                    for (var oy = -1; oy <= 1; oy += 1) {
-                        for (var ox = -1; ox <= 1; ox += 1) {
-                            if (mask[(y + oy) * drawWidth + (x + ox)]) votes += 1;
-                        }
-                    }
-                    if (level > 75) {
-                        out[idx] = votes >= 3 ? 1 : 0;
-                    } else {
-                        out[idx] = votes >= 6 ? 1 : 0;
-                    }
-                }
+        function stopReadinessFlow() {
+            if (readinessLensTimer) {
+                window.clearInterval(readinessLensTimer);
+                readinessLensTimer = null;
             }
-            return out;
+            if (readinessRowTimer) {
+                window.clearInterval(readinessRowTimer);
+                readinessRowTimer = null;
+            }
+            if (readinessWrap) readinessWrap.classList.remove("is-live");
         }
 
-        function applyOverlay(mask, labelMap) {
-            if (!baseData) return;
-            var img = new ImageData(new Uint8ClampedArray(baseData.data), drawWidth, drawHeight);
-            var alpha = parseInt(opacity.value, 10) / 100;
+        function startReadinessFlow() {
+            if (prefersReducedMotion || !lensButtons.length || !readinessCards.length) return;
+            stopReadinessFlow();
+            if (readinessWrap) readinessWrap.classList.add("is-live");
 
-            if (segMode === "semantic" && mask) {
-                for (var i = 0; i < mask.length; i += 1) {
-                    if (!mask[i]) continue;
-                    var idx = i * 4;
-                    img.data[idx] = Math.round(img.data[idx] * (1 - alpha) + 34 * alpha);
-                    img.data[idx + 1] = Math.round(img.data[idx + 1] * (1 - alpha) + 211 * alpha);
-                    img.data[idx + 2] = Math.round(img.data[idx + 2] * (1 - alpha) + 238 * alpha);
-                }
-            }
-
-            if ((segMode === "instance" || segMode === "panoptic") && labelMap) {
-                for (var j = 0; j < labelMap.length; j += 1) {
-                    var label = labelMap[j];
-                    var jdx = j * 4;
-                    if (label === 10) {
-                        img.data[jdx] = Math.round(img.data[jdx] * (1 - alpha * 0.36) + 37 * alpha * 0.36);
-                        img.data[jdx + 1] = Math.round(img.data[jdx + 1] * (1 - alpha * 0.36) + 99 * alpha * 0.36);
-                        img.data[jdx + 2] = Math.round(img.data[jdx + 2] * (1 - alpha * 0.36) + 235 * alpha * 0.36);
-                    }
-                    if (label === 11) {
-                        img.data[jdx] = Math.round(img.data[jdx] * (1 - alpha * 0.36) + 22 * alpha * 0.36);
-                        img.data[jdx + 1] = Math.round(img.data[jdx + 1] * (1 - alpha * 0.36) + 163 * alpha * 0.36);
-                        img.data[jdx + 2] = Math.round(img.data[jdx + 2] * (1 - alpha * 0.36) + 74 * alpha * 0.36);
-                    }
-                    if (label === 1) {
-                        img.data[jdx] = Math.round(img.data[jdx] * (1 - alpha) + 34 * alpha);
-                        img.data[jdx + 1] = Math.round(img.data[jdx + 1] * (1 - alpha) + 211 * alpha);
-                        img.data[jdx + 2] = Math.round(img.data[jdx + 2] * (1 - alpha) + 238 * alpha);
-                    }
-                    if (label === 2) {
-                        img.data[jdx] = Math.round(img.data[jdx] * (1 - alpha) + 236 * alpha);
-                        img.data[jdx + 1] = Math.round(img.data[jdx + 1] * (1 - alpha) + 72 * alpha);
-                        img.data[jdx + 2] = Math.round(img.data[jdx + 2] * (1 - alpha) + 153 * alpha);
-                    }
-                    if (label === 3) {
-                        img.data[jdx] = Math.round(img.data[jdx] * (1 - alpha) + 245 * alpha);
-                        img.data[jdx + 1] = Math.round(img.data[jdx + 1] * (1 - alpha) + 158 * alpha);
-                        img.data[jdx + 2] = Math.round(img.data[jdx + 2] * (1 - alpha) + 11 * alpha);
-                    }
-                }
-            }
-
-            if (mask || labelMap) {
-                for (var k = 0; k < drawWidth * drawHeight; k += 1) {
-                    var x = k % drawWidth;
-                    var y = Math.floor(k / drawWidth);
-                    var left = x > 0 ? k - 1 : k;
-                    var right = x < drawWidth - 1 ? k + 1 : k;
-                    var up = y > 0 ? k - drawWidth : k;
-                    var down = y < drawHeight - 1 ? k + drawWidth : k;
-                    var self = labelMap ? labelMap[k] : (mask && mask[k] ? 1 : 0);
-                    var lval = labelMap ? labelMap[left] : (mask && mask[left] ? 1 : 0);
-                    var rval = labelMap ? labelMap[right] : (mask && mask[right] ? 1 : 0);
-                    var uval = labelMap ? labelMap[up] : (mask && mask[up] ? 1 : 0);
-                    var dval = labelMap ? labelMap[down] : (mask && mask[down] ? 1 : 0);
-                    if (self !== lval || self !== rval || self !== uval || self !== dval) {
-                        var odx = k * 4;
-                        if (segMode === "semantic") {
-                            img.data[odx] = 249;
-                            img.data[odx + 1] = 115;
-                            img.data[odx + 2] = 22;
-                        } else if (segMode === "instance") {
-                            img.data[odx] = 15;
-                            img.data[odx + 1] = 23;
-                            img.data[odx + 2] = 42;
-                        } else {
-                            img.data[odx] = 255;
-                            img.data[odx + 1] = 255;
-                            img.data[odx + 2] = 255;
-                        }
-                    }
-                }
-            }
-
-            ctx.putImageData(img, 0, 0);
-        }
-
-        function drawBaseImage() {
-            if (!baseData) return;
-            ctx.putImageData(new ImageData(new Uint8ClampedArray(baseData.data), drawWidth, drawHeight), 0, 0);
-        }
-
-        function runSegmentation() {
-            if (!drawWidth || !drawHeight) return;
-
-            var labelMap = null;
-            var thingMask = null;
-
-            if (segMode === "semantic" && modeMasks.semantic) {
-                thingMask = copyMask(modeMasks.semantic);
-            }
-
-            if ((segMode === "instance" || segMode === "panoptic") && modeMasks.instancePrimary && modeMasks.instanceSecondary && modeMasks.instanceTertiary) {
-                labelMap = new Uint8Array(drawWidth * drawHeight);
-                for (var i = 0; i < labelMap.length; i += 1) {
-                    if (segMode === "panoptic") labelMap[i] = panopticStuffLabelAt(i);
-                    else labelMap[i] = 0;
-
-                    if (modeMasks.instancePrimary[i]) labelMap[i] = 1;
-                    else if (modeMasks.instanceSecondary[i]) labelMap[i] = 2;
-                    else if (modeMasks.instanceTertiary[i]) labelMap[i] = 3;
-                }
-
-                thingMask = new Uint8Array(labelMap.length);
-                for (var m = 0; m < labelMap.length; m += 1) {
-                    thingMask[m] = (labelMap[m] === 1 || labelMap[m] === 2 || labelMap[m] === 3) ? 1 : 0;
-                }
-            }
-
-            if (thingMask) {
-                var tuned = applySensitivityToThingMask(thingMask);
-                if (labelMap) {
-                    for (var l = 0; l < labelMap.length; l += 1) {
-                        if (labelMap[l] === 1 || labelMap[l] === 2 || labelMap[l] === 3) {
-                            if (!tuned[l]) {
-                                labelMap[l] = segMode === "panoptic" ? panopticStuffLabelAt(l) : 0;
-                            }
-                        }
-                    }
-                }
-                currentMask = tuned;
-                currentLabelMap = labelMap;
-            }
-
-            applyOverlay(currentMask, currentLabelMap);
-
-            if (segMode === "semantic") {
-                setStatus("Semantic result: all objects are treated as one class.");
-            } else if (segMode === "instance") {
-                setStatus("Instance result: sphere, cylinder, and pyramid are shown as separate IDs.");
-            } else {
-                setStatus("Panoptic result: object instances plus sky/floor stuff are shown together.");
-            }
-        }
-
-        function fitAndDrawImage() {
-            if (!image.naturalWidth || !image.naturalHeight) return;
-
-            var maxWidth = Math.min(760, Math.max(360, canvas.parentElement.clientWidth - 20));
-            var ratio = image.naturalHeight / image.naturalWidth;
-            drawWidth = Math.round(maxWidth);
-            drawHeight = Math.round(maxWidth * ratio);
-
-            canvas.width = drawWidth;
-            canvas.height = drawHeight;
-
-            ctx.drawImage(image, 0, 0, drawWidth, drawHeight);
-            baseData = ctx.getImageData(0, 0, drawWidth, drawHeight);
-            buildModeMasksFromAssets();
-            currentMask = null;
-            currentLabelMap = null;
-            drawBaseImage();
-            applyModeText();
-            setStatus("Ready. Choose a mode and click Run Segmentation.");
-        }
-
-        modeButtons.forEach(function(btn) {
-            btn.addEventListener("click", function() {
-                segMode = btn.getAttribute("data-seg-mode") || "semantic";
-                modeButtons.forEach(function(item) {
-                    var active = item === btn;
-                    item.classList.toggle("is-active", active);
-                    item.setAttribute("aria-selected", String(active));
+            readinessLensTimer = window.setInterval(function() {
+                if (document.hidden) return;
+                var activeIndex = 0;
+                lensButtons.forEach(function(btn, idx) {
+                    if (btn.classList.contains("is-active")) activeIndex = idx;
                 });
-                applyModeText();
-                runSegmentation();
+                var nextLensBtn = lensButtons[(activeIndex + 1) % lensButtons.length];
+                if (nextLensBtn) {
+                    var nextLens = nextLensBtn.getAttribute("data-readiness-lens");
+                    if (nextLens) nextLensBtn.click();
+                }
+            }, 4200);
+
+            readinessRowTimer = window.setInterval(function() {
+                if (document.hidden) return;
+                nextReadinessCard();
+            }, 1800);
+        }
+
+        function startPlaybookLiveFlow() {
+            if (prefersReducedMotion || playbookSteps.length < 2) return;
+            stopPlaybookLiveFlow();
+            if (playbookShell) playbookShell.classList.add("is-live");
+            playbookTimer = window.setInterval(function() {
+                if (document.hidden) return;
+                var next = (activePlaybookIndex() + 1) % playbookSteps.length;
+                activatePlaybook(playbookSteps[next]);
+            }, 2300);
+        }
+
+        function schedulePlaybookResume() {
+            if (prefersReducedMotion || playbookSteps.length < 2) return;
+            if (playbookResumeTimer) window.clearTimeout(playbookResumeTimer);
+            playbookResumeTimer = window.setTimeout(startPlaybookLiveFlow, 2600);
+        }
+
+        playbookSteps.forEach(function(step) {
+            step.addEventListener("click", function() {
+                stopPlaybookLiveFlow();
+                schedulePlaybookResume();
             });
         });
 
-        runBtn.addEventListener("click", function() {
-            runSegmentation();
+        stageCards.forEach(function(card) {
+            card.addEventListener("click", function() {
+                stopLifecycleFlow();
+                scheduleLifecycleResume();
+            });
         });
 
-        resetBtn.addEventListener("click", function() {
-            currentMask = null;
-            currentLabelMap = null;
-            drawBaseImage();
-            setStatus("Reset complete. Choose a mode and run again.");
+        if (lifecycleTrack) {
+            lifecycleTrack.addEventListener("mouseenter", stopLifecycleFlow);
+            lifecycleTrack.addEventListener("mouseleave", startLifecycleFlow);
+            lifecycleTrack.addEventListener("focusin", stopLifecycleFlow);
+            lifecycleTrack.addEventListener("focusout", function() {
+                scheduleLifecycleResume();
+            });
+        }
+
+        if (readinessWrap) {
+            readinessWrap.addEventListener("mouseenter", stopReadinessFlow);
+            readinessWrap.addEventListener("mouseleave", startReadinessFlow);
+            readinessWrap.addEventListener("focusin", stopReadinessFlow);
+            readinessWrap.addEventListener("focusout", startReadinessFlow);
+        }
+
+        if (playbookShell) {
+            playbookShell.addEventListener("mouseenter", stopPlaybookLiveFlow);
+            playbookShell.addEventListener("mouseleave", startPlaybookLiveFlow);
+            playbookShell.addEventListener("focusin", stopPlaybookLiveFlow);
+            playbookShell.addEventListener("focusout", function() {
+                schedulePlaybookResume();
+            });
+        }
+
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                stopLifecycleFlow();
+                stopReadinessFlow();
+                stopPlaybookLiveFlow();
+            } else {
+                startLifecycleFlow();
+                startReadinessFlow();
+                startPlaybookLiveFlow();
+            }
         });
 
-        sensitivity.addEventListener("input", function() {
-            if (currentMask) runSegmentation();
-        });
+        startLifecycleFlow();
+        startReadinessFlow();
+        startPlaybookLiveFlow();
+    }
 
-        opacity.addEventListener("input", function() {
-            if (currentMask || currentLabelMap) {
-                applyOverlay(currentMask, currentLabelMap);
+    function setupAboutFocusTypewriter() {
+        var focusTarget = document.getElementById("focus-typewriter-text");
+        if (!focusTarget) return;
+
+        var focusPhrases = [
+            "Full-Stack Software Engineer",
+            "Internet Security Researcher",
+            "Web Measurement Specialist",
+            "Java Microservices Engineer",
+            "MLOps and Cloud Engineer"
+        ];
+
+        var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReducedMotion) {
+            if (focusTarget) focusTarget.textContent = focusPhrases[0];
+            return;
+        }
+
+        var phraseIndex = 0;
+        var charIndex = 0;
+        var deleting = false;
+        var timer = null;
+        var firstPhraseDisplayed = false;
+        
+        // Timing configuration - more generous for visibility
+        var FIRST_PHRASE_HOLD_MS = 5800;  // 5.8 seconds for first phrase (very visible)
+        var PHRASE_HOLD_MS = 4200;         // 4.2 seconds for other phrases (well-visible)
+        var CHAR_APPEAR_MS = 75;           // 75ms per character (slower for visibility)
+        var CHAR_ERASE_MS = 55;            // 55ms per character erase (smooth)
+        var TRANSITION_DELAY_MS = 520;     // 520ms pause before next phrase starts typing
+
+        // Display the first phrase and start countdown
+        function displayPhrase(index) {
+            focusTarget.textContent = focusPhrases[index];
+            focusTarget.style.opacity = "1";
+        }
+
+        function schedule(ms) {
+            if (timer) window.clearTimeout(timer);
+            timer = window.setTimeout(tick, ms);
+        }
+
+        function tick() {
+            var phrase = focusPhrases[phraseIndex];
+
+            // TYPING PHASE
+            if (!deleting) {
+                if (charIndex === 0) {
+                    // Start typing this phrase from scratch
+                    focusTarget.textContent = "";
+                    focusTarget.style.opacity = "1";
+                }
+                
+                charIndex = Math.min(phrase.length, charIndex + 1);
+                focusTarget.textContent = phrase.slice(0, charIndex);
+                
+                if (charIndex === phrase.length) {
+                    // Finished typing - hold the phrase
+                    deleting = true;
+                    var holdTime = !firstPhraseDisplayed && phraseIndex === 0 ? FIRST_PHRASE_HOLD_MS : PHRASE_HOLD_MS;
+                    firstPhraseDisplayed = true;
+                    schedule(holdTime);
+                    return;
+                }
+                // Continue typing
+                schedule(CHAR_APPEAR_MS + Math.random() * 12);
                 return;
             }
-            drawBaseImage();
+
+            // ERASING PHASE
+            charIndex = Math.max(0, charIndex - 1);
+            focusTarget.textContent = phrase.slice(0, charIndex);
+            
+            if (charIndex === 0) {
+                // Finished erasing - move to next phrase
+                deleting = false;
+                phraseIndex = (phraseIndex + 1) % focusPhrases.length;
+                // Transition delay before typing next phrase
+                schedule(TRANSITION_DELAY_MS);
+                return;
+            }
+            // Continue erasing
+            schedule(CHAR_ERASE_MS + Math.random() * 8);
+        }
+
+        // Initialize with first phrase displayed for full duration
+        displayPhrase(0);
+        schedule(FIRST_PHRASE_HOLD_MS);
+
+        // Cleanup on page unload
+        window.addEventListener("beforeunload", function() {
+            if (timer) window.clearTimeout(timer);
         });
+    }
 
-        image.addEventListener("load", fitAndDrawImage);
+    function setupProfilePic3DSmoothing() {
+        var pic = document.querySelector(".about_person_area .person_img img");
+        var shell = document.querySelector(".about_person_area .person_img");
+        if (!pic || !shell) return;
 
-        function onMaskLoaded() {
-            if (drawWidth && drawHeight) {
-                buildModeMasksFromAssets();
+        var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var maxTilt = reduceMotion ? 6 : 12;
+        var target = { x: 0, y: 0 };
+        var current = { x: 0, y: 0 };
+        var raf = 0;
+
+        function setTilt(x, y) {
+            pic.style.setProperty("--pic-rot-y", x.toFixed(2) + "deg");
+            pic.style.setProperty("--pic-rot-x", y.toFixed(2) + "deg");
+        }
+
+        function animateTilt() {
+            current.x += (target.x - current.x) * 0.16;
+            current.y += (target.y - current.y) * 0.16;
+            setTilt(current.x, current.y);
+
+            var epsilon = 0.08;
+            if (Math.abs(target.x - current.x) > epsilon || Math.abs(target.y - current.y) > epsilon) {
+                raf = window.requestAnimationFrame(animateTilt);
+            } else {
+                raf = 0;
             }
         }
 
-        semanticMaskImage.addEventListener("load", onMaskLoaded);
-        instancePrimaryMaskImage.addEventListener("load", onMaskLoaded);
-        instanceSecondaryMaskImage.addEventListener("load", onMaskLoaded);
-        instanceTertiaryMaskImage.addEventListener("load", onMaskLoaded);
+        function queueAnimate() {
+            if (!raf) raf = window.requestAnimationFrame(animateTilt);
+        }
 
-        image.addEventListener("error", function() {
-            setStatus("Segmentation image failed to load. Please refresh the page.");
+        function pointToTilt(clientX, clientY) {
+            var rect = pic.getBoundingClientRect();
+            var cx = rect.left + rect.width / 2;
+            var cy = rect.top + rect.height / 2;
+            var normX = (clientX - cx) / Math.max(1, rect.width / 2);
+            var normY = (clientY - cy) / Math.max(1, rect.height / 2);
+
+            target.x = Math.max(-maxTilt, Math.min(maxTilt, normX * maxTilt));
+            target.y = Math.max(-maxTilt, Math.min(maxTilt, -normY * maxTilt));
+            pic.classList.add("smooth-3d");
+            shell.classList.add("is-interacting");
+            queueAnimate();
+        }
+
+        function resetTilt() {
+            target.x = 0;
+            target.y = 0;
+            shell.classList.remove("is-interacting");
+            queueAnimate();
+            window.setTimeout(function() {
+                if (Math.abs(current.x) < 0.18 && Math.abs(current.y) < 0.18) {
+                    pic.classList.remove("smooth-3d");
+                }
+            }, 180);
+        }
+
+        pic.addEventListener("mousemove", function(e) {
+            pointToTilt(e.clientX, e.clientY);
         });
 
-        function onMaskError() {
-            setStatus("Mask asset failed to load. Please refresh the page.");
-        }
-
-        semanticMaskImage.addEventListener("error", onMaskError);
-        instancePrimaryMaskImage.addEventListener("error", onMaskError);
-        instanceSecondaryMaskImage.addEventListener("error", onMaskError);
-        instanceTertiaryMaskImage.addEventListener("error", onMaskError);
-
-        if (image.complete && image.naturalWidth) {
-            fitAndDrawImage();
-        }
-        if (semanticMaskImage.complete && semanticMaskImage.naturalWidth && instancePrimaryMaskImage.complete && instancePrimaryMaskImage.naturalWidth && instanceSecondaryMaskImage.complete && instanceSecondaryMaskImage.naturalWidth && instanceTertiaryMaskImage.complete && instanceTertiaryMaskImage.naturalWidth) {
-            buildModeMasksFromAssets();
-        }
-
-        window.addEventListener("resize", function() {
-            if (image.complete && image.naturalWidth) {
-                fitAndDrawImage();
-            }
+        pic.addEventListener("touchmove", function(e) {
+            if (!e.touches || !e.touches[0]) return;
+            pointToTilt(e.touches[0].clientX, e.touches[0].clientY);
         }, { passive: true });
+
+        pic.addEventListener("mouseenter", function() {
+            pic.classList.add("smooth-3d");
+            shell.classList.add("is-interacting");
+        });
+
+        pic.addEventListener("mouseleave", resetTilt);
+        pic.addEventListener("touchend", resetTilt);
+        pic.addEventListener("blur", resetTilt);
+        pic.addEventListener("focus", function() {
+            pic.classList.add("smooth-3d");
+            shell.classList.add("is-interacting");
+        });
     }
 
     function initModernEnhancements() {
@@ -844,10 +1060,11 @@
         setupCardPointerGlow();
         setupScrollProgress();
         setupProjectFilter();
-        setupProjectModal();
         setupContactReveal();
         setupAiBlueprintTabs();
         setupAiBlueprintInteractions();
+        setupAboutFocusTypewriter();
+        setupProfilePic3DSmoothing();
     }
 
     if (document.readyState === "loading") {
