@@ -647,7 +647,6 @@ body.theme-light .service_area .service_inner .service_item p {
   color: #faaa5e;
   border-color: #faaa5e;
 }
-
 .social_icon li:last-child:hover a {
   background: #faaa5e;
 }
@@ -656,7 +655,6 @@ body.theme-light .service_area .service_inner .service_item p {
   background: #677fb5;
   color: #fff;
 }
-
 /* End About Person area css
 ============================================================================================ */
 /*---------------------------------------------------- */
@@ -704,6 +702,10 @@ body.theme-light .service_area .service_inner .service_item p {
   -webkit-transform: translateY(300%);
   -ms-transform: translateY(300%);
   transform: translateY(300%);
+      margin: 8px 10px 12px;
+      padding: 10px;
+      border-radius: 14px;
+      box-shadow: 0 16px 26px rgba(2, 8, 23, 0.34);
 }
 
 .download_btn:hover:before {
@@ -2035,6 +2037,7 @@ body.theme-light .quick_cta .cta_icon_only {
 #skill .main_title,
 #journey .main_title,
 #intel-map .main_title,
+#ai-blueprint .main_title,
 #service .main_title,
 #contact .main_title {
   padding: 40px 0 28px;
@@ -2043,6 +2046,7 @@ body.theme-light .quick_cta .cta_icon_only {
 #skill .main_title h2,
 #journey .main_title h2,
 #intel-map .main_title h2,
+#ai-blueprint .main_title h2,
 #service .main_title h2,
 #contact .main_title h2 {
   display: inline-flex;
@@ -2053,6 +2057,7 @@ body.theme-light .quick_cta .cta_icon_only {
 #skill .main_title h2:before,
 #journey .main_title h2:before,
 #intel-map .main_title h2:before,
+#ai-blueprint .main_title h2:before,
 #service .main_title h2:before,
 #contact .main_title h2:before {
   font-family: FontAwesome;
@@ -2070,6 +2075,7 @@ body.theme-light .quick_cta .cta_icon_only {
 #skill .main_title h2:before { content: "\f0ae"; color: #0ea5a4; }
 #journey .main_title h2:before { content: "\f19d"; color: #38bdf8; }
 #intel-map .main_title h2:before { content: "\f0ac"; color: #22c55e; }
+#ai-blueprint .main_title h2:before { content: "\f085"; color: #22d3ee; }
 #service .main_title h2:before { content: "\f0b1"; color: #ffd166; }
 #contact .main_title h2:before { content: "\f1d8"; color: #f59e0b; }
 
@@ -2178,6 +2184,7 @@ body.theme-light .quick_cta .cta_icon_only {
 
 #about .person_details > p {
   min-height: 310px;
+  text-align: justify;
   transition: font-size 0.28s ease, line-height 0.28s ease, min-height 0.28s ease;
 }
 
@@ -3158,6 +3165,7 @@ body.theme-light .modern_modal_panel {
 body.theme-light #skill .main_title h2:before,
 body.theme-light #journey .main_title h2:before,
 body.theme-light #intel-map .main_title h2:before,
+body.theme-light #ai-blueprint .main_title h2:before,
 body.theme-light #service .main_title h2:before,
 body.theme-light #contact .main_title h2:before,
 body.theme-light .journey_card h4:before,
