@@ -7122,6 +7122,13 @@ body.interaction-micro .service_item:focus-visible {
     white-space: nowrap;
   }
 
+  .service_area .modern_toolbar {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    justify-content: center;
+    row-gap: 8px;
+  }
+
   .playbook_steps:before,
   .playbook_steps:after,
   .playbook_step:after,
