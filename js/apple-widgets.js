@@ -64,37 +64,59 @@
   }
 
   function updateClock() {
-    var now = new Date();
+    try {
+      var now = new Date();
 
-    var timeFmt = new Intl.DateTimeFormat(undefined, {
-      hour: "numeric",
-      minute: "2-digit"
-    });
-    var zoneFmt = new Intl.DateTimeFormat(undefined, {
-      timeZoneName: "short"
-    });
-    var weekdayFmt = new Intl.DateTimeFormat(undefined, {
-      weekday: "long"
-    });
-    var longDateFmt = new Intl.DateTimeFormat(undefined, {
-      month: "long",
-      day: "numeric",
-      year: "numeric"
-    });
-
-    if (clockTimeEl) clockTimeEl.textContent = timeFmt.format(now);
-    if (clockZoneEl) {
-      var zoneText = zoneFmt.formatToParts(now).find(function (p) {
-        return p.type === "timeZoneName";
+      var timeFmt = new Intl.DateTimeFormat(undefined, {
+        hour: "numeric",
+        minute: "2-digit"
       });
-      clockZoneEl.textContent = zoneText ? zoneText.value : "Local time";
+      var zoneFmt = new Intl.DateTimeFormat(undefined, {
+        timeZoneName: "short"
+      });
+      var weekdayFmt = new Intl.DateTimeFormat(undefined, {
+        weekday: "long"
+      });
+      var longDateFmt = new Intl.DateTimeFormat(undefined, {
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+      });
+
+      if (clockTimeEl) clockTimeEl.textContent = timeFmt.format(now);
+      if (clockZoneEl) {
+        var zoneText = "";
+        if (typeof zoneFmt.formatToParts === "function") {
+          var zonePart = zoneFmt.formatToParts(now).find(function (p) {
+            return p.type === "timeZoneName";
+          });
+          zoneText = zonePart ? zonePart.value : "";
+        }
+        clockZoneEl.textContent = zoneText || "Local time";
+      }
+      if (dateWeekdayEl) dateWeekdayEl.textContent = weekdayFmt.format(now);
+      if (dateLongEl) dateLongEl.textContent = longDateFmt.format(now);
+    } catch (_e) {
+      var fallbackNow = new Date();
+      if (clockTimeEl) clockTimeEl.textContent = fallbackNow.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      if (clockZoneEl) clockZoneEl.textContent = "Local time";
+      if (dateWeekdayEl) dateWeekdayEl.textContent = fallbackNow.toLocaleDateString([], { weekday: "long" });
+      if (dateLongEl) dateLongEl.textContent = fallbackNow.toLocaleDateString([], { month: "long", day: "numeric", year: "numeric" });
     }
-    if (dateWeekdayEl) dateWeekdayEl.textContent = weekdayFmt.format(now);
-    if (dateLongEl) dateLongEl.textContent = longDateFmt.format(now);
   }
 
   function initThreeAccent() {
     if (!canvas3d) return;
+    var isLiveOrbital = false;
+
+    canvas3d.classList.add("is-css-fallback");
+
+    function markLiveOrbital() {
+      if (isLiveOrbital) return;
+      isLiveOrbital = true;
+      canvas3d.classList.remove("is-css-fallback");
+      canvas3d.classList.add("is-live");
+    }
 
     var dynamicImport = null;
     try {
@@ -108,6 +130,7 @@
       if (!ctx) return;
 
       canvas3d.classList.add("is-fallback");
+      markLiveOrbital();
 
       var mood = {
         core: "#8cc7ff",
@@ -173,6 +196,7 @@
       }
 
       function draw(tMs) {
+        markLiveOrbital();
         var t = tMs * 0.001;
         var w = canvas3d.width;
         var h = canvas3d.height;
@@ -378,6 +402,7 @@
 
       var start = performance.now();
       function animate() {
+        markLiveOrbital();
         var t = (performance.now() - start) * 0.001;
         globe.rotation.y += 0.0023;
         globe.rotation.x = Math.sin(t * 0.34) * 0.06;
@@ -397,6 +422,12 @@
       // Keep widget functional when Three.js module is unavailable.
       initCanvasFallback();
     });
+
+    window.setTimeout(function () {
+      if (!isLiveOrbital && canvas3d) {
+        canvas3d.classList.add("is-css-fallback");
+      }
+    }, 1500);
   }
 
   function initPanelTilt() {
@@ -560,8 +591,25 @@
   }
 
   updateClock();
-  window.setInterval(updateClock, 1000);
-  initWeather();
-  initThreeAccent();
-  initPanelTilt();
+  window.setInterval(function () {
+    updateClock();
+  }, 1000);
+
+  try {
+    initWeather();
+  } catch (_e) {
+    // Keep panel live even when weather fetch path fails.
+  }
+
+  try {
+    initThreeAccent();
+  } catch (_e) {
+    if (canvas3d) canvas3d.classList.add("is-css-fallback");
+  }
+
+  try {
+    initPanelTilt();
+  } catch (_e) {
+    // Non-critical enhancement.
+  }
 })();

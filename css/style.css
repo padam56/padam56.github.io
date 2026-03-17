@@ -361,8 +361,8 @@ body, p, h1, h2, h3, h4, h5, h6 {
 ============================================================================================ */
 .about_person_area {
   background: #fff;
-  margin-top: 60px;
-  padding-top: 40px;
+  margin-top: 34px;
+  padding-top: 22px;
   padding-bottom: 40px;
 }
 
@@ -7394,6 +7394,11 @@ body.interaction-micro .service_item:focus-visible {
     padding-bottom: 44px;
   }
 
+  #about.about_person_area {
+    margin-top: 14px;
+    padding-top: 12px;
+  }
+
   .main_title h2 {
     font-size: 28px;
     line-height: 1.2;
@@ -7844,6 +7849,13 @@ body.theme-light .ai_blueprint_area #ai-view-edge .demo_lab_shell {
     drop-shadow(0 0 6px rgba(125, 211, 252, 0.26));
 }
 
+.apple_weather_3d.is-css-fallback {
+  background:
+    radial-gradient(circle at 72% 52%, rgba(216, 243, 255, 0.98) 0%, rgba(188, 231, 255, 0.88) 10%, rgba(129, 194, 255, 0.65) 20%, rgba(64, 142, 235, 0.28) 34%, rgba(0, 0, 0, 0) 55%),
+    conic-gradient(from 40deg at 72% 52%, rgba(0, 0, 0, 0) 0deg, rgba(191, 229, 255, 0.4) 88deg, rgba(0, 0, 0, 0) 184deg, rgba(154, 217, 255, 0.35) 300deg, rgba(0, 0, 0, 0) 360deg);
+  animation: appleWeatherCssSpin 7.4s linear infinite;
+}
+
 .apple_weather_3d.is-fallback {
   opacity: 0.84;
   filter:
@@ -7928,6 +7940,9 @@ body.theme-light .apple_panel_timeblock {
   .apple_weather_3d {
     inset: -8px -10px -10px 42%;
     opacity: 0.58;
+    animation: appleWeatherOrbitalMobile 8.4s ease-in-out infinite alternate;
+    transform-origin: 58% 52%;
+    will-change: transform;
   }
 
   .apple_weather_3d.is-fallback {
@@ -7958,6 +7973,36 @@ body.theme-light .apple_panel_timeblock {
 
   .apple_widget_panel::after {
     animation: none !important;
+  }
+
+  .apple_weather_3d {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .apple_weather_3d.is-css-fallback {
+    animation: none !important;
+  }
+}
+
+@keyframes appleWeatherCssSpin {
+  0% {
+    transform: rotate(0deg) scale(0.98);
+  }
+  100% {
+    transform: rotate(360deg) scale(1.02);
+  }
+}
+
+@keyframes appleWeatherOrbitalMobile {
+  0% {
+    transform: translate3d(-11%, -6%, 0) rotate(-7deg) scale(0.93);
+  }
+  50% {
+    transform: translate3d(5%, 7%, 0) rotate(8deg) scale(1.02);
+  }
+  100% {
+    transform: translate3d(14%, -5%, 0) rotate(15deg) scale(0.95);
   }
 }
 
