@@ -3,7 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="format-detection" content="telephone=no,email=no,address=no,date=no,url=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Padam Jung Thapa - Machine Learning and Computer Vision portfolio.">
   <meta name="theme-color" content="#0f172a">
   <link rel="icon" href="img/Pattern_Light.png" type="image/x-icon">
@@ -11,7 +15,7 @@
   <link href="css/font-awesome.min.css" rel="stylesheet">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="vendors/animate-css/animate.css" rel="stylesheet">
-  <link href="css/style.css?v=20260316-17" rel="stylesheet">
+  <link href="css/style.css?v=20260316-21" rel="stylesheet">
   <link href="css/responsive.css?v=20260316-3" rel="stylesheet">
   <link rel="stylesheet" href="css/colors/default.css" title="default">
 </head>
@@ -94,7 +98,10 @@
       <section class="about_person_area pad" id="about">
         <div class="row">
           <div class="col-md-4">
-            <div class="person_img"><img src="img/member/Mr.Padam.jpg" alt="Padam Jung Thapa portrait" loading="lazy"></div>
+            <div class="person_img">
+              <img src="img/member/member-photo-14.jpg" alt="Padam Jung Thapa portrait" loading="lazy">
+              <span class="photo_story_badge" id="photo-story-badge" aria-live="polite" hidden>Story Tag</span>
+            </div>
             <div class="about_media_meta">
               <div class="focus_tags wow fadeInUp animated" data-wow-delay="0.2s" aria-live="polite">
                 <span class="focus_typewriter_text" id="focus-typewriter-text">Full-Stack Software Engineer</span>
@@ -112,7 +119,7 @@
                 <div class="row person_details">
                   <h3>Hi, Nice to meet you!</h3>
                   <h4>PhD Researcher | Internet Security and Web Measurement</h4>
-                  <p>I am currently pursuing a PhD in Computer Science at the University of Louisiana at Lafayette, where my research focuses on internet cybercrime, Web3 and internet security, large-scale web measurement, phishing, abuse, and scam ecosystems. During my prior MS in Computer Science at the University of New Orleans, I specialized in machine learning and deep learning for computer vision. I developed robust pipelines for real-time segmentation, object detection, and annotation automation, significantly improving efficiency and accuracy in levee fault detection. My work also included building scalable full-stack pipelines for real-time inference, enhancing dataset diversity with diffusion models, and applying model quantization techniques to improve efficiency. This experience now informs my current security research approach in a practical, automation-driven way.</p>
+                  <p class="about_bio_text">I am currently pursuing a PhD in Computer Science at the University of Louisiana at Lafayette, where my research focuses on internet cybercrime, Web3 and internet security, large-scale web measurement, phishing, abuse, and scam ecosystems. During my prior MS in Computer Science at the University of New Orleans, I specialized in machine learning and deep learning for computer vision. I developed robust pipelines for real-time segmentation, object detection, and annotation automation, significantly improving efficiency and accuracy in levee fault detection. My work also included building scalable full-stack pipelines for real-time inference, enhancing dataset diversity with diffusion models, and applying model quantization techniques to improve efficiency. I am a lifelong learner and an enthusiastic collaborator who enjoys turning research ideas into practical, automation-driven security systems.</p>
                   <div id="tech-stack-list" class="tech_stack_list is-hidden" aria-label="Technology stacks list"></div>
                   <div class="tech_concepts_wrap is-hidden">
                     <div id="tech-concepts-board" class="tech_concepts_board" aria-live="polite"></div>
@@ -744,14 +751,6 @@
     </div>
   </div>
 
-  <nav class="mobile_explore_dock" aria-label="Mobile quick explore">
-    <button type="button" class="mobile_dock_btn is-active" data-mobile-target="about" aria-pressed="true">About</button>
-    <button type="button" class="mobile_dock_btn" data-mobile-target="intel-map" aria-pressed="false">Map</button>
-    <button type="button" class="mobile_dock_btn" data-mobile-target="ai-blueprint" aria-pressed="false">Demos</button>
-    <button type="button" class="mobile_dock_btn" data-mobile-target="service" aria-pressed="false">Projects</button>
-    <button type="button" class="mobile_dock_btn" data-mobile-target="contact" aria-pressed="false">Contact</button>
-  </nav>
-
   <footer class="footer_area">
     <div class="footer_copyright">
       <div class="container">
@@ -770,6 +769,6 @@
   <script src="js/network-bg.js?v=20260316-3" defer></script>
   <script src="js/threat-map.js?v=20260316-7" defer></script>
   <script src="js/tech-tagcloud.js?v=20260316-2" defer></script>
-  <script src="js/theme.js?v=20260316-25" defer></script>
+  <script src="js/theme.js?v=20260316-36" defer></script>
 </body>
 </html>

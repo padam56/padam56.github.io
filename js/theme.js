@@ -1070,67 +1070,81 @@
         });
     }
 
-    function setupMobileExploreDock() {
-        var dock = document.querySelector(".mobile_explore_dock");
-        if (!dock) return;
+    function setupMemberPhotoSequence() {
+        var photo = document.querySelector(".about_person_area .person_img img");
+        if (!photo) return;
+        var shell = document.querySelector(".about_person_area .person_img");
+        var badge = document.getElementById("photo-story-badge");
 
-        var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        var mobile = window.matchMedia("(max-width: 767px)").matches;
-        var buttons = Array.prototype.slice.call(dock.querySelectorAll(".mobile_dock_btn[data-mobile-target]"));
-        if (!mobile || !buttons.length) return;
+        var firstImpression = "img/member/member-photo-14.jpg";
+        var lowerFocusFrame = "img/member/member-photo-12.jpeg";
+        var frameTags = {
+            "img/member/member-photo-07.jpeg": "With Mom",
+            "img/member/member-photo-05.jpg": "NeurIPS 2023",
+            "img/member/member-photo-03.jpeg": "MSCS Graduate"
+        };
+        var frames = [
+            "img/member/member-photo-01.jpeg",
+            "img/member/member-photo-02.jpeg",
+            "img/member/member-photo-03.jpeg",
+            "img/member/member-photo-04.jpg",
+            "img/member/member-photo-05.jpg",
+            "img/member/member-photo-06.jpeg",
+            "img/member/member-photo-07.jpeg",
+            "img/member/member-photo-08.jpeg",
+            "img/member/member-photo-11.jpg",
+            "img/member/member-photo-12.jpeg",
+            "img/member/member-photo-13.jpeg",
+            "img/member/member-photo-14.jpg"
+        ];
 
-        var ticking = false;
-
-        function setActive(id) {
-            buttons.forEach(function(btn) {
-                var active = btn.getAttribute("data-mobile-target") === id;
-                btn.classList.toggle("is-active", active);
-                btn.setAttribute("aria-pressed", String(active));
-            });
-        }
-
-        function updateActiveByScroll() {
-            if (ticking) return;
-            ticking = true;
-            window.requestAnimationFrame(function() {
-                ticking = false;
-                var anchorY = window.innerHeight * 0.35;
-                var currentId = buttons[0].getAttribute("data-mobile-target");
-
-                buttons.forEach(function(btn) {
-                    var id = btn.getAttribute("data-mobile-target");
-                    var section = id ? document.getElementById(id) : null;
-                    if (!section) return;
-                    var rect = section.getBoundingClientRect();
-                    if (rect.top <= anchorY && rect.bottom > anchorY) {
-                        currentId = id;
-                    }
-                });
-
-                if (currentId) setActive(currentId);
-            });
-        }
-
-        buttons.forEach(function(btn) {
-            btn.addEventListener("click", function() {
-                var id = btn.getAttribute("data-mobile-target");
-                var section = id ? document.getElementById(id) : null;
-                if (!section) return;
-
-                var top = section.getBoundingClientRect().top + window.pageYOffset - 72;
-                window.scrollTo({
-                    top: Math.max(0, top),
-                    behavior: reduced ? "auto" : "smooth"
-                });
-                setActive(id);
-
-                if (navigator.vibrate) navigator.vibrate(10);
-            });
+        // Preload frames so transitions stay smooth.
+        frames.forEach(function(src) {
+            var img = new Image();
+            img.src = src;
         });
 
-        window.addEventListener("scroll", updateActiveByScroll, { passive: true });
-        window.addEventListener("resize", updateActiveByScroll, { passive: true });
-        updateActiveByScroll();
+        var idx = frames.indexOf(firstImpression);
+        if (idx < 0) idx = 0;
+        var stepMs = 2100;
+
+        function applyFrame(src) {
+            if (!src) return;
+            photo.src = src;
+            photo.classList.remove("photo-frame-enter");
+            // Force reflow for deterministic restart of transition animation.
+            void photo.offsetWidth;
+            photo.classList.add("photo-frame-enter");
+
+            var tagText = frameTags[src] || "";
+            if (shell) {
+                shell.classList.toggle("is-tag-frame", !!tagText);
+                shell.classList.toggle("is-lower-focus-frame", src === lowerFocusFrame);
+            }
+
+            if (badge) {
+                if (tagText) {
+                    badge.textContent = tagText;
+                    badge.hidden = false;
+                } else {
+                    badge.hidden = true;
+                }
+            }
+        }
+
+        // First impression: always hold this frame for 2 seconds.
+        applyFrame(firstImpression);
+
+        window.setTimeout(function() {
+            // Continue with the next frame and loop through all available photos.
+            idx = (idx + 1) % frames.length;
+            applyFrame(frames[idx]);
+
+            window.setInterval(function() {
+                idx = (idx + 1) % frames.length;
+                applyFrame(frames[idx]);
+            }, stepMs);
+        }, 2000);
     }
 
     function initModernEnhancements() {
@@ -1143,8 +1157,8 @@
         setupAiBlueprintTabs();
         setupAiBlueprintInteractions();
         setupAboutFocusTypewriter();
+        setupMemberPhotoSequence();
         setupProfilePic3DSmoothing();
-        setupMobileExploreDock();
     }
 
     if (document.readyState === "loading") {

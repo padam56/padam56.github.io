@@ -23,6 +23,19 @@ a:hover, a:focus {
   margin: 0px;
 }
 
+html {
+  zoom: 110%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  html {
+    zoom: 100%;
+  }
+}
+
 body {
   line-height: 1.72;
   font-size: 14px;
@@ -31,6 +44,8 @@ body {
   letter-spacing: 0.2px;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 body.light_bg {
@@ -390,9 +405,9 @@ body, p, h1, h2, h3, h4, h5, h6 {
   inset: -8px;
   border-radius: 22px;
   pointer-events: none;
-  opacity: 0;
+  opacity: 0.42;
   background: conic-gradient(from 210deg at 50% 50%, rgba(34, 211, 238, 0) 0deg, rgba(34, 211, 238, 0.34) 86deg, rgba(255, 138, 0, 0.36) 190deg, rgba(34, 211, 238, 0) 360deg);
-  filter: blur(10px);
+  filter: none;
   transform: scale(0.92);
   transition: opacity 0.35s ease, transform 0.45s ease;
 }
@@ -400,24 +415,89 @@ body, p, h1, h2, h3, h4, h5, h6 {
 .about_person_area .person_img img {
   max-width: 100%;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 4 / 5;
   border-radius: 18px;
   box-shadow: 0 16px 34px rgba(34, 211, 238, 0.14), 0 7px 20px rgba(255, 138, 0, 0.14);
-  transition: transform 0.22s linear, box-shadow 0.42s cubic-bezier(0.22, 1, 0.36, 1), filter 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.22s linear, box-shadow 0.42s cubic-bezier(0.22, 1, 0.36, 1);
   transform-style: preserve-3d;
   transform-origin: center;
+  backface-visibility: hidden;
+  image-rendering: auto;
   will-change: transform, box-shadow;
   position: relative;
   z-index: 1;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(34, 211, 238, 0.06) 100%);
-  filter: drop-shadow(0 2px 10px rgba(34, 211, 238, 0.08)) saturate(1.05);
+  filter: none;
+  --frame-zoom: 1;
+  --pic-zoom: 1.03;
+  transform: scale(var(--frame-zoom));
   cursor: pointer;
+}
+
+.about_person_area .person_img {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: visible;
+}
+
+.about_person_area .person_img img.photo-frame-enter {
+  animation: portraitFrameEnter 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about_person_area .person_img.is-tag-frame:before {
+  background: radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.2) 0%, rgba(125, 211, 252, 0.14) 42%, rgba(125, 211, 252, 0) 75%);
+}
+
+.about_person_area .person_img.is-lower-focus-frame img {
+  --frame-zoom: 1.12;
+  --pic-zoom: 1.12;
+  object-position: 50% 84%;
+  transform-origin: center 78%;
+}
+
+.about_person_area .person_img.is-lower-focus-frame {
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.photo_story_badge {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 3;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: rgba(15, 23, 42, 0.58);
+  color: #dbeafe;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.24px;
+  text-transform: uppercase;
+  box-shadow: 0 6px 14px rgba(2, 8, 23, 0.24);
+}
+
+body.theme-light .photo_story_badge {
+  border-color: rgba(148, 163, 184, 0.42);
+  background: rgba(255, 255, 255, 0.72);
+  color: #1e293b;
+}
+
+@keyframes portraitFrameEnter {
+  from {
+    opacity: 0.72;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .about_person_area .person_img img.smooth-3d {
   box-shadow: 0 26px 56px rgba(34, 211, 238, 0.24), 0 14px 38px rgba(255, 138, 0, 0.22);
-  filter: drop-shadow(0 7px 26px rgba(34, 211, 238, 0.2)) saturate(1.14);
-  transform: perspective(1040px) rotateY(var(--pic-rot-y, 0deg)) rotateX(var(--pic-rot-x, 0deg)) translateZ(8px) scale(1.03);
+  filter: none;
+  transform: perspective(1040px) rotateY(var(--pic-rot-y, 0deg)) rotateX(var(--pic-rot-x, 0deg)) translateZ(8px) scale(var(--pic-zoom, 1.03));
 }
 
 .about_person_area .person_img.is-interacting:after {
@@ -2347,15 +2427,32 @@ body.theme-light .focus_typewriter_text::after {
 }
 
 #about .person_details > p {
-  min-height: 310px;
+  min-height: auto;
+  max-width: 68ch;
+  margin-top: 10px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: linear-gradient(150deg, rgba(15, 23, 42, 0.34) 0%, rgba(2, 8, 23, 0.28) 100%);
+  box-shadow: 0 14px 26px rgba(2, 8, 23, 0.16);
+  font-size: 14px;
+  line-height: 1.86;
+  letter-spacing: 0.14px;
   text-align: justify;
-  transition: font-size 0.28s ease, line-height 0.28s ease, min-height 0.28s ease;
+  text-justify: inter-word;
+  text-wrap: pretty;
+  transition: font-size 0.28s ease, line-height 0.28s ease;
+}
+
+body.theme-light #about .person_details > p {
+  border-color: rgba(31, 41, 55, 0.16);
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.72) 0%, rgba(241, 246, 255, 0.68) 100%);
+  box-shadow: 0 12px 24px rgba(31, 41, 55, 0.08);
 }
 
 #about .person_details.bio-condensed > p {
   font-size: 13.5px;
-  line-height: 1.7;
-  min-height: 266px;
+  line-height: 1.75;
 }
 
 #about .about_cloud_col .technology_cloud_wrap {
@@ -3064,15 +3161,6 @@ body.theme-light .left_contact_details .media .media-body a {
   border-radius: 999px;
   background: rgba(15, 23, 42, 0.58);
   border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.mobile_explore_dock {
-  display: none;
-}
-
-.mobile_dock_btn {
-  border: 0;
-  background: transparent;
 }
 
 .modern_progress_nav .progress_track {
@@ -7057,10 +7145,6 @@ body.interaction-micro .service_item:focus-visible {
     overflow-x: hidden;
   }
 
-  body {
-    padding-bottom: 84px;
-  }
-
   section,
   .service_area,
   .contact_area,
@@ -7167,8 +7251,44 @@ body.interaction-micro .service_item:focus-visible {
     text-justify: inter-word;
   }
 
+  #about .person_details > p.about_bio_text {
+    max-width: 100%;
+    margin-top: 8px;
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.78;
+    text-align: justify;
+    text-justify: inter-word;
+    text-wrap: pretty;
+  }
+
   .service_area .service_inner .service_item {
-    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 90%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .service_area .service_inner .col-md-6 {
+    display: flex;
+    justify-content: center;
+  }
+
+  .service_area .service_inner .service_item h4,
+  .service_area .service_inner .service_item p {
+    margin-left: 0;
+    padding-left: 0;
+    margin-right: 0;
+    padding-right: 0;
+    text-align: center;
+  }
+
+  .service_area .service_inner .service_item i {
+    margin: 0 auto 15px auto;
   }
 
   .playbook_steps:before,
@@ -7219,41 +7339,6 @@ body.interaction-micro .service_item:focus-visible {
     max-height: 56vh;
   }
 
-  .mobile_explore_dock {
-    position: fixed;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    z-index: 10002;
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 6px;
-    padding: 8px;
-    border-radius: 14px;
-    border: 1px solid rgba(148, 163, 184, 0.35);
-    background: linear-gradient(145deg, rgba(6, 14, 27, 0.93) 0%, rgba(10, 18, 33, 0.9) 100%);
-    box-shadow: 0 16px 26px rgba(2, 8, 23, 0.32);
-    backdrop-filter: blur(8px);
-  }
-
-  .mobile_dock_btn {
-    min-height: 38px;
-    border-radius: 10px;
-    border: 1px solid rgba(148, 163, 184, 0.3);
-    background: rgba(15, 23, 42, 0.58);
-    color: #dbeafe;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-    text-transform: uppercase;
-  }
-
-  .mobile_dock_btn.is-active {
-    color: #f8fbff;
-    border-color: rgba(125, 211, 252, 0.92);
-    background: linear-gradient(120deg, rgba(14, 165, 164, 0.95) 0%, rgba(2, 132, 199, 0.95) 100%);
-    box-shadow: 0 8px 18px rgba(14, 165, 164, 0.36);
-  }
 }
 
 @media (max-width: 479px) {
@@ -7264,20 +7349,6 @@ body.interaction-micro .service_item:focus-visible {
 
   .main_title h2 {
     font-size: 24px;
-  }
-
-  .mobile_explore_dock {
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
-    gap: 5px;
-    padding: 7px;
-  }
-
-  .mobile_dock_btn {
-    min-height: 36px;
-    font-size: 10px;
-    padding: 6px 4px;
   }
 
   .playbook_steps,
