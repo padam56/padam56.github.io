@@ -15,8 +15,8 @@
   <link href="css/font-awesome.min.css" rel="stylesheet">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="vendors/animate-css/animate.css" rel="stylesheet">
-  <link href="css/style.css?v=20260316-22" rel="stylesheet">
-  <link href="css/responsive.css?v=20260316-4" rel="stylesheet">
+  <link href="css/style.css?v=20260316-25" rel="stylesheet">
+  <link href="css/responsive.css?v=20260316-6" rel="stylesheet">
   <link rel="stylesheet" href="css/colors/default.css" title="default">
 </head>
 <body class="light_bg theme-dark interaction-choreo interaction-micro" data-spy="scroll" data-target="#bs-example-navbar-collapse-1" data-offset="80" data-scroll-animation="true" data-visual-mode="network">
@@ -36,39 +36,7 @@
     </div>
   </div>
   <script>
-    (function() {
-      "use strict";
-
-      function revealSections() {
-        var sections = document.querySelectorAll("body.interaction-choreo section");
-        sections.forEach(function(section) {
-          section.classList.add("section-visible");
-        });
-      }
-
-      function hidePreloaderFallback() {
-        var preloader = document.getElementById("preloader");
-        if (preloader) {
-          preloader.classList.add("is-hidden");
-          window.setTimeout(function() {
-            preloader.style.display = "none";
-          }, 760);
-        }
-        document.body.style.overflow = "visible";
-      }
-
-      document.addEventListener("DOMContentLoaded", revealSections);
-      window.addEventListener("load", function() {
-        revealSections();
-        hidePreloaderFallback();
-      });
-
-      // Safety net for environments where load handlers fail or scripts are blocked.
-      setTimeout(function() {
-        revealSections();
-        hidePreloaderFallback();
-      }, 2200);
-    })();
+    (function(){"use strict";function r(){document.querySelectorAll("body.interaction-choreo section").forEach(function(s){s.classList.add("section-visible");});}function h(){var p=document.getElementById("preloader");if(p){p.classList.add("is-hidden");window.setTimeout(function(){p.style.display="none";},760);}document.body.style.overflow="visible";}document.addEventListener("DOMContentLoaded",r);window.addEventListener("load",function(){r();h();});setTimeout(function(){r();h();},2200);}());
   </script>
 
   <header class="header_area">
@@ -766,12 +734,11 @@
   <script src="js/bootstrap.min.js" defer></script>
   <script src="vendors/counter-up/waypoints.min.js" defer></script>
   <script src="vendors/animate-css/wow.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js" defer></script>
-  <script src="js/network-bg.js?v=20260316-3" defer></script>
-  <script src="js/threat-map.js?v=20260316-7" defer></script>
+  <script src="js/network-bg.js?v=20260316-5" defer></script>
   <script src="js/tech-tagcloud.js?v=20260316-2" defer></script>
-  <script src="js/theme.js?v=20260316-36" defer></script>
+  <script src="js/theme.js?v=20260316-37" defer></script>
+  <script>
+    (function(){"use strict";var loaded=false;function s(src){return new Promise(function(ok,err){var t=document.createElement("script");t.src=src;t.defer=true;t.onload=ok;t.onerror=err;document.body.appendChild(t);});}function load(){if(loaded)return;loaded=true;s("https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js").then(function(){return s("https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js");}).then(function(){return s("js/threat-map.js?v=20260316-8");}).catch(function(){loaded=false;});}function boot(){var el=document.getElementById("intel-map");if(!el)return;if("IntersectionObserver" in window){var ob=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){load();ob.disconnect();}});},{rootMargin:"300px 0px"});ob.observe(el);}else load();if("requestIdleCallback" in window){window.requestIdleCallback(function(){if(!loaded)load();},{timeout:2800});}else{window.setTimeout(function(){if(!loaded)load();},2400);}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();}());
+  </script>
 </body>
 </html>

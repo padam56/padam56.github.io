@@ -71,6 +71,29 @@ body, p, h1, h2, h3, h4, h5, h6 {
   padding: 0px 68px;
 }
 
+/* Improve first-load performance by deferring offscreen section rendering. */
+#skill,
+#journey,
+#intel-map,
+#ai-blueprint,
+#service,
+#contact {
+  content-visibility: auto;
+  contain-intrinsic-size: 760px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #network-canvas {
+    display: none !important;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 #success {
   display: none;
   padding-left: 15px;
@@ -2167,13 +2190,15 @@ body .content_inner_bg {
 
 .quick_cta {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  flex-wrap: nowrap;
+  gap: 8px;
   margin-bottom: 22px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .quick_cta .cta_chip {
-  min-width: 170px;
+  min-width: 0;
   border-radius: 999px;
   background: linear-gradient(120deg, var(--accent) 0%, #ffd166 100%);
   color: #1f2937;
@@ -2202,7 +2227,14 @@ body .content_inner_bg {
 }
 
 .quick_cta .cta_resume i {
-  font-size: 15px;
+  font-size: 13px;
+}
+
+.quick_cta .cta_resume {
+  min-width: 92px;
+  padding: 10px 14px;
+  font-size: 13px;
+  flex: 0 0 auto;
 }
 
 .quick_cta .cta_resume .resume_label {
@@ -2234,9 +2266,9 @@ body .content_inner_bg {
 }
 
 .quick_cta .cta_icon_only {
-  min-width: 48px;
-  width: 48px;
-  height: 48px;
+  min-width: 42px;
+  width: 42px;
+  height: 42px;
   padding: 0;
   border-color: rgba(255, 209, 102, 0.8);
   background: rgba(17, 24, 39, 0.55);
@@ -2244,7 +2276,7 @@ body .content_inner_bg {
 }
 
 .quick_cta .cta_icon_only i {
-  font-size: 20px;
+  font-size: 17px;
 }
 
 
@@ -7267,23 +7299,27 @@ body.interaction-micro .service_item:focus-visible {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    width: 100%;
+    width: 90%;
     max-width: 100%;
     margin-left: auto;
     margin-right: auto;
+    box-sizing: border-box;
   }
 
   .service_area .service_inner .col-md-6 {
     display: flex;
     justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .service_area .service_inner .service_item h4,
   .service_area .service_inner .service_item p {
-    margin-left: 0;
-    padding-left: 0;
-    margin-right: 0;
-    padding-right: 0;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    margin-right: 0 !important;
+    padding-right: 0 !important;
+    width: 100%;
     text-align: center;
   }
 

@@ -338,6 +338,12 @@
         padding-right: 0;
     }
 
+    .service_area .service_inner .col-md-6,
+    .service_area .service_inner .col-md-12 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
     .content_inner_bg {
         margin-left: 0;
         margin-right: 0;
@@ -392,6 +398,9 @@
 
     .quick_cta {
         gap: 8px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .quick_cta .cta_chip {
@@ -399,13 +408,13 @@
     }
 
     .quick_cta .cta_resume {
-        width: 100%;
-        flex: 1 0 100%;
+        width: auto;
+        flex: 0 0 auto;
         justify-content: center;
     }
 
     .quick_cta .cta_icon_only {
-        flex: 0 0 44px;
+        flex: 0 0 42px;
     }
 
     .technology_cloud_wrap {

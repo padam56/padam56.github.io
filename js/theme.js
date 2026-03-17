@@ -225,7 +225,6 @@
     function setupDefaultVisualExperience() {
         document.body.setAttribute("data-visual-mode", "network");
         document.body.classList.add("interaction-choreo", "interaction-micro");
-        window.dispatchEvent(new CustomEvent("visualmodechange", { detail: { mode: "network" } }));
     }
 
     function setupSectionChoreography() {

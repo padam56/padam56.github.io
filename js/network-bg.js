@@ -9,12 +9,6 @@
     return Math.random() * (max - min) + min;
   }
 
-  function dist(ax, ay, bx, by) {
-    var dx = ax - bx;
-    var dy = ay - by;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-
   function distSq(ax, ay, bx, by) {
     var dx = ax - bx;
     var dy = ay - by;
@@ -40,7 +34,8 @@
     this.themeMode = "dark";
     this.palette = null;
     this.auroraCanvas = null;
-    this.activeMode = "network";
+    this.lastFrameTime = 0;
+    this.targetFrameMs = 16;
 
     this.pointer = {
       x: window.innerWidth * 0.5,
@@ -65,23 +60,35 @@
     this.onWindowClick = this.onWindowClick.bind(this);
     this.onVisibilityChange = this.onVisibilityChange.bind(this);
     this.onThemeChange = this.onThemeChange.bind(this);
-    this.onVisualModeChange = this.onVisualModeChange.bind(this);
 
     this.init();
   }
 
   NetworkBackground.prototype.recomputeQuality = function() {
     this.isCompact = window.matchMedia("(max-width: 991px)").matches;
+    var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var saveData = !!(navigator.connection && navigator.connection.saveData);
+    var lowThreads = (navigator.hardwareConcurrency || 8) <= 4;
+    var lowMemory = (navigator.deviceMemory || 8) <= 4;
+    this.lowPowerMode = reducedMotion || saveData || lowThreads || lowMemory;
+
     this.dpr = Math.min(window.devicePixelRatio || 1, this.isCompact ? 1.05 : 1.25);
-    this.maxNodes = this.isCompact ? 56 : 84;
-    this.linkDistance = this.isCompact ? 126 : 164;
+    if (this.lowPowerMode) {
+      this.dpr = Math.min(this.dpr, 1);
+      this.maxNodes = this.isCompact ? 26 : 40;
+      this.linkDistance = this.isCompact ? 102 : 126;
+      this.targetFrameMs = 34;
+    } else {
+      this.maxNodes = this.isCompact ? 56 : 84;
+      this.linkDistance = this.isCompact ? 126 : 164;
+      this.targetFrameMs = this.isCompact ? 24 : 16;
+    }
     this.linkDistanceSq = this.linkDistance * this.linkDistance;
   };
 
   NetworkBackground.prototype.init = function() {
     this.updatePalette();
     this.recomputeQuality();
-    this.onVisualModeChange();
     this.resize();
     this.seedNodes();
     this.pointerLastMove = performance.now();
@@ -90,13 +97,8 @@
     window.addEventListener("mouseleave", this.onPointerLeave, { passive: true });
     window.addEventListener("click", this.onWindowClick, { passive: true });
     window.addEventListener("themechange", this.onThemeChange, { passive: true });
-    window.addEventListener("visualmodechange", this.onVisualModeChange, { passive: true });
     document.addEventListener("visibilitychange", this.onVisibilityChange);
     requestAnimationFrame(this.animate);
-  };
-
-  NetworkBackground.prototype.onVisualModeChange = function() {
-    this.activeMode = "network";
   };
 
   NetworkBackground.prototype.onThemeChange = function() {
@@ -451,11 +453,17 @@
     }
   };
 
-  NetworkBackground.prototype.animate = function() {
+  NetworkBackground.prototype.animate = function(now) {
     requestAnimationFrame(this.animate);
     if (!this.isVisible) return;
 
-    this.time += 16;
+    if (!now) now = performance.now();
+    if (this.lastFrameTime && (now - this.lastFrameTime) < this.targetFrameMs) return;
+    var delta = this.lastFrameTime ? (now - this.lastFrameTime) : this.targetFrameMs;
+    this.lastFrameTime = now;
+    delta = clamp(delta, 12, 40);
+
+    this.time += delta;
     this.ctx.clearRect(0, 0, this.width, this.height);
 
     this.drawAurora();
@@ -486,7 +494,12 @@
 
   // Initialize only on pages that include the network canvas.
   function initNetworkBackground() {
-    if (!document.getElementById("network-canvas")) return;
+    var canvas = document.getElementById("network-canvas");
+    if (!canvas) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      canvas.style.display = "none";
+      return;
+    }
     new NetworkBackground("network-canvas");
   }
 
