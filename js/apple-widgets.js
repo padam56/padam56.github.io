@@ -15,7 +15,6 @@
   var weatherCondEl = document.getElementById("apple-weather-cond");
   var weatherHiLoEl = document.getElementById("apple-weather-hilo");
   var accentController = null;
-  var latestAccentState = { code: 0, temp: null, isDay: (new Date().getHours() >= 6 && new Date().getHours() < 18) };
   var usePadamFallback = false;
 
   var PADAM_LAT = 30.2241;
@@ -305,9 +304,6 @@
         setWeather: setAccentMood
       };
 
-      // Apply immediately so daytime sun/moon state is visible even before weather fetch resolves.
-      setAccentMood(latestAccentState.code, latestAccentState.temp, latestAccentState.isDay);
-
       function onResize() {
         var w = canvas3d.clientWidth || 260;
         var h = canvas3d.clientHeight || 172;
@@ -412,12 +408,8 @@
       ? payload.current.is_day === 1
       : (new Date().getHours() >= 6 && new Date().getHours() < 18);
 
-    latestAccentState.code = code;
-    latestAccentState.temp = temp;
-    latestAccentState.isDay = isDay;
-
     if (accentController && typeof accentController.setWeather === "function") {
-      accentController.setWeather(latestAccentState.code, latestAccentState.temp, latestAccentState.isDay);
+      accentController.setWeather(code, temp, isDay);
     }
   }
 
