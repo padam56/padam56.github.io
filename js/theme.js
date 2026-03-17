@@ -1075,7 +1075,7 @@
         var shell = document.querySelector(".about_person_area .person_img");
         var badge = document.getElementById("photo-story-badge");
 
-        var firstImpression = "img/member/member-photo-14.jpg";
+        var firstImpression = "img/member/member-photo-14.jpeg";
         var lowerFocusFrame = "img/member/member-photo-12.jpeg";
         var frameTags = {
             "img/member/member-photo-07.jpeg": "With Mom",
@@ -1093,8 +1093,8 @@
             "img/member/member-photo-08.jpeg",
             "img/member/member-photo-11.jpg",
             "img/member/member-photo-12.jpeg",
-            "img/member/member-photo-13.jpeg",
-            "img/member/member-photo-14.jpg"
+            "img/member/member-photo-13.jpg",
+            "img/member/member-photo-14.jpeg"
         ];
 
         // Preload frames so transitions stay smooth.

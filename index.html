@@ -67,7 +67,7 @@
         <div class="row">
           <div class="col-md-4">
             <div class="person_img">
-              <img src="img/member/member-photo-14.jpg" alt="Padam Jung Thapa portrait" loading="lazy">
+              <img src="img/member/member-photo-14.jpeg" alt="Padam Jung Thapa portrait" loading="lazy">
               <span class="photo_story_badge" id="photo-story-badge" aria-live="polite" hidden>Story Tag</span>
             </div>
             <div class="about_media_meta">
@@ -736,7 +736,7 @@
   <script src="vendors/animate-css/wow.min.js" defer></script>
   <script src="js/network-bg.js?v=20260316-5" defer></script>
   <script src="js/tech-tagcloud.js?v=20260316-2" defer></script>
-  <script src="js/theme.js?v=20260316-37" defer></script>
+  <script src="js/theme.js?v=20260316-38" defer></script>
   <script>
     (function(){"use strict";var loaded=false;function s(src){return new Promise(function(ok,err){var t=document.createElement("script");t.src=src;t.defer=true;t.onload=ok;t.onerror=err;document.body.appendChild(t);});}function load(){if(loaded)return;loaded=true;s("https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js").then(function(){return s("https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js");}).then(function(){return s("js/threat-map.js?v=20260316-8");}).catch(function(){loaded=false;});}function boot(){var el=document.getElementById("intel-map");if(!el)return;if("IntersectionObserver" in window){var ob=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){load();ob.disconnect();}});},{rootMargin:"300px 0px"});ob.observe(el);}else load();if("requestIdleCallback" in window){window.requestIdleCallback(function(){if(!loaded)load();},{timeout:2800});}else{window.setTimeout(function(){if(!loaded)load();},2400);}}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();}());
   </script>
