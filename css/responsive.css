@@ -398,9 +398,9 @@
 
     .quick_cta {
         gap: 8px;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        flex-wrap: wrap;
+        overflow-x: visible;
+        justify-content: center;
     }
 
     .quick_cta .cta_chip {
@@ -410,6 +410,9 @@
     .quick_cta .cta_resume {
         width: auto;
         flex: 0 0 auto;
+        min-width: 92px;
+        padding: 10px 14px;
+        font-size: 13px;
         justify-content: center;
     }
 
@@ -527,7 +530,8 @@
 
 @media (max-width: 479px){
     .quick_cta .cta_resume {
-        width: 100%;
+        width: auto;
+        flex: 0 0 auto;
     }
 
     .theme_toggle {

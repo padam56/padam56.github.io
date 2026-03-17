@@ -5,19 +5,18 @@
     /*  Menu scroll js
     /*----------------------------------------------------*/
     var nav_offset_top = $('.header_area').length ? $('.header_area').offset().top : 0;
+    var stickyState = null;
     function stickyHeader() {
-		if ($('.header_area').length) {
-			var strickyScrollPos = nav_offset_top;
-			if($(window).scrollTop() > strickyScrollPos) {
-				$('.header_area').removeClass('fadeIn animated');
-				$('.header_area').addClass('stricky-fixed fadeInDown animated')
-			}
-			else if($(window).scrollTop() <= strickyScrollPos) {
-				$('.header_area').removeClass('stricky-fixed fadeInDown animated');
-				$('.header_area').addClass('slideIn animated')
-			}
-		}
-	}
+        if (!$('.header_area').length) return;
+        var shouldStick = $(window).scrollTop() > nav_offset_top;
+        if (stickyState === shouldStick) return;
+        stickyState = shouldStick;
+        if (shouldStick) {
+            $('.header_area').removeClass('fadeIn animated').addClass('stricky-fixed fadeInDown animated');
+        } else {
+            $('.header_area').removeClass('stricky-fixed fadeInDown animated').addClass('slideIn animated');
+        }
+    }
     
     // Throttle sticky header updates to animation frames.
     var stickyTicking = false;
@@ -166,12 +165,15 @@
 
     // Keep navigation state synced with current section while scrolling.
     var sectionSelector = '#about, #skill, #journey, #service, #contact';
+    var activeSectionId = '';
     function setActiveNav() {
         var scrollPos = $(window).scrollTop() + 110;
         $(sectionSelector).each(function() {
             var $section = $(this);
             if (scrollPos >= $section.offset().top && scrollPos < ($section.offset().top + $section.outerHeight())) {
                 var id = $section.attr('id');
+                if (activeSectionId === id) return;
+                activeSectionId = id;
                 $('.header_area .nav.navbar-nav li').removeClass('active');
                 $('.header_area .nav.navbar-nav li a[href="#' + id + '"]').parent().addClass('active');
                 $('.footer_copyright .nav.navbar-nav li').removeClass('active');
