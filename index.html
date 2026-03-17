@@ -1,1 +1,2496 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="format-detection" content="telephone=no,email=no,address=no,date=no,url=no"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="description" content="Padam Jung Thapa - Machine Learning and Computer Vision portfolio."><meta name="theme-color" content="#0f172a"><link rel="icon" href="img/Pattern_Light.png" type="image/x-icon"><title>Padam Jung Thapa</title><link href="css/font-awesome.min.css" rel="stylesheet"><link href="css/bootstrap.min.css" rel="stylesheet"><link href="vendors/animate-css/animate.css" rel="stylesheet"><link href="css/style.css?v=20260316-26" rel="stylesheet"><link href="css/responsive.css?v=20260316-7" rel="stylesheet"><link rel="stylesheet" href="css/colors/default.css" title="default"></head><body class="light_bg theme-dark interaction-choreo interaction-micro" data-spy="scroll" data-target="#bs-example-navbar-collapse-1" data-offset="80" data-scroll-animation="true" data-visual-mode="network"><div id="top-progress" class="top_progress" aria-hidden="true"><div class="top_progress_fill"></div></div><canvas id="network-canvas" class="network_canvas" aria-hidden="true"></canvas><div id="preloader" aria-hidden="true"><div id="preloader_spinner" class="preload_core"><div class="wave_container"><div class="wave_line wave_line_1"></div><div class="wave_line wave_line_2"></div><div class="wave_line wave_line_3"></div></div><div class="energy_pulse energy_pulse_1"></div><div class="energy_pulse energy_pulse_2"></div><div class="energy_pulse energy_pulse_3"></div><div class="center_core"></div></div></div><script>!function(){"use strict";function e(){document.querySelectorAll("body.interaction-choreo section").forEach(function(e){e.classList.add("section-visible")})}function n(){var e=document.getElementById("preloader");e&&(e.classList.add("is-hidden"),window.setTimeout(function(){e.style.display="none"},760)),document.body.style.overflow="visible"}document.addEventListener("DOMContentLoaded",e),window.addEventListener("load",function(){e(),n()}),setTimeout(function(){e(),n()},2200)}()</script><header class="header_area"><div class="container"><nav class="navbar navbar-default"><div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div><div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"><ul class="nav navbar-nav navbar-right"><li class="active"><a href="#about">About Me</a></li><li><a href="#ai-blueprint">Live Demos</a></li><li><a href="#skill">Skills</a></li><li><a href="#journey">Journey</a></li><li><a href="#service">Projects</a></li><li><a href="#contact">Contact</a></li></ul></div></nav></div></header><div class="container main_container"><div class="content_inner_bg row m0"><section class="about_person_area pad" id="about"><div class="row"><div class="col-md-4"><div class="person_img"><img src="img/member/member-photo-14.jpeg" alt="Padam Jung Thapa portrait" loading="lazy"> <span class="photo_story_badge" id="photo-story-badge" aria-live="polite" hidden>Story Tag</span></div><div class="about_media_meta"><div class="focus_tags wow fadeInUp animated" data-wow-delay="0.2s" aria-live="polite"><span class="focus_typewriter_text" id="focus-typewriter-text">Full-Stack Software Engineer</span></div><div class="quick_cta"><a class="cta_chip cta_resume" href="CV.docx" target="_blank" rel="noopener noreferrer"><i class="fa fa-file-text-o cta_primary_icon" aria-hidden="true"></i><span class="resume_label">CV</span><i class="fa fa-download cta_hover_icon" aria-hidden="true"></i></a> <a class="cta_chip cta_icon_only" href="https://github.com/padam56" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><i class="fa fa-github" aria-hidden="true"></i></a> <a class="cta_chip cta_icon_only" href="https://www.linkedin.com/in/padamjung/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile"><i class="fa fa-linkedin" aria-hidden="true"></i></a> <a class="cta_chip cta_icon_only" href="mailto:tpadamjung@gmail.com" aria-label="Send email"><i class="fa fa-envelope" aria-hidden="true"></i></a> <a class="cta_chip cta_icon_only" href="tel:+13372670379" aria-label="Call phone"><i class="fa fa-phone" aria-hidden="true"></i></a> <a class="cta_chip cta_icon_only" href="https://maps.google.com/?q=612+Lamar+St,+Lafayette,+Louisiana+70501" target="_blank" rel="noopener noreferrer" aria-label="Open location"><i class="fa fa-map-marker" aria-hidden="true"></i></a></div></div></div><div class="col-md-8"><div class="row about_intro_cloud"><div class="col-md-6"><div class="row person_details"><h3>Hi, Nice to meet you!</h3><h4>PhD Researcher | Internet Security and Web Measurement</h4><p class="about_bio_text">I am currently pursuing a PhD in Computer Science at the University of Louisiana at Lafayette, where my research focuses on internet cybercrime, Web3 and internet security, large-scale web measurement, phishing, abuse, and scam ecosystems. During my prior MS in Computer Science at the University of New Orleans, I specialized in machine learning and deep learning for computer vision. I developed robust pipelines for real-time segmentation, object detection, and annotation automation, significantly improving efficiency and accuracy in levee fault detection. My work also included building scalable full-stack pipelines for real-time inference, enhancing dataset diversity with diffusion models, and applying model quantization techniques to improve efficiency. I am a lifelong learner and an enthusiastic collaborator who enjoys turning research ideas into practical, automation-driven security systems.</p><div id="tech-stack-list" class="tech_stack_list is-hidden" aria-label="Technology stacks list"></div><div class="tech_concepts_wrap is-hidden"><div id="tech-concepts-board" class="tech_concepts_board" aria-live="polite"></div></div></div></div><div class="col-md-6 about_cloud_col"><div class="technology_cloud_wrap wow fadeInUp animated" data-wow-delay="0.15s"><h3>Technology Cloud</h3><div class="tech_cloud_controls" aria-label="Technology cloud controls"><button class="tech_mode_btn is-active" type="button" data-tech-mode="all">All</button> <button class="tech_mode_btn" type="button" data-tech-mode="ml">ML</button> <button class="tech_mode_btn" type="button" data-tech-mode="security">Security</button> <button class="tech_mode_btn" type="button" data-tech-mode="cloud">Cloud</button> <button class="tech_mode_btn" type="button" data-tech-mode="java">Java</button> <button class="tech_mode_btn" type="button" data-tech-mode="backend">Backend</button> <button class="tech_mode_btn" type="button" data-tech-mode="data">Data</button></div><div class="tech-div"><div id="tagcloud" aria-label="Interactive rotating technology tag cloud"></div><div id="tech-cloud-active" class="tech_cloud_active" aria-live="polite"></div></div></div></div></div></div></div></section><section class="myskill_area pad" id="skill"><div class="main_title"><h2>My Skills</h2><p class="section_lead">Tools and technologies I use to build robust, secure AI systems from research to deployment.</p></div><div class="row"><div class="col-md-6 wow fadeInUp animated"><div class="skill_item_inner"><div class="single_skill"><div class="skill_head"><h4>Applied AI and ML</h4></div><p class="skill_meta">Computer vision model design, training, and deployment.</p><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="93" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div></div></div><div class="single_skill"><div class="skill_head"><h4>Data Science and Analytics</h4></div><p class="skill_meta">Data wrangling, KPI tracking, and analytics reporting.</p><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div></div></div><div class="single_skill"><div class="skill_head"><h4>Java Full-Stack Platform</h4></div><p class="skill_meta">Production microservices with event-driven backend architecture.</p><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div></div></div><div class="single_skill"><div class="skill_head"><h4>Cloud, MLOps, and DevOps</h4></div><p class="skill_meta">Container delivery, CI/CD, and cloud runtime operations.</p><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="86" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div></div></div><div class="single_skill"><div class="skill_head"><h4>Security and Abuse Research Tooling</h4></div><p class="skill_meta">Web abuse measurement, phishing analysis, and automation.</p><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div></div></div><div class="single_skill"><div class="skill_head"><h4>Languages and Databases</h4></div><p class="skill_meta">Cross-stack development with SQL and NoSQL systems.</p><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div></div></div></div></div><div class="col-md-6 wow fadeInUp animated"><div class="skill_item_inner"><div class="single_skill"><div class="skill_head"><h4>Deep Learning Frameworks</h4></div><p class="skill_meta">Training and optimization for vision and sequence models.</p><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div></div></div><div class="single_skill"><div class="skill_head"><h4>Web and Frontend Stack</h4></div><p class="skill_meta">Interactive dashboards and reactive front-end experiences.</p><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="84" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div></div></div><div class="single_skill"><div class="skill_head"><h4>Experiment Tracking and Reproducibility</h4></div><p class="skill_meta">Run tracking, model versioning, and reproducible workflows.</p><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div></div></div><div class="single_skill"><div class="skill_head"><h4>Data Engineering and Lakehouse</h4></div><p class="skill_meta">Batch and distributed pipelines for analytics workloads.</p><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div></div></div><div class="single_skill"><div class="skill_head"><h4>Automation and QA Reliability</h4></div><p class="skill_meta">Automated testing and reliability checks for stable releases.</p><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div></div></div><div class="single_skill"><div class="skill_head"><h4>Linux and Systems Engineering</h4></div><p class="skill_meta">Server operations, observability, and production debugging.</p><div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div></div></div></div></div></div></section><section class="journey_area pad" id="journey"><div class="main_title"><h2>Research and Experience</h2><p class="section_lead">A short snapshot of my academic background and industry engineering work.</p></div><div class="row journey_grid"><div class="col-md-6"><article class="journey_card"><h4>Education</h4><p>Strong academic foundation in computer science, with ongoing doctoral research and prior graduate specialization in AI/ML.</p><ul><li>PhD in Computer Science, University of Louisiana at Lafayette (in progress).</li><li>MS in Computer Science (Research), University of New Orleans.</li><li>B.Tech in Computer Science and Engineering, KIIT University.</li><li>Focus areas: machine learning, computer vision, and internet security research.</li></ul></article></div><div class="col-md-6"><article class="journey_card"><h4>Industry Experience</h4><p>Hands-on full-stack engineering experience building reliable, scalable systems for production use.</p><ul><li>Implemented Spring Boot microservices and Kafka event flows for reliable, low-latency updates.</li><li>Developed Angular dashboards for cap table insights, vesting visibility, and user-facing analytics.</li><li>Deployed on AWS with Docker, Redis, PostgreSQL, CI/CD, and monitoring for operational resilience.</li></ul></article></div></div></section><section class="threat_map_area pad" id="intel-map"><div class="main_title"><h2>Threat Intel Map</h2><p class="section_lead">Source-backed global view of campaign clusters, abuse infrastructure, and victim-origin patterns with live rotating context highlights.</p></div><div class="intel_map_grid wow fadeInUp animated" data-wow-delay="0.1s"><aside class="intel_view_selector" aria-label="Threat intelligence views"><h3>Views</h3><button class="intel_view_btn is-active" type="button" data-intel-view="campaign">Campaign Infrastructure</button> <button class="intel_view_btn" type="button" data-intel-view="crypto">Crypto Wallet Fraud</button> <button class="intel_view_btn" type="button" data-intel-view="expired">Expired Domains and Re-Registration</button> <button class="intel_view_btn" type="button" data-intel-view="social">Social Media Scam Markets</button> <button class="intel_view_btn" type="button" data-intel-view="brand">Brand Impersonation Attacks</button> <button class="intel_view_btn" type="button" data-intel-view="captcha">CAPTCHA Attack Ecosystems</button> <button class="intel_view_btn" type="button" data-intel-view="phishing">Credential Phishing Waves</button> <button class="intel_view_btn" type="button" data-intel-view="pigbutchering">Pig Butchering Networks</button> <button class="intel_view_btn" type="button" data-intel-view="drainers">Wallet Drainer Ecosystems</button></aside><div class="threat_map_shell"><div class="threat_map_topline"><div class="intel_live_context" aria-live="polite"><strong>Live Context</strong> <span id="intel-live-context-text">Loading context stream...</span> <small id="intel-live-context-meta">Severity: n/a | Region: n/a | Time: n/a</small></div></div><svg id="threat-world-map" class="threat_world_map" viewBox="0 0 1000 450" role="img" aria-label="World map showing campaign clusters and abuse hotspots"></svg><div class="threat_map_legend" aria-label="Threat map legend"><span><i class="dot dot-cyan"></i>Phishing / wallet-drain infra</span> <span><i class="dot dot-green"></i>Sinkhole / takedown campaigns</span> <span><i class="dot dot-amber"></i>Victim-origin concentration</span> <span><i class="dot dot-blue"></i>Abuse hosting overlap</span></div></div><div class="intel_live_feed_card"><div class="intel_live_feed_top"><h3>Live Exploited Vulnerability Feed</h3><p id="intel-live-feed-updated">Live snapshot: loading...</p></div><div class="intel_live_feed_metrics"><div><span>KEV Total</span><strong id="intel-live-kev-total">-</strong></div><div><span>Added Last 30d</span><strong id="intel-live-kev-30d">-</strong></div><div><span>Known Ransomware Use</span><strong id="intel-live-kev-ransom">-</strong></div></div><ul id="intel-live-feed-list" class="intel_live_feed_list" aria-live="polite"></ul></div></div><div class="intel_stats row"><div class="col-sm-4"><div class="intel_stat_card"><h4 id="intel-kpi-1-value">23</h4><p id="intel-kpi-1-label">active campaign clusters tracked this quarter</p></div></div><div class="col-sm-4"><div class="intel_stat_card"><h4 id="intel-kpi-2-value">1.9k</h4><p id="intel-kpi-2-label">sinkholed and monitored suspicious domains</p></div></div><div class="col-sm-4"><div class="intel_stat_card"><h4 id="intel-kpi-3-value">67</h4><p id="intel-kpi-3-label">infrastructure overlap signals under active review</p></div></div></div><div class="victim_origin_card"><h3 id="intel-victim-title">Reported Crypto Wallet Fraud Victim Origins</h3><p id="intel-victim-intro">Regional distribution for the selected view, driven by the loaded threat dataset and public-source references.</p><ul id="intel-victim-list" class="victim_origin_list"></ul><p class="intel_source_note">Validated references for the active view:</p><ul id="intel-source-list" class="intel_source_list"></ul></div></section><section class="ai_blueprint_area pad" id="ai-blueprint"><div class="main_title"><h2>AI Blueprint and Live Demos</h2><p class="section_lead">A compact view of production-minded ML workflows with hands-on demos.</p></div><div class="ai_blueprint_shell wow fadeInUp animated" data-wow-delay="0.1s"><div class="ai_blueprint_tabs" role="tablist" aria-label="AI blueprint views"><button class="ai_blueprint_tab is-active" type="button" role="tab" aria-selected="true" aria-controls="ai-view-lifecycle" data-ai-view="lifecycle">Model Lifecycle</button> <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-cv" data-ai-view="cv">CV Pipeline</button> <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-seg" data-ai-view="seg">Segmentation Workflow Lab</button> <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-ml" data-ai-view="ml">Classical ML Demos</button> <button class="ai_blueprint_tab" type="button" role="tab" aria-selected="false" aria-controls="ai-view-edge" data-ai-view="edge">Sorting Algorithms Live Demo</button></div><div class="ai_blueprint_panel is-active" id="ai-view-lifecycle" role="tabpanel"><div class="ml_lifecycle_track" aria-label="Model lifecycle timeline"><article class="ml_stage_card is-active" tabindex="0" data-stage="Problem" data-detail="Define task scope, operating constraints, and measurable outcome targets before training begins." data-artifact="Success Metric Sheet"><h4>Problem</h4><p>Scope risk and define measurable success criteria.</p><span>Artifact: Success Metric Sheet</span></article><article class="ml_stage_card" tabindex="0" data-stage="Data" data-detail="Build representative datasets, run quality checks, and validate labels for training confidence." data-artifact="Dataset Snapshot and Label Audit"><h4>Data</h4><p>Assemble and validate representative training data.</p><span>Artifact: Dataset Snapshot and Label Audit</span></article><article class="ml_stage_card" tabindex="0" data-stage="Training" data-detail="Track experiment configurations, compare runs, and lock best candidates for evaluation." data-artifact="Experiment Run Log"><h4>Training</h4><p>Run controlled experiments with tracked configurations.</p><span>Artifact: Experiment Run Log</span></article><article class="ml_stage_card" tabindex="0" data-stage="Evaluation" data-detail="Inspect confusion patterns, failure buckets, and robustness before production release." data-artifact="Confusion Matrix and Error Buckets"><h4>Evaluation</h4><p>Stress-test for precision, recall, and failure modes.</p><span>Artifact: Confusion Matrix and Error Buckets</span></article><article class="ml_stage_card" tabindex="0" data-stage="Deployment" data-detail="Serve models via versioned APIs with latency budgets, rollback plans, and release checks." data-artifact="API Latency and Throughput Report"><h4>Deployment</h4><p>Package model service with latency-aware API paths.</p><span>Artifact: API Latency and Throughput Report</span></article><article class="ml_stage_card" tabindex="0" data-stage="Monitoring" data-detail="Observe drift, reliability, and model quality signals to trigger safe retraining workflows." data-artifact="Drift Dashboard and Alert Rules"><h4>Monitoring</h4><p>Track drift and trigger safe retraining workflows.</p><span>Artifact: Drift Dashboard and Alert Rules</span></article></div><div class="ml_lifecycle_detail" aria-live="polite"><h4 id="ml-stage-title">Problem</h4><p id="ml-stage-detail">Define task scope, operating constraints, and measurable outcome targets before training begins.</p><span id="ml-stage-artifact">Primary Artifact: Success Metric Sheet</span></div></div><div class="ai_blueprint_panel" id="ai-view-cv" role="tabpanel" hidden><div class="cv_pipeline_graph is-flowing" aria-label="Computer vision pipeline diagram"><div class="cv_node">Data Ingestion</div><div class="cv_arrow" aria-hidden="true"><span>&rarr;</span><i class="cv_flow_dot"></i></div><div class="cv_node">Preprocessing</div><div class="cv_arrow" aria-hidden="true"><span>&rarr;</span><i class="cv_flow_dot"></i></div><div class="cv_node">Augmentation</div><div class="cv_arrow" aria-hidden="true"><span>&rarr;</span><i class="cv_flow_dot"></i></div><div class="cv_node">Model Training and Tuning</div><div class="cv_arrow" aria-hidden="true"><span>&rarr;</span><i class="cv_flow_dot"></i></div><div class="cv_node">Post-Processing</div><div class="cv_arrow" aria-hidden="true"><span>&rarr;</span><i class="cv_flow_dot"></i></div><div class="cv_node">Alert and UI Integration</div></div><p class="ai_blueprint_note">Built for the same style of end-to-end CV workflows used in segmentation and detection projects from MS research and production engineering practice.</p></div><div class="ai_blueprint_panel" id="ai-view-seg" role="tabpanel" hidden><div class="seg_workflow_shell" data-stage="setup"><div class="seg_workflow_header"><div class="seg_workflow_header_main"><h4>End-to-End Segmentation Experience Lab</h4><p>Use one scene across segmentation, explainability, and synthetic augmentation. Switch sub-views below without leaving this panel.</p></div><div class="seg_workflow_header_links" aria-label="Segmentation experience links"><a href="https://huggingface.co/spaces/padam5699/levee-detection-app" target="_blank" rel="noopener noreferrer">Live Levee Detection App</a></div></div><div class="readiness_lens" role="tablist" aria-label="Segmentation lab sub-views"><button class="readiness_lens_btn seg_lab_sub_btn is-active" type="button" data-seg-lab-view="seg" aria-selected="true">Segmentation</button> <button class="readiness_lens_btn seg_lab_sub_btn" type="button" data-seg-lab-view="xai" aria-selected="false">Seg Explainability</button> <button class="readiness_lens_btn seg_lab_sub_btn" type="button" data-seg-lab-view="aug" aria-selected="false">Synthetic Data Booster</button></div><div class="seg_lab_subview is-active" id="seg-lab-view-seg"><div class="seg_mode_switch" role="tablist" aria-label="Segmentation mode selector"><button class="seg_mode_btn is-active" type="button" data-seg-mode="semantic" aria-selected="true">Semantic</button> <button class="seg_mode_btn" type="button" data-seg-mode="instance" aria-selected="false">Instance</button> <button class="seg_mode_btn" type="button" data-seg-mode="panoptic" aria-selected="false">Panoptic</button></div><p id="seg-mode-detail" class="seg_mode_detail">Semantic mode: one foreground class for geometric objects over background.</p><div class="seg_demo_layout"><div class="seg_demo_canvas_wrap"><canvas id="seg-demo-canvas" class="seg_demo_canvas" aria-label="Geometric segmentation workflow canvas"></canvas><img id="seg-demo-image" src="img/segmentation/geometric-scene.svg" alt="Geometric segmentation scene" hidden> <img id="seg-demo-mask-semantic" src="img/segmentation/geometric-mask-semantic.svg" alt="Ground truth semantic segmentation mask" hidden> <img id="seg-demo-mask-instance-primary" src="img/segmentation/geometric-mask-instance-primary.svg" alt="Primary instance mask" hidden> <img id="seg-demo-mask-instance-secondary" src="img/segmentation/geometric-mask-instance-secondary.svg" alt="Secondary instance mask" hidden> <img id="seg-demo-mask-instance-tertiary" src="img/segmentation/geometric-mask-instance-tertiary.svg" alt="Tertiary instance mask" hidden><div class="seg_canvas_legend"><span><i class="seg_legend_dot dot-mask"></i>Segmentation overlay</span> <span><i class="seg_legend_dot dot-edge"></i>Object boundary</span></div></div><div class="seg_demo_controls"><div class="seg_param_stack"><label for="seg-sensitivity">Mask Sensitivity</label> <input id="seg-sensitivity" type="range" min="20" max="130" value="70"> <label for="seg-opacity">Overlay Opacity</label> <input id="seg-opacity" type="range" min="25" max="90" value="58"></div><div class="seg_demo_actions"><button id="seg-reset" type="button">Reset Lab</button> <button id="seg-run" type="button">Run Segmentation</button></div><p id="seg-status" class="seg_status" aria-live="polite">Ready. Choose a mode and click Run Segmentation.</p></div></div></div><div class="seg_lab_subview" id="seg-lab-view-xai" hidden><div class="demo_lab_shell"><div class="demo_lab_head"><h4>Explainability for Segmentation</h4><p>Inspect prediction-vs-ground-truth drift, saliency, and boundary stress on the same geometric segmentation scene.</p></div><div class="demo_lab_layout"><div class="demo_lab_canvas_wrap"><canvas id="xai-demo-canvas" class="demo_lab_canvas" aria-label="Grad-CAM and attention overlay demo"></canvas><img id="xai-demo-image" src="img/segmentation/geometric-scene.svg" alt="Segmentation scene for explainability" hidden></div><div class="demo_lab_controls"><label for="xai-overlay-mode">Explainability View</label> <select id="xai-overlay-mode"><option value="mask-vs-gt">Prediction vs GT</option><option value="gradcam">Grad-CAM</option><option value="attention">Attention Map</option><option value="boundary-error">Boundary Error Heatmap</option></select> <button id="xai-toggle-failure" type="button">Inject Boundary Failure</button><p id="xai-status" class="demo_lab_status" aria-live="polite">Ready. Rendering explainability overlays on geometric scene.</p></div></div></div></div><div class="seg_lab_subview" id="seg-lab-view-aug" hidden><div class="demo_lab_shell"><div class="demo_lab_head"><h4>Synthetic Data Booster (Albumentations)</h4><p>Preview hard-case augmentations directly on the same segmentation scene and estimate generalization gain.</p></div><div class="demo_lab_layout"><div class="demo_lab_canvas_wrap"><canvas id="aug-demo-canvas" class="demo_lab_canvas" aria-label="Synthetic data augmentation preview"></canvas><img id="aug-demo-image" src="img/segmentation/geometric-scene.svg" alt="Segmentation scene for synthetic augmentation" hidden></div><div class="demo_lab_controls"><label for="aug-condition">Albumentations Transform</label> <select id="aug-condition"></select><p id="aug-transform-note" class="ml_algo_note">Choose a transform to preview how it affects the segmentation scene patch.</p><div class="aug_quick_presets" aria-label="Augmentation presets"><button type="button" class="aug_preset_btn" data-aug-preset="geometry">Geometry</button> <button type="button" class="aug_preset_btn" data-aug-preset="color">Color</button> <button type="button" class="aug_preset_btn" data-aug-preset="noise">Noise</button> <button type="button" class="aug_preset_btn" data-aug-preset="weather">Weather</button> <button type="button" class="aug_preset_btn" data-aug-preset="dropout">Dropout</button></div><label for="aug-intensity">Intensity: <span id="aug-intensity-value">55%</span></label> <input id="aug-intensity" type="range" min="0" max="100" value="55"> <button id="aug-randomize" type="button">Resample Variation</button><div id="aug-transform-gallery" class="aug_transform_gallery" aria-label="Live augmentation controls"></div><p class="aug_live_metrics" aria-live="polite">Baseline mIoU: <strong id="aug-miou-base">0.68</strong> | Boosted mIoU: <strong id="aug-miou-boost">0.77</strong> | Generalization Gain: <strong id="aug-gain">+0.09</strong></p><p id="aug-status" class="demo_lab_status" aria-live="polite">Ready. Live augmentation preview is active.</p></div></div></div></div></div></div><div class="ai_blueprint_panel" id="ai-view-ml" role="tabpanel" hidden><div class="demo_lab_shell"><div class="demo_lab_head"><h4>Classical ML Algorithms Live Demo</h4><p>A practical decision guide: choose an algorithm by problem shape, data volume, and explainability needs, with live examples teams can quickly map to real product scenarios.</p><p id="ml-live-note" class="ml_live_note">Live scenario mode: algorithm behavior, split quality, and diagnostics update continuously.</p></div><div class="demo_lab_layout"><div class="demo_lab_canvas_wrap"><canvas id="ml-demo-canvas" class="demo_lab_canvas" aria-label="Classical machine learning algorithm visualization"></canvas></div><div class="demo_lab_controls"><label for="ml-algo">Algorithm</label> <select id="ml-algo"><option value="logistic">Logistic Regression</option><option value="svm">SVM</option><option value="knn">KNN</option><option value="naive-bayes">Naive Bayes</option><option value="gp-classifier">Gaussian Process Classifier</option><option value="lda">LDA (Linear Discriminant Analysis)</option><option value="qda">QDA (Quadratic Discriminant Analysis)</option><option value="xgboost">XGBoost</option><option value="lightgbm">LightGBM</option><option value="catboost">CatBoost</option><option value="extra-trees">Extra Trees</option><option value="adaboost">AdaBoost</option><option value="dbscan">DBSCAN Clustering</option><option value="agglomerative">Hierarchical Agglomerative Clustering</option><option value="one-class-svm">One-Class SVM (Anomaly)</option><option value="isolation-forest">Isolation Forest (Anomaly)</option><option value="decision-tree">Decision Tree</option><option value="random-forest">Random Forest</option><option value="kmeans">K-Means</option><option value="linear-regression">Linear Regression</option><option value="gp-regressor">Gaussian Process Regressor</option><option value="ridge">Ridge Regression</option><option value="lasso">Lasso Regression</option><option value="elastic-net">Elastic Net Regression</option></select><p id="ml-algo-note" class="ml_algo_note">Scenario: binary conversion risk scoring with constrained latency and explainability needs.</p><label for="ml-noise">Noise</label> <input id="ml-noise" type="range" min="0" max="40" value="12"><div class="ml_inline_controls"><button id="ml-noise-toggle" type="button">Pause Noise</button> <label for="ml-noise-speed">Noise Speed</label> <select id="ml-noise-speed"><option value="slow">Slow</option><option value="normal" selected="selected">Normal</option><option value="fast">Fast</option></select></div><label for="ml-preset">Dataset Preset</label> <select id="ml-preset"><option value="linear" selected="selected">Linear Separable</option><option value="moons">Two Moons</option><option value="xor">XOR Quadrants</option><option value="concentric">Concentric Rings</option></select> <label for="ml-imbalance">Class Imbalance (Class 1): <span id="ml-imbalance-value">50%</span></label> <input id="ml-imbalance" type="range" min="20" max="80" value="50"><div class="ml_toggle_row"><label><input id="ml-outliers" type="checkbox"> Add Outliers</label> <label><input id="ml-scale" type="checkbox" checked="checked"> Scale Features</label></div><label for="ml-split">Train Split: <span id="ml-split-value">80%</span></label> <input id="ml-split" type="range" min="50" max="90" value="80"> <label for="ml-depth">Tree Depth: <span id="ml-depth-value">3</span></label> <input id="ml-depth" type="range" min="1" max="6" value="3"> <label for="ml-forest-trees">Forest Trees: <span id="ml-forest-value">7</span></label> <input id="ml-forest-trees" type="range" min="3" max="21" step="2" value="7"> <button id="ml-regenerate" type="button">Regenerate Dataset</button><div class="demo_metric_grid ml_usecase_grid" aria-label="Algorithm selection guide"><div><span>Use When</span><strong id="ml-metric-acc">Linearity is acceptable and you need interpretable baselines.</strong></div><div><span>Best Fit</span><strong id="ml-metric-f1">Small-to-medium tabular datasets with clean features.</strong></div><div><span>Delivery Impact</span><strong id="ml-metric-auc">Fast iteration from baseline to production candidate with clear trade-offs.</strong></div></div><div class="demo_metric_grid ml_diag_grid" aria-label="Model diagnostics"><div><span>Confusion Matrix</span><strong id="ml-confusion">TP 0 | FP 0 | TN 0 | FN 0</strong></div><div><span>Validation Snapshot</span><strong id="ml-validation">Split 80/20 | AUC 0.00</strong></div><div><span>Feature Signal</span><strong id="ml-feature-signal">x: 0.00 | y: 0.00</strong></div></div><p id="ml-status" class="demo_lab_status" aria-live="polite">Switch algorithms to see when each one should be used in a delivery workflow, not just how it scores.</p></div></div></div></div><div class="ai_blueprint_panel" id="ai-view-edge" role="tabpanel" hidden><div class="demo_lab_shell sorting_demo_shell"><div class="demo_lab_head"><h4>Sorting Algorithms Live Demo</h4><p>Visualize how each sorting strategy transforms an array over time and compare implementation trade-offs beyond just Big-O notation.</p></div><div class="demo_lab_layout"><div class="demo_lab_canvas_wrap sorting_demo_board"><canvas id="sort-demo-canvas" class="demo_lab_canvas" width="760" height="340" aria-label="Sorting algorithm visualization canvas"></canvas><p id="sort-algo-note" class="ml_algo_note">Scenario: choose a stable sorter for transaction feeds where duplicate keys must preserve upstream ordering.</p></div><div class="demo_lab_controls"><label for="sort-algo">Sorting Algorithm</label> <select id="sort-algo"><option value="bubble">Bubble Sort</option><option value="selection">Selection Sort</option><option value="insertion" selected="selected">Insertion Sort</option><option value="merge">Merge Sort</option><option value="quick">Quick Sort</option><option value="heap">Heap Sort</option><option value="counting">Counting Sort</option><option value="radix">Radix Sort (LSD Base-10)</option></select> <label for="sort-pattern">Input Pattern</label> <select id="sort-pattern"><option value="random" selected="selected">Random</option><option value="nearly">Nearly Sorted</option><option value="reversed">Reverse Sorted</option><option value="few-unique">Few Unique Values</option></select> <label for="sort-size">Array Size: <span id="sort-size-value">56</span></label> <input id="sort-size" type="range" min="20" max="110" value="56"> <label for="sort-speed">Animation Speed: <span id="sort-speed-value">42</span></label> <input id="sort-speed" type="range" min="8" max="90" value="42"><div class="sort_demo_actions"><button id="sort-run" type="button">Run Sort</button> <button id="sort-shuffle" type="button">Shuffle Data</button></div><div class="demo_metric_grid ml_usecase_grid" aria-label="Sorting algorithm use guide"><div><span>Use When</span><strong id="sort-use-when">Dataset is almost sorted and online inserts happen frequently.</strong></div><div><span>Best Fit</span><strong id="sort-best-fit">Small or near-sorted sequences where low overhead is critical.</strong></div><div><span>Delivery Impact</span><strong id="sort-impact">Quick, stable behavior for real-time ranked feed maintenance.</strong></div></div><div class="demo_metric_grid ml_diag_grid" aria-label="Sorting run diagnostics"><div><span>Comparisons</span><strong id="sort-comparisons">0</strong></div><div><span>Writes and Swaps</span><strong id="sort-writes">0</strong></div><div><span>Complexity Snapshot</span><strong id="sort-complexity">Best O(n), Avg O(n^2)</strong></div><div><span>Stability</span><strong id="sort-stability">Stable</strong></div></div><p id="sort-status" class="demo_lab_status" aria-live="polite">Ready: choose an algorithm, generate data, and run to inspect each strategy step-by-step.</p></div></div></div></div></div><div class="project_playbook wow fadeInUp animated" data-wow-delay="0.16s"><div class="playbook_head"><h3>This Is How I Work on Projects</h3><p>A practical delivery loop blending MS research habits with production engineering discipline.</p></div><div class="playbook_steps" role="tablist" aria-label="Project workflow steps"><button class="playbook_step is-active" type="button" data-step-title="Discovery and Scope" data-step-detail="Understand problem boundaries, users, constraints, and risk. Translate requirements into measurable success criteria before implementation." data-step-output="Output: problem framing doc, measurable KPIs" aria-selected="true">01 Discover</button> <button class="playbook_step" type="button" data-step-title="Design and Mockups" data-step-detail="Create architecture sketches, data flows, wireframes, and experiment plans to visualize the system before heavy build effort." data-step-output="Output: architecture draft, data flow map, interface mockups" aria-selected="false">02 Design</button> <button class="playbook_step" type="button" data-step-title="Build and Integrate" data-step-detail="Develop model pipelines and service interfaces incrementally. Integrate backend, model serving, and UI with versioned checkpoints." data-step-output="Output: integrated prototype with tracked versions" aria-selected="false">03 Build</button> <button class="playbook_step" type="button" data-step-title="Evaluate and Refine" data-step-detail="Stress-test against edge cases, inspect failure buckets, tune performance, and close quality gaps before release decisions." data-step-output="Output: evaluation report, risk/failure checklist" aria-selected="false">04 Validate</button> <button class="playbook_step" type="button" data-step-title="Deploy and Monitor" data-step-detail="Release with CI/CD, monitor reliability and drift signals, and iterate using operational feedback loops from real usage." data-step-output="Output: monitored deployment with retraining triggers" aria-selected="false">05 Operate</button></div><div class="playbook_detail" aria-live="polite"><h4 id="playbook-step-title">Discovery and Scope</h4><p id="playbook-step-detail">Understand problem boundaries, users, constraints, and risk. Translate requirements into measurable success criteria before implementation.</p><span id="playbook-step-output">Output: problem framing doc, measurable KPIs</span></div></div></section><section class="service_area" id="service"><div class="main_title"><h2>Projects</h2></div><div class="modern_toolbar" aria-label="Project filters"><button class="modern_filter_btn is-active" type="button" data-filter="security">Security</button> <button class="modern_filter_btn" type="button" data-filter="cv">Vision</button> <button class="modern_filter_btn" type="button" data-filter="data">Data Platforms</button> <button class="modern_filter_btn" type="button" data-filter="nlp">NLP</button> <button class="modern_filter_btn" type="button" data-filter="robotics">Robotics</button></div><div class="service_inner row project_group" data-group="security"><div class="col-md-12 project_group_title"><h3>Security and Abuse Research</h3></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="security,ml" data-title="Microsoft Malware Prediction" data-description="Developed a LightGBM malware risk model with strong ROC AUC performance and validated ensemble effectiveness on heterogeneous tabular signals."><i class="fa fa-shield" aria-hidden="true"></i><h4>Microsoft Malware Prediction</h4><div class="project_tags"><span>Security</span><span>ML</span></div><p>Built malware risk prediction using ensemble learning and compared model families for practical detection workflows.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="security,ml" data-title="Credit Card Fraud Detection" data-description="Enhanced fraud detection under heavy class imbalance using Decision Trees and Naive Bayes with synthetic balancing methods such as SMOTE and ADASYN."><i class="fa fa-credit-card" aria-hidden="true"></i><h4>Credit Card Fraud Detection</h4><div class="project_tags"><span>Security</span><span>ML</span></div><p>Applied imbalance-aware training strategies to improve fraud identification reliability in realistic transaction datasets.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="security" data-title="MTD-Research" data-description="Research repository focused on malicious domain tracking and scam infrastructure analysis workflows using automation and web measurement tools."><i class="fa fa-search" aria-hidden="true"></i><h4>MTD-Research</h4><div class="project_tags"><span>Security</span><span>Web Measurement</span></div><p>Security research code and experiments around domain abuse tracking and suspicious infrastructure behavior.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="security" data-title="Pyspark-Cryptoanalysis" data-description="Distributed machine learning experiments for cryptocurrency analysis and prediction with scalable data processing."><i class="fa fa-bitcoin" aria-hidden="true"></i><h4>Pyspark Cryptoanalysis</h4><div class="project_tags"><span>Security</span><span>Distributed ML</span></div><p>Crypto ecosystem analysis project combining PySpark pipelines with predictive modeling.</p></div></div></div><div class="service_inner row project_group" data-group="cv"><div class="col-md-12 project_group_title"><h3>Computer Vision and Remote Sensing</h3></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="cv,ml" data-title="Levee Monitoring and Fault Detection WebApp" data-description="Built and deployed a Streamlit application for levee fault segmentation with advanced post-processing and conflict-aware overlay handling."><i class="fa fa-eye" aria-hidden="true"></i><h4>Levee Monitoring and Fault Detection WebApp</h4><div class="project_tags"><span>Vision</span><span>Applied AI</span></div><p>End-to-end deep learning deployment for levee deficiency analysis with practical controls for field usage.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="cv,ml" data-title="Traffic Sign Classification" data-description="Trained a deep CNN on 43 traffic sign classes with augmentation and optimization techniques for robust recognition."><i class="fa fa-road" aria-hidden="true"></i><h4>Traffic Sign Classification</h4><div class="project_tags"><span>Vision</span><span>Deep Learning</span></div><p>Multi-class traffic sign recognition pipeline designed for autonomous driving-oriented scenarios.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="cv,ml" data-title="Diabetic Retinopathy Detection" data-description="Developed a ResNet-based medical imaging classifier and improved class-wise performance through augmentation and targeted hyperparameter tuning."><i class="fa fa-heartbeat" aria-hidden="true"></i><h4>Diabetic Retinopathy Detection</h4><div class="project_tags"><span>Vision</span><span>Medical AI</span></div><p>Clinical image classification project with class imbalance mitigation and explainable performance reporting.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="cv,ml" data-title="Facial Expression Classification" data-description="Built a ResNet-based facial expression model across five classes using learning-rate scheduling, early stopping, and augmentation."><i class="fa fa-smile-o" aria-hidden="true"></i><h4>Facial Expression Classification</h4><div class="project_tags"><span>Vision</span><span>ResNet</span></div><p>Emotion classification benchmark with precision/recall focused evaluation by class.</p></div></div></div><div class="service_inner row project_group" data-group="data"><div class="col-md-12 project_group_title"><h3>Data Platforms and Analytics</h3></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="data,timeseries,ml" data-title="Stock Price Prediction" data-description="Built market prediction workflows with deep sequence models and reinforcement-inspired optimization over NEPSE historical records."><i class="fa fa-line-chart" aria-hidden="true"></i><h4>Stock Price Prediction</h4><div class="project_tags"><span>Time Series</span><span>ML</span></div><p>Forecasting and strategy optimization project for financial trend analysis and return-oriented decision support.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="data" data-title="HYCOM Ocean Data Visualization" data-description="Developed an interactive Streamlit + Plotly platform to analyze large-scale oceanographic variables with efficient filtering pipelines."><i class="fa fa-area-chart" aria-hidden="true"></i><h4>HYCOM Ocean Data Visualization</h4><div class="project_tags"><span>Data Viz</span><span>Streamlit</span></div><p>Exploratory analytics platform to extract and communicate insights from large spatiotemporal ocean datasets.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="data" data-title="Global Sales Dashboard" data-description="Designed a Databricks + Delta Lake supply-chain analytics dashboard with near real-time reporting for decision support."><i class="fa fa-dashboard" aria-hidden="true"></i><h4>Global Sales Dashboard</h4><div class="project_tags"><span>Databricks</span><span>Analytics</span></div><p>Business intelligence dashboard for supply-chain visibility and faster strategy decisions.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="data,nlp" data-title="Document Similarity Analysis" data-description="Implemented NLP similarity analysis using TF-IDF and cosine similarity with clustering visualization for semantic exploration."><i class="fa fa-files-o" aria-hidden="true"></i><h4>Document Similarity Analysis</h4><div class="project_tags"><span>NLP</span><span>Information Retrieval</span></div><p>Text analytics pipeline for clustering and semantic proximity insights across corpora.</p></div></div></div><div class="service_inner row project_group" data-group="nlp"><div class="col-md-12 project_group_title"><h3>NLP and Language Modeling</h3></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="nlp,ml" data-title="English-to-French Translator Using LSTMs" data-description="Built a seq2seq translation model using LSTMs with large bilingual corpora preprocessing and TensorFlow/Keras training."><i class="fa fa-language" aria-hidden="true"></i><h4>English-to-French Translator</h4><div class="project_tags"><span>NLP</span><span>LSTM</span></div><p>Neural machine translation pipeline with tokenization, sequence modeling, and bilingual evaluation workflows.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="nlp" data-title="Natural Language Processing Projects" data-description="Collection of NLP experiments including classical and deep learning text processing workflows from coursework and independent exploration."><i class="fa fa-comments" aria-hidden="true"></i><h4>Natural Language Processing Projects</h4><div class="project_tags"><span>NLP</span><span>Text Mining</span></div><p>Hands-on NLP repository with preprocessing, feature engineering, and model experimentation tasks.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="nlp" data-title="Generating Text with Markov Chains" data-description="Implemented probabilistic text generation using Markov chain transitions for sequence modeling and synthetic text production."><i class="fa fa-pencil" aria-hidden="true"></i><h4>Generating Text with Markov Chains</h4><div class="project_tags"><span>NLP</span><span>Sequence Modeling</span></div><p>Language generation mini-project focused on transition-based stochastic text synthesis.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="nlp" data-title="Boggle Word Solver" data-description="Python implementation for efficient dictionary-based word solving on Boggle boards using algorithmic search strategies."><i class="fa fa-font" aria-hidden="true"></i><h4>Boggle Word Solver</h4><div class="project_tags"><span>NLP</span><span>Algorithms</span></div><p>Word search and lexical matching project with performance-aware board traversal logic.</p></div></div></div><div class="service_inner row project_group" data-group="robotics"><div class="col-md-12 project_group_title"><h3>Robotics and Optimization</h3></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="robotics" data-title="Adaptive Motion Planning for UGVs" data-description="Integrated artificial potential fields with occupancy grid mapping in simulation to support dynamic target tracking and obstacle avoidance."><i class="fa fa-crosshairs" aria-hidden="true"></i><h4>Adaptive Motion Planning for UGVs</h4><div class="project_tags"><span>Robotics</span><span>Simulation</span></div><p>Autonomous navigation study combining planning and environmental mapping for robust UGV movement.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="robotics,data" data-title="Futoshiki Puzzle Solver" data-description="Parallelized constraint-satisfaction solver with OpenMP task-based execution and up to 5x speedup on large grids."><i class="fa fa-cogs" aria-hidden="true"></i><h4>Futoshiki Puzzle Solver</h4><div class="project_tags"><span>Parallel Computing</span><span>Optimization</span></div><p>High-performance solver leveraging backtracking and multi-threaded parallelism for faster complex puzzle resolution.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="robotics" data-title="On-Device AI" data-description="Edge deployment notes and code for model conversion, quantization, and real-time inference workflows on resource-constrained devices."><i class="fa fa-microchip" aria-hidden="true"></i><h4>On-Device AI</h4><div class="project_tags"><span>Edge AI</span><span>Optimization</span></div><p>Practical edge AI deployment repository focused on latency, model size, and device execution constraints.</p></div></div><div class="col-md-6"><div class="service_item wow fadeIn animated" data-tags="robotics" data-title="Advanced Machine Learning Algorithms" data-description="Algorithm-focused repository with implementations and assignments emphasizing optimization, model behavior, and evaluation techniques."><i class="fa fa-sitemap" aria-hidden="true"></i><h4>Advanced ML Algorithms</h4><div class="project_tags"><span>Optimization</span><span>Algorithms</span></div><p>Advanced algorithmic implementations and comparative ML experimentation workflows.</p></div></div></div><div id="project-empty-state" class="project_empty_state" hidden>No projects are tagged under this domain yet.</div></section><section class="contact_area pad" id="contact"><div class="main_title"><h2>Contact</h2></div><div class="row"><div class="col-md-6"><div class="left_contact_details contact_panel contact_panel_info wow fadeInUp animated"><div class="contact_title"><h3>Contact Info</h3></div><button id="contact-reveal-toggle" class="contact_reveal_btn" type="button" aria-expanded="false" aria-controls="contact-reveal-content">Reveal Contact Details</button><div id="contact-reveal-content" class="contact_reveal_content" hidden><div class="media"><div class="media-left"><i class="fa fa-envelope"></i></div><div class="media-body"><h4>Email</h4><p><a href="mailto:tpadamjung@gmail.com">tpadamjung@gmail.com</a></p></div></div><div class="media"><div class="media-left"><i class="fa fa-phone"></i></div><div class="media-body"><h4>Phone</h4><p><a href="tel:+13372670379">+1 (337) 267-0379</a></p></div></div><div class="media"><div class="media-left"><i class="fa fa-map-marker"></i></div><div class="media-body"><h4>Address</h4><p>612 Lamar St., Lafayette, Louisiana 70501</p></div></div><div class="media"><div class="media-left"><i class="fa fa-github"></i></div><div class="media-body"><h4>GitHub</h4><p><a href="https://github.com/padam56" target="_blank" rel="noopener noreferrer">github.com/padam56</a></p></div></div><div class="media"><div class="media-left"><i class="fa fa-linkedin"></i></div><div class="media-body"><h4>LinkedIn</h4><p><a href="https://www.linkedin.com/in/padamjung/" target="_blank" rel="noopener noreferrer">linkedin.com/in/padamjung</a></p></div></div><div class="media"><div class="media-left"><i class="fa fa-globe"></i></div><div class="media-body"><h4>Web and Scholar</h4><p><a href="https://padamjungthapa.com.np" target="_blank" rel="noopener noreferrer">padamjungthapa.com.np</a> | <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer">Google Scholar</a> | <a href="https://public.tableau.com/app/profile/padam.jung.thapa/vizzes" target="_blank" rel="noopener noreferrer">Tableau</a></p></div></div></div></div></div><div class="col-md-6"><div class="contact_from_area contact_panel contact_panel_form wow fadeInUp animated"><div class="contact_title"><h3>Send Message</h3></div><div class="row"><form method="POST" action="https://formspree.io/f/mqkwypyw" aria-label="Contact form"><input type="hidden" name="_subject" value="New portfolio contact message"><div class="form-group col-md-12"><label class="contact_field_label" for="contact-name">Your Name</label><input id="contact-name" name="name" placeholder="Your full name" autocomplete="name" required></div><div class="form-group col-md-12"><label class="contact_field_label" for="contact-email">Your Email</label><input id="contact-email" type="email" name="_replyto" placeholder="name@example.com" autocomplete="email" required></div><div class="form-group col-md-12"><label class="contact_field_label" for="contact-subject">Subject</label><input id="contact-subject" name="title" placeholder="Project / Collaboration Subject" required></div><div class="form-group col-md-12"><label class="contact_field_label" for="contact-message">Message</label><textarea id="contact-message" name="message" placeholder="Write your message here..." required></textarea></div><div class="form-group col-md-12"><input class="contact_btn" type="submit" value="Send Message"></div></form></div></div></div></div></section></div></div><footer class="footer_area"><div class="footer_copyright"><div class="container"><div class="pull-left"><h5>© <span id="current-year">2026</span> Padam Jung Thapa.</h5></div></div></div></footer><script src="js/jquery-2.1.4.min.js" defer="defer"></script><script src="js/bootstrap.min.js" defer="defer"></script><script src="vendors/counter-up/waypoints.min.js" defer="defer"></script><script src="vendors/animate-css/wow.min.js" defer="defer"></script><script src="js/network-bg.js?v=20260316-5" defer="defer"></script><script src="js/tech-tagcloud.js?v=20260316-2" defer="defer"></script><script src="js/theme.js?v=20260316-39" defer="defer"></script><script>!function(){"use strict";var n=!1;function t(n){return new Promise(function(t,e){var o=document.createElement("script");o.src=n,o.defer=!0,o.onload=t,o.onerror=e,document.body.appendChild(o)})}function e(){n||(n=!0,t("https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js").then(function(){return t("https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js")}).then(function(){return t("js/threat-map.js?v=20260316-8")}).catch(function(){n=!1}))}function o(){var t=document.getElementById("intel-map");if(t){if("IntersectionObserver"in window){var o=new IntersectionObserver(function(n){n.forEach(function(n){n.isIntersecting&&(e(),o.disconnect())})},{rootMargin:"300px 0px"});o.observe(t)}else e();"requestIdleCallback"in window?window.requestIdleCallback(function(){n||e()},{timeout:2800}):window.setTimeout(function(){n||e()},2400)}}"loading"===document.readyState?document.addEventListener("DOMContentLoaded",o):o()}()</script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta
+      name="format-detection"
+      content="telephone=no,email=no,address=no,date=no,url=no"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta
+      name="description"
+      content="Padam Jung Thapa - Machine Learning and Computer Vision portfolio."
+    />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="icon" href="img/Pattern_Light.png" type="image/x-icon" />
+    <title>Padam Jung Thapa</title>
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="vendors/animate-css/animate.css" rel="stylesheet" />
+    <link href="css/style.css?v=20260316-26" rel="stylesheet" />
+    <link href="css/responsive.css?v=20260316-7" rel="stylesheet" />
+    <link rel="stylesheet" href="css/colors/default.css" title="default" />
+  </head>
+  <body
+    class="light_bg theme-dark interaction-choreo interaction-micro"
+    data-spy="scroll"
+    data-target="#bs-example-navbar-collapse-1"
+    data-offset="80"
+    data-scroll-animation="true"
+    data-visual-mode="network"
+  >
+    <div id="top-progress" class="top_progress" aria-hidden="true">
+      <div class="top_progress_fill"></div>
+    </div>
+    <canvas
+      id="network-canvas"
+      class="network_canvas"
+      aria-hidden="true"
+    ></canvas>
+    <div id="preloader" aria-hidden="true">
+      <div id="preloader_spinner" class="preload_core">
+        <div class="wave_container">
+          <div class="wave_line wave_line_1"></div>
+          <div class="wave_line wave_line_2"></div>
+          <div class="wave_line wave_line_3"></div>
+        </div>
+        <div class="energy_pulse energy_pulse_1"></div>
+        <div class="energy_pulse energy_pulse_2"></div>
+        <div class="energy_pulse energy_pulse_3"></div>
+        <div class="center_core"></div>
+      </div>
+    </div>
+    <script>
+      !(function () {
+        "use strict";
+        function e() {
+          document
+            .querySelectorAll("body.interaction-choreo section")
+            .forEach(function (e) {
+              e.classList.add("section-visible");
+            });
+        }
+        function n() {
+          var e = document.getElementById("preloader");
+          (e &&
+            (e.classList.add("is-hidden"),
+            window.setTimeout(function () {
+              e.style.display = "none";
+            }, 760)),
+            (document.body.style.overflow = "visible"));
+        }
+        (document.addEventListener("DOMContentLoaded", e),
+          window.addEventListener("load", function () {
+            (e(), n());
+          }),
+          setTimeout(function () {
+            (e(), n());
+          }, 2200));
+      })();
+    </script>
+    <header class="header_area">
+      <div class="container">
+        <nav class="navbar navbar-default">
+          <div class="navbar-header">
+            <button
+              type="button"
+              class="navbar-toggle collapsed"
+              data-toggle="collapse"
+              data-target="#bs-example-navbar-collapse-1"
+              aria-expanded="false"
+            >
+              <span class="sr-only">Toggle navigation</span
+              ><span class="icon-bar"></span><span class="icon-bar"></span
+              ><span class="icon-bar"></span>
+            </button>
+          </div>
+          <div
+            class="collapse navbar-collapse"
+            id="bs-example-navbar-collapse-1"
+          >
+            <ul class="nav navbar-nav navbar-right">
+              <li class="active"><a href="#about">About Me</a></li>
+              <li><a href="#ai-blueprint">Live Demos</a></li>
+              <li><a href="#skill">Skills</a></li>
+              <li><a href="#journey">Journey</a></li>
+              <li><a href="#service">Projects</a></li>
+              <li><a href="3d-exp.html">3D Exp</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <div class="container main_container">
+      <div class="content_inner_bg row m0">
+        <section class="about_person_area pad" id="about">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="person_img">
+                <img
+                  src="img/member/member-photo-14.jpeg"
+                  alt="Padam Jung Thapa portrait"
+                  loading="lazy"
+                />
+                <span
+                  class="photo_story_badge"
+                  id="photo-story-badge"
+                  aria-live="polite"
+                  hidden
+                  >Story Tag</span
+                >
+              </div>
+              <div class="about_media_meta">
+                <div
+                  class="focus_tags wow fadeInUp animated"
+                  data-wow-delay="0.2s"
+                  aria-live="polite"
+                >
+                  <span class="focus_typewriter_text" id="focus-typewriter-text"
+                    >Full-Stack Software Engineer</span
+                  >
+                </div>
+                <div class="quick_cta">
+                  <a
+                    class="cta_chip cta_resume"
+                    href="CV.docx"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    ><i
+                      class="fa fa-file-text-o cta_primary_icon"
+                      aria-hidden="true"
+                    ></i
+                    ><span class="resume_label">CV</span
+                    ><i
+                      class="fa fa-download cta_hover_icon"
+                      aria-hidden="true"
+                    ></i
+                  ></a>
+                  <a
+                    class="cta_chip cta_icon_only"
+                    href="https://github.com/padam56"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub profile"
+                    ><i class="fa fa-github" aria-hidden="true"></i
+                  ></a>
+                  <a
+                    class="cta_chip cta_icon_only"
+                    href="https://www.linkedin.com/in/padamjung/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn profile"
+                    ><i class="fa fa-linkedin" aria-hidden="true"></i
+                  ></a>
+                  <a
+                    class="cta_chip cta_icon_only"
+                    href="mailto:tpadamjung@gmail.com"
+                    aria-label="Send email"
+                    ><i class="fa fa-envelope" aria-hidden="true"></i
+                  ></a>
+                  <a
+                    class="cta_chip cta_icon_only"
+                    href="tel:+13372670379"
+                    aria-label="Call phone"
+                    ><i class="fa fa-phone" aria-hidden="true"></i
+                  ></a>
+                  <a
+                    class="cta_chip cta_icon_only"
+                    href="https://maps.google.com/?q=612+Lamar+St,+Lafayette,+Louisiana+70501"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open location"
+                    ><i class="fa fa-map-marker" aria-hidden="true"></i
+                  ></a>
+                </div>
+              </div>
+              <section
+                id="apple-widget-panel"
+                class="apple_widget_panel"
+                aria-label="Local widgets"
+              >
+                <div class="apple_panel_main">
+                  <div class="apple_panel_timeblock">
+                    <div class="apple_widget_label">Local Time</div>
+                    <div id="apple-clock-time" class="apple_clock_time">
+                      --:--:--
+                    </div>
+                    <div id="apple-clock-zone" class="apple_clock_zone">
+                      Local time
+                    </div>
+                    <div id="apple-date-weekday" class="apple_date_weekday">
+                      --
+                    </div>
+                    <div id="apple-date-long" class="apple_date_long">--</div>
+                  </div>
+                  <div class="apple_panel_weatherblock">
+                    <div class="apple_widget_label">Weather</div>
+                    <div id="apple-weather-temp" class="apple_weather_temp">
+                      --
+                    </div>
+                    <div id="apple-weather-cond" class="apple_weather_cond">
+                      Weather
+                    </div>
+                    <div id="apple-weather-hilo" class="apple_weather_hilo">
+                      H -- / L --
+                    </div>
+                    <div id="apple-weather-loc" class="apple_weather_loc">
+                      Requesting location...
+                    </div>
+                    <div id="apple-weather-meta" class="apple_weather_meta">
+                      Location used only for this widget
+                    </div>
+                  </div>
+                  <canvas
+                    id="apple-weather-3d-canvas"
+                    class="apple_weather_3d"
+                    aria-hidden="true"
+                  ></canvas>
+                </div>
+              </section>
+            </div>
+            <div class="col-md-8">
+              <div class="row about_intro_cloud">
+                <div class="col-md-6">
+                  <div class="row person_details">
+                    <h3>Hi, Nice to meet you!</h3>
+                    <h4>
+                      PhD Researcher | Internet Security and Web Measurement
+                    </h4>
+                    <p class="about_bio_text">
+                      I am currently pursuing a PhD in Computer Science at the
+                      University of Louisiana at Lafayette, where my research
+                      focuses on internet cybercrime, Web3 and internet
+                      security, large-scale web measurement, phishing, abuse,
+                      and scam ecosystems. During my prior MS in Computer
+                      Science at the University of New Orleans, I specialized in
+                      machine learning and deep learning for computer vision. I
+                      developed robust pipelines for real-time segmentation,
+                      object detection, and annotation automation, significantly
+                      improving efficiency and accuracy in levee fault
+                      detection. My work also included building scalable
+                      full-stack pipelines for real-time inference, enhancing
+                      dataset diversity with diffusion models, and applying
+                      model quantization techniques to improve efficiency. I am
+                      a lifelong learner and an enthusiastic collaborator who
+                      enjoys turning research ideas into practical,
+                      automation-driven security systems.
+                    </p>
+                    <div
+                      id="tech-stack-list"
+                      class="tech_stack_list is-hidden"
+                      aria-label="Technology stacks list"
+                    ></div>
+                    <div class="tech_concepts_wrap is-hidden">
+                      <div
+                        id="tech-concepts-board"
+                        class="tech_concepts_board"
+                        aria-live="polite"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 about_cloud_col">
+                  <div
+                    class="technology_cloud_wrap wow fadeInUp animated"
+                    data-wow-delay="0.15s"
+                  >
+                    <h3>Technology Cloud</h3>
+                    <div
+                      class="tech_cloud_controls"
+                      aria-label="Technology cloud controls"
+                    >
+                      <button
+                        class="tech_mode_btn is-active"
+                        type="button"
+                        data-tech-mode="all"
+                      >
+                        All
+                      </button>
+                      <button
+                        class="tech_mode_btn"
+                        type="button"
+                        data-tech-mode="ml"
+                      >
+                        ML
+                      </button>
+                      <button
+                        class="tech_mode_btn"
+                        type="button"
+                        data-tech-mode="security"
+                      >
+                        Security
+                      </button>
+                      <button
+                        class="tech_mode_btn"
+                        type="button"
+                        data-tech-mode="cloud"
+                      >
+                        Cloud
+                      </button>
+                      <button
+                        class="tech_mode_btn"
+                        type="button"
+                        data-tech-mode="java"
+                      >
+                        Java
+                      </button>
+                      <button
+                        class="tech_mode_btn"
+                        type="button"
+                        data-tech-mode="backend"
+                      >
+                        Backend
+                      </button>
+                      <button
+                        class="tech_mode_btn"
+                        type="button"
+                        data-tech-mode="data"
+                      >
+                        Data
+                      </button>
+                    </div>
+                    <div class="tech-div">
+                      <div
+                        id="tagcloud"
+                        aria-label="Interactive rotating technology tag cloud"
+                      ></div>
+                      <div
+                        id="tech-cloud-active"
+                        class="tech_cloud_active"
+                        aria-live="polite"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="myskill_area pad" id="skill">
+          <div class="main_title">
+            <h2>My Skills</h2>
+            <p class="section_lead">
+              Tools and technologies I use to build robust, secure AI systems
+              from research to deployment.
+            </p>
+          </div>
+          <div class="row">
+            <div class="col-md-6 wow fadeInUp animated">
+              <div class="skill_item_inner">
+                <div class="single_skill">
+                  <div class="skill_head"><h4>Applied AI and ML</h4></div>
+                  <p class="skill_meta">
+                    Computer vision model design, training, and deployment.
+                  </p>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="93"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <div class="single_skill">
+                  <div class="skill_head">
+                    <h4>Data Science and Analytics</h4>
+                  </div>
+                  <p class="skill_meta">
+                    Data wrangling, KPI tracking, and analytics reporting.
+                  </p>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="90"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <div class="single_skill">
+                  <div class="skill_head">
+                    <h4>Java Full-Stack Platform</h4>
+                  </div>
+                  <p class="skill_meta">
+                    Production microservices with event-driven backend
+                    architecture.
+                  </p>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="91"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <div class="single_skill">
+                  <div class="skill_head">
+                    <h4>Cloud, MLOps, and DevOps</h4>
+                  </div>
+                  <p class="skill_meta">
+                    Container delivery, CI/CD, and cloud runtime operations.
+                  </p>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="86"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <div class="single_skill">
+                  <div class="skill_head">
+                    <h4>Security and Abuse Research Tooling</h4>
+                  </div>
+                  <p class="skill_meta">
+                    Web abuse measurement, phishing analysis, and automation.
+                  </p>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="88"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <div class="single_skill">
+                  <div class="skill_head"><h4>Languages and Databases</h4></div>
+                  <p class="skill_meta">
+                    Cross-stack development with SQL and NoSQL systems.
+                  </p>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="89"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 wow fadeInUp animated">
+              <div class="skill_item_inner">
+                <div class="single_skill">
+                  <div class="skill_head">
+                    <h4>Deep Learning Frameworks</h4>
+                  </div>
+                  <p class="skill_meta">
+                    Training and optimization for vision and sequence models.
+                  </p>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="91"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <div class="single_skill">
+                  <div class="skill_head"><h4>Web and Frontend Stack</h4></div>
+                  <p class="skill_meta">
+                    Interactive dashboards and reactive front-end experiences.
+                  </p>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="84"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <div class="single_skill">
+                  <div class="skill_head">
+                    <h4>Experiment Tracking and Reproducibility</h4>
+                  </div>
+                  <p class="skill_meta">
+                    Run tracking, model versioning, and reproducible workflows.
+                  </p>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="85"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <div class="single_skill">
+                  <div class="skill_head">
+                    <h4>Data Engineering and Lakehouse</h4>
+                  </div>
+                  <p class="skill_meta">
+                    Batch and distributed pipelines for analytics workloads.
+                  </p>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="82"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <div class="single_skill">
+                  <div class="skill_head">
+                    <h4>Automation and QA Reliability</h4>
+                  </div>
+                  <p class="skill_meta">
+                    Automated testing and reliability checks for stable
+                    releases.
+                  </p>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="87"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <div class="single_skill">
+                  <div class="skill_head">
+                    <h4>Linux and Systems Engineering</h4>
+                  </div>
+                  <p class="skill_meta">
+                    Server operations, observability, and production debugging.
+                  </p>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      aria-valuenow="87"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="journey_area pad" id="journey">
+          <div class="main_title">
+            <h2>Research and Experience</h2>
+            <p class="section_lead">
+              A short snapshot of my academic background and industry
+              engineering work.
+            </p>
+          </div>
+          <div class="row journey_grid">
+            <div class="col-md-6">
+              <article class="journey_card">
+                <h4>Education</h4>
+                <p>
+                  Strong academic foundation in computer science, with ongoing
+                  doctoral research and prior graduate specialization in AI/ML.
+                </p>
+                <ul>
+                  <li>
+                    PhD in Computer Science, University of Louisiana at
+                    Lafayette (in progress).
+                  </li>
+                  <li>
+                    MS in Computer Science (Research), University of New
+                    Orleans.
+                  </li>
+                  <li>
+                    B.Tech in Computer Science and Engineering, KIIT University.
+                  </li>
+                  <li>
+                    Focus areas: machine learning, computer vision, and internet
+                    security research.
+                  </li>
+                </ul>
+              </article>
+            </div>
+            <div class="col-md-6">
+              <article class="journey_card">
+                <h4>Industry Experience</h4>
+                <p>
+                  Hands-on full-stack engineering experience building reliable,
+                  scalable systems for production use.
+                </p>
+                <ul>
+                  <li>
+                    Implemented Spring Boot microservices and Kafka event flows
+                    for reliable, low-latency updates.
+                  </li>
+                  <li>
+                    Developed Angular dashboards for cap table insights, vesting
+                    visibility, and user-facing analytics.
+                  </li>
+                  <li>
+                    Deployed on AWS with Docker, Redis, PostgreSQL, CI/CD, and
+                    monitoring for operational resilience.
+                  </li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+        <section class="threat_map_area pad" id="intel-map">
+          <div class="main_title">
+            <h2>Threat Intel Map</h2>
+            <p class="section_lead">
+              Source-backed global view of campaign clusters, abuse
+              infrastructure, and victim-origin patterns with live rotating
+              context highlights.
+            </p>
+          </div>
+          <div
+            class="intel_map_grid wow fadeInUp animated"
+            data-wow-delay="0.1s"
+          >
+            <aside
+              class="intel_view_selector"
+              aria-label="Threat intelligence views"
+            >
+              <h3>Views</h3>
+              <button
+                class="intel_view_btn is-active"
+                type="button"
+                data-intel-view="campaign"
+              >
+                Campaign Infrastructure
+              </button>
+              <button
+                class="intel_view_btn"
+                type="button"
+                data-intel-view="crypto"
+              >
+                Crypto Wallet Fraud
+              </button>
+              <button
+                class="intel_view_btn"
+                type="button"
+                data-intel-view="expired"
+              >
+                Expired Domains and Re-Registration
+              </button>
+              <button
+                class="intel_view_btn"
+                type="button"
+                data-intel-view="social"
+              >
+                Social Media Scam Markets
+              </button>
+              <button
+                class="intel_view_btn"
+                type="button"
+                data-intel-view="brand"
+              >
+                Brand Impersonation Attacks
+              </button>
+              <button
+                class="intel_view_btn"
+                type="button"
+                data-intel-view="captcha"
+              >
+                CAPTCHA Attack Ecosystems
+              </button>
+              <button
+                class="intel_view_btn"
+                type="button"
+                data-intel-view="phishing"
+              >
+                Credential Phishing Waves
+              </button>
+              <button
+                class="intel_view_btn"
+                type="button"
+                data-intel-view="pigbutchering"
+              >
+                Pig Butchering Networks
+              </button>
+              <button
+                class="intel_view_btn"
+                type="button"
+                data-intel-view="drainers"
+              >
+                Wallet Drainer Ecosystems
+              </button>
+            </aside>
+            <div class="threat_map_shell">
+              <div class="threat_map_topline">
+                <div class="intel_live_context" aria-live="polite">
+                  <strong>Live Context</strong>
+                  <span id="intel-live-context-text"
+                    >Loading context stream...</span
+                  >
+                  <small id="intel-live-context-meta"
+                    >Severity: n/a | Region: n/a | Time: n/a</small
+                  >
+                </div>
+              </div>
+              <svg
+                id="threat-world-map"
+                class="threat_world_map"
+                viewBox="0 0 1000 450"
+                role="img"
+                aria-label="World map showing campaign clusters and abuse hotspots"
+              ></svg>
+              <div class="threat_map_legend" aria-label="Threat map legend">
+                <span
+                  ><i class="dot dot-cyan"></i>Phishing / wallet-drain
+                  infra</span
+                >
+                <span
+                  ><i class="dot dot-green"></i>Sinkhole / takedown
+                  campaigns</span
+                >
+                <span
+                  ><i class="dot dot-amber"></i>Victim-origin
+                  concentration</span
+                >
+                <span><i class="dot dot-blue"></i>Abuse hosting overlap</span>
+              </div>
+            </div>
+            <div class="intel_live_feed_card">
+              <div class="intel_live_feed_top">
+                <h3>Live Exploited Vulnerability Feed</h3>
+                <p id="intel-live-feed-updated">Live snapshot: loading...</p>
+              </div>
+              <div class="intel_live_feed_metrics">
+                <div>
+                  <span>KEV Total</span
+                  ><strong id="intel-live-kev-total">-</strong>
+                </div>
+                <div>
+                  <span>Added Last 30d</span
+                  ><strong id="intel-live-kev-30d">-</strong>
+                </div>
+                <div>
+                  <span>Known Ransomware Use</span
+                  ><strong id="intel-live-kev-ransom">-</strong>
+                </div>
+              </div>
+              <ul
+                id="intel-live-feed-list"
+                class="intel_live_feed_list"
+                aria-live="polite"
+              ></ul>
+            </div>
+          </div>
+          <div class="intel_stats row">
+            <div class="col-sm-4">
+              <div class="intel_stat_card">
+                <h4 id="intel-kpi-1-value">23</h4>
+                <p id="intel-kpi-1-label">
+                  active campaign clusters tracked this quarter
+                </p>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="intel_stat_card">
+                <h4 id="intel-kpi-2-value">1.9k</h4>
+                <p id="intel-kpi-2-label">
+                  sinkholed and monitored suspicious domains
+                </p>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="intel_stat_card">
+                <h4 id="intel-kpi-3-value">67</h4>
+                <p id="intel-kpi-3-label">
+                  infrastructure overlap signals under active review
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="victim_origin_card">
+            <h3 id="intel-victim-title">
+              Reported Crypto Wallet Fraud Victim Origins
+            </h3>
+            <p id="intel-victim-intro">
+              Regional distribution for the selected view, driven by the loaded
+              threat dataset and public-source references.
+            </p>
+            <ul id="intel-victim-list" class="victim_origin_list"></ul>
+            <p class="intel_source_note">
+              Validated references for the active view:
+            </p>
+            <ul id="intel-source-list" class="intel_source_list"></ul>
+          </div>
+        </section>
+        <section class="ai_blueprint_area pad" id="ai-blueprint">
+          <div class="main_title">
+            <h2>AI Blueprint and Live Demos</h2>
+            <p class="section_lead">
+              A compact view of production-minded ML workflows with hands-on
+              demos.
+            </p>
+          </div>
+          <div
+            class="ai_blueprint_shell wow fadeInUp animated"
+            data-wow-delay="0.1s"
+          >
+            <div
+              class="ai_blueprint_tabs"
+              role="tablist"
+              aria-label="AI blueprint views"
+            >
+              <button
+                class="ai_blueprint_tab is-active"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="ai-view-lifecycle"
+                data-ai-view="lifecycle"
+              >
+                Model Lifecycle
+              </button>
+              <button
+                class="ai_blueprint_tab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="ai-view-cv"
+                data-ai-view="cv"
+              >
+                CV Pipeline
+              </button>
+              <button
+                class="ai_blueprint_tab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="ai-view-seg"
+                data-ai-view="seg"
+              >
+                Segmentation Workflow Lab
+              </button>
+              <button
+                class="ai_blueprint_tab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="ai-view-ml"
+                data-ai-view="ml"
+              >
+                Classical ML Demos
+              </button>
+              <button
+                class="ai_blueprint_tab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="ai-view-edge"
+                data-ai-view="edge"
+              >
+                Sorting Algorithms Live Demo
+              </button>
+            </div>
+            <div
+              class="ai_blueprint_panel is-active"
+              id="ai-view-lifecycle"
+              role="tabpanel"
+            >
+              <div
+                class="ml_lifecycle_track"
+                aria-label="Model lifecycle timeline"
+              >
+                <article
+                  class="ml_stage_card is-active"
+                  tabindex="0"
+                  data-stage="Problem"
+                  data-detail="Define task scope, operating constraints, and measurable outcome targets before training begins."
+                  data-artifact="Success Metric Sheet"
+                >
+                  <h4>Problem</h4>
+                  <p>Scope risk and define measurable success criteria.</p>
+                  <span>Artifact: Success Metric Sheet</span>
+                </article>
+                <article
+                  class="ml_stage_card"
+                  tabindex="0"
+                  data-stage="Data"
+                  data-detail="Build representative datasets, run quality checks, and validate labels for training confidence."
+                  data-artifact="Dataset Snapshot and Label Audit"
+                >
+                  <h4>Data</h4>
+                  <p>Assemble and validate representative training data.</p>
+                  <span>Artifact: Dataset Snapshot and Label Audit</span>
+                </article>
+                <article
+                  class="ml_stage_card"
+                  tabindex="0"
+                  data-stage="Training"
+                  data-detail="Track experiment configurations, compare runs, and lock best candidates for evaluation."
+                  data-artifact="Experiment Run Log"
+                >
+                  <h4>Training</h4>
+                  <p>Run controlled experiments with tracked configurations.</p>
+                  <span>Artifact: Experiment Run Log</span>
+                </article>
+                <article
+                  class="ml_stage_card"
+                  tabindex="0"
+                  data-stage="Evaluation"
+                  data-detail="Inspect confusion patterns, failure buckets, and robustness before production release."
+                  data-artifact="Confusion Matrix and Error Buckets"
+                >
+                  <h4>Evaluation</h4>
+                  <p>Stress-test for precision, recall, and failure modes.</p>
+                  <span>Artifact: Confusion Matrix and Error Buckets</span>
+                </article>
+                <article
+                  class="ml_stage_card"
+                  tabindex="0"
+                  data-stage="Deployment"
+                  data-detail="Serve models via versioned APIs with latency budgets, rollback plans, and release checks."
+                  data-artifact="API Latency and Throughput Report"
+                >
+                  <h4>Deployment</h4>
+                  <p>Package model service with latency-aware API paths.</p>
+                  <span>Artifact: API Latency and Throughput Report</span>
+                </article>
+                <article
+                  class="ml_stage_card"
+                  tabindex="0"
+                  data-stage="Monitoring"
+                  data-detail="Observe drift, reliability, and model quality signals to trigger safe retraining workflows."
+                  data-artifact="Drift Dashboard and Alert Rules"
+                >
+                  <h4>Monitoring</h4>
+                  <p>Track drift and trigger safe retraining workflows.</p>
+                  <span>Artifact: Drift Dashboard and Alert Rules</span>
+                </article>
+              </div>
+              <div class="ml_lifecycle_detail" aria-live="polite">
+                <h4 id="ml-stage-title">Problem</h4>
+                <p id="ml-stage-detail">
+                  Define task scope, operating constraints, and measurable
+                  outcome targets before training begins.
+                </p>
+                <span id="ml-stage-artifact"
+                  >Primary Artifact: Success Metric Sheet</span
+                >
+              </div>
+            </div>
+            <div
+              class="ai_blueprint_panel"
+              id="ai-view-cv"
+              role="tabpanel"
+              hidden
+            >
+              <div
+                class="cv_pipeline_graph is-flowing"
+                aria-label="Computer vision pipeline diagram"
+              >
+                <div class="cv_node">Data Ingestion</div>
+                <div class="cv_arrow" aria-hidden="true">
+                  <span>&rarr;</span><i class="cv_flow_dot"></i>
+                </div>
+                <div class="cv_node">Preprocessing</div>
+                <div class="cv_arrow" aria-hidden="true">
+                  <span>&rarr;</span><i class="cv_flow_dot"></i>
+                </div>
+                <div class="cv_node">Augmentation</div>
+                <div class="cv_arrow" aria-hidden="true">
+                  <span>&rarr;</span><i class="cv_flow_dot"></i>
+                </div>
+                <div class="cv_node">Model Training and Tuning</div>
+                <div class="cv_arrow" aria-hidden="true">
+                  <span>&rarr;</span><i class="cv_flow_dot"></i>
+                </div>
+                <div class="cv_node">Post-Processing</div>
+                <div class="cv_arrow" aria-hidden="true">
+                  <span>&rarr;</span><i class="cv_flow_dot"></i>
+                </div>
+                <div class="cv_node">Alert and UI Integration</div>
+              </div>
+              <p class="ai_blueprint_note">
+                Built for the same style of end-to-end CV workflows used in
+                segmentation and detection projects from MS research and
+                production engineering practice.
+              </p>
+            </div>
+            <div
+              class="ai_blueprint_panel"
+              id="ai-view-seg"
+              role="tabpanel"
+              hidden
+            >
+              <div class="seg_workflow_shell" data-stage="setup">
+                <div class="seg_workflow_header">
+                  <div class="seg_workflow_header_main">
+                    <h4>End-to-End Segmentation Experience Lab</h4>
+                    <p>
+                      Use one scene across segmentation, explainability, and
+                      synthetic augmentation. Switch sub-views below without
+                      leaving this panel.
+                    </p>
+                  </div>
+                  <div
+                    class="seg_workflow_header_links"
+                    aria-label="Segmentation experience links"
+                  >
+                    <a
+                      href="https://huggingface.co/spaces/padam5699/levee-detection-app"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >Live Levee Detection App</a
+                    >
+                  </div>
+                </div>
+                <div
+                  class="readiness_lens"
+                  role="tablist"
+                  aria-label="Segmentation lab sub-views"
+                >
+                  <button
+                    class="readiness_lens_btn seg_lab_sub_btn is-active"
+                    type="button"
+                    data-seg-lab-view="seg"
+                    aria-selected="true"
+                  >
+                    Segmentation
+                  </button>
+                  <button
+                    class="readiness_lens_btn seg_lab_sub_btn"
+                    type="button"
+                    data-seg-lab-view="xai"
+                    aria-selected="false"
+                  >
+                    Seg Explainability
+                  </button>
+                  <button
+                    class="readiness_lens_btn seg_lab_sub_btn"
+                    type="button"
+                    data-seg-lab-view="aug"
+                    aria-selected="false"
+                  >
+                    Synthetic Data Booster
+                  </button>
+                </div>
+                <div class="seg_lab_subview is-active" id="seg-lab-view-seg">
+                  <div
+                    class="seg_mode_switch"
+                    role="tablist"
+                    aria-label="Segmentation mode selector"
+                  >
+                    <button
+                      class="seg_mode_btn is-active"
+                      type="button"
+                      data-seg-mode="semantic"
+                      aria-selected="true"
+                    >
+                      Semantic
+                    </button>
+                    <button
+                      class="seg_mode_btn"
+                      type="button"
+                      data-seg-mode="instance"
+                      aria-selected="false"
+                    >
+                      Instance
+                    </button>
+                    <button
+                      class="seg_mode_btn"
+                      type="button"
+                      data-seg-mode="panoptic"
+                      aria-selected="false"
+                    >
+                      Panoptic
+                    </button>
+                  </div>
+                  <p id="seg-mode-detail" class="seg_mode_detail">
+                    Semantic mode: one foreground class for geometric objects
+                    over background.
+                  </p>
+                  <div class="seg_demo_layout">
+                    <div class="seg_demo_canvas_wrap">
+                      <canvas
+                        id="seg-demo-canvas"
+                        class="seg_demo_canvas"
+                        aria-label="Geometric segmentation workflow canvas"
+                      ></canvas
+                      ><img
+                        id="seg-demo-image"
+                        src="img/segmentation/geometric-scene.svg"
+                        alt="Geometric segmentation scene"
+                        hidden
+                      />
+                      <img
+                        id="seg-demo-mask-semantic"
+                        src="img/segmentation/geometric-mask-semantic.svg"
+                        alt="Ground truth semantic segmentation mask"
+                        hidden
+                      />
+                      <img
+                        id="seg-demo-mask-instance-primary"
+                        src="img/segmentation/geometric-mask-instance-primary.svg"
+                        alt="Primary instance mask"
+                        hidden
+                      />
+                      <img
+                        id="seg-demo-mask-instance-secondary"
+                        src="img/segmentation/geometric-mask-instance-secondary.svg"
+                        alt="Secondary instance mask"
+                        hidden
+                      />
+                      <img
+                        id="seg-demo-mask-instance-tertiary"
+                        src="img/segmentation/geometric-mask-instance-tertiary.svg"
+                        alt="Tertiary instance mask"
+                        hidden
+                      />
+                      <div class="seg_canvas_legend">
+                        <span
+                          ><i class="seg_legend_dot dot-mask"></i>Segmentation
+                          overlay</span
+                        >
+                        <span
+                          ><i class="seg_legend_dot dot-edge"></i>Object
+                          boundary</span
+                        >
+                      </div>
+                    </div>
+                    <div class="seg_demo_controls">
+                      <div class="seg_param_stack">
+                        <label for="seg-sensitivity">Mask Sensitivity</label>
+                        <input
+                          id="seg-sensitivity"
+                          type="range"
+                          min="20"
+                          max="130"
+                          value="70"
+                        />
+                        <label for="seg-opacity">Overlay Opacity</label>
+                        <input
+                          id="seg-opacity"
+                          type="range"
+                          min="25"
+                          max="90"
+                          value="58"
+                        />
+                      </div>
+                      <div class="seg_demo_actions">
+                        <button id="seg-reset" type="button">Reset Lab</button>
+                        <button id="seg-run" type="button">
+                          Run Segmentation
+                        </button>
+                      </div>
+                      <p id="seg-status" class="seg_status" aria-live="polite">
+                        Ready. Choose a mode and click Run Segmentation.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="seg_lab_subview" id="seg-lab-view-xai" hidden>
+                  <div class="demo_lab_shell">
+                    <div class="demo_lab_head">
+                      <h4>Explainability for Segmentation</h4>
+                      <p>
+                        Inspect prediction-vs-ground-truth drift, saliency, and
+                        boundary stress on the same geometric segmentation
+                        scene.
+                      </p>
+                    </div>
+                    <div class="demo_lab_layout">
+                      <div class="demo_lab_canvas_wrap">
+                        <canvas
+                          id="xai-demo-canvas"
+                          class="demo_lab_canvas"
+                          aria-label="Grad-CAM and attention overlay demo"
+                        ></canvas
+                        ><img
+                          id="xai-demo-image"
+                          src="img/segmentation/geometric-scene.svg"
+                          alt="Segmentation scene for explainability"
+                          hidden
+                        />
+                      </div>
+                      <div class="demo_lab_controls">
+                        <label for="xai-overlay-mode"
+                          >Explainability View</label
+                        >
+                        <select id="xai-overlay-mode">
+                          <option value="mask-vs-gt">Prediction vs GT</option>
+                          <option value="gradcam">Grad-CAM</option>
+                          <option value="attention">Attention Map</option>
+                          <option value="boundary-error">
+                            Boundary Error Heatmap
+                          </option>
+                        </select>
+                        <button id="xai-toggle-failure" type="button">
+                          Inject Boundary Failure
+                        </button>
+                        <p
+                          id="xai-status"
+                          class="demo_lab_status"
+                          aria-live="polite"
+                        >
+                          Ready. Rendering explainability overlays on geometric
+                          scene.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="seg_lab_subview" id="seg-lab-view-aug" hidden>
+                  <div class="demo_lab_shell">
+                    <div class="demo_lab_head">
+                      <h4>Synthetic Data Booster (Albumentations)</h4>
+                      <p>
+                        Preview hard-case augmentations directly on the same
+                        segmentation scene and estimate generalization gain.
+                      </p>
+                    </div>
+                    <div class="demo_lab_layout">
+                      <div class="demo_lab_canvas_wrap">
+                        <canvas
+                          id="aug-demo-canvas"
+                          class="demo_lab_canvas"
+                          aria-label="Synthetic data augmentation preview"
+                        ></canvas
+                        ><img
+                          id="aug-demo-image"
+                          src="img/segmentation/geometric-scene.svg"
+                          alt="Segmentation scene for synthetic augmentation"
+                          hidden
+                        />
+                      </div>
+                      <div class="demo_lab_controls">
+                        <label for="aug-condition"
+                          >Albumentations Transform</label
+                        >
+                        <select id="aug-condition"></select>
+                        <p id="aug-transform-note" class="ml_algo_note">
+                          Choose a transform to preview how it affects the
+                          segmentation scene patch.
+                        </p>
+                        <div
+                          class="aug_quick_presets"
+                          aria-label="Augmentation presets"
+                        >
+                          <button
+                            type="button"
+                            class="aug_preset_btn"
+                            data-aug-preset="geometry"
+                          >
+                            Geometry
+                          </button>
+                          <button
+                            type="button"
+                            class="aug_preset_btn"
+                            data-aug-preset="color"
+                          >
+                            Color
+                          </button>
+                          <button
+                            type="button"
+                            class="aug_preset_btn"
+                            data-aug-preset="noise"
+                          >
+                            Noise
+                          </button>
+                          <button
+                            type="button"
+                            class="aug_preset_btn"
+                            data-aug-preset="weather"
+                          >
+                            Weather
+                          </button>
+                          <button
+                            type="button"
+                            class="aug_preset_btn"
+                            data-aug-preset="dropout"
+                          >
+                            Dropout
+                          </button>
+                        </div>
+                        <label for="aug-intensity"
+                          >Intensity:
+                          <span id="aug-intensity-value">55%</span></label
+                        >
+                        <input
+                          id="aug-intensity"
+                          type="range"
+                          min="0"
+                          max="100"
+                          value="55"
+                        />
+                        <button id="aug-randomize" type="button">
+                          Resample Variation
+                        </button>
+                        <div
+                          id="aug-transform-gallery"
+                          class="aug_transform_gallery"
+                          aria-label="Live augmentation controls"
+                        ></div>
+                        <p class="aug_live_metrics" aria-live="polite">
+                          Baseline mIoU:
+                          <strong id="aug-miou-base">0.68</strong> | Boosted
+                          mIoU: <strong id="aug-miou-boost">0.77</strong> |
+                          Generalization Gain:
+                          <strong id="aug-gain">+0.09</strong>
+                        </p>
+                        <p
+                          id="aug-status"
+                          class="demo_lab_status"
+                          aria-live="polite"
+                        >
+                          Ready. Live augmentation preview is active.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="ai_blueprint_panel"
+              id="ai-view-ml"
+              role="tabpanel"
+              hidden
+            >
+              <div class="demo_lab_shell">
+                <div class="demo_lab_head">
+                  <h4>Classical ML Algorithms Live Demo</h4>
+                  <p>
+                    A practical decision guide: choose an algorithm by problem
+                    shape, data volume, and explainability needs, with live
+                    examples teams can quickly map to real product scenarios.
+                  </p>
+                  <p id="ml-live-note" class="ml_live_note">
+                    Live scenario mode: algorithm behavior, split quality, and
+                    diagnostics update continuously.
+                  </p>
+                </div>
+                <div class="demo_lab_layout">
+                  <div class="demo_lab_canvas_wrap">
+                    <canvas
+                      id="ml-demo-canvas"
+                      class="demo_lab_canvas"
+                      aria-label="Classical machine learning algorithm visualization"
+                    ></canvas>
+                  </div>
+                  <div class="demo_lab_controls">
+                    <label for="ml-algo">Algorithm</label>
+                    <select id="ml-algo">
+                      <option value="logistic">Logistic Regression</option>
+                      <option value="svm">SVM</option>
+                      <option value="knn">KNN</option>
+                      <option value="naive-bayes">Naive Bayes</option>
+                      <option value="gp-classifier">
+                        Gaussian Process Classifier
+                      </option>
+                      <option value="lda">
+                        LDA (Linear Discriminant Analysis)
+                      </option>
+                      <option value="qda">
+                        QDA (Quadratic Discriminant Analysis)
+                      </option>
+                      <option value="xgboost">XGBoost</option>
+                      <option value="lightgbm">LightGBM</option>
+                      <option value="catboost">CatBoost</option>
+                      <option value="extra-trees">Extra Trees</option>
+                      <option value="adaboost">AdaBoost</option>
+                      <option value="dbscan">DBSCAN Clustering</option>
+                      <option value="agglomerative">
+                        Hierarchical Agglomerative Clustering
+                      </option>
+                      <option value="one-class-svm">
+                        One-Class SVM (Anomaly)
+                      </option>
+                      <option value="isolation-forest">
+                        Isolation Forest (Anomaly)
+                      </option>
+                      <option value="decision-tree">Decision Tree</option>
+                      <option value="random-forest">Random Forest</option>
+                      <option value="kmeans">K-Means</option>
+                      <option value="linear-regression">
+                        Linear Regression
+                      </option>
+                      <option value="gp-regressor">
+                        Gaussian Process Regressor
+                      </option>
+                      <option value="ridge">Ridge Regression</option>
+                      <option value="lasso">Lasso Regression</option>
+                      <option value="elastic-net">
+                        Elastic Net Regression
+                      </option>
+                    </select>
+                    <p id="ml-algo-note" class="ml_algo_note">
+                      Scenario: binary conversion risk scoring with constrained
+                      latency and explainability needs.
+                    </p>
+                    <label for="ml-noise">Noise</label>
+                    <input
+                      id="ml-noise"
+                      type="range"
+                      min="0"
+                      max="40"
+                      value="12"
+                    />
+                    <div class="ml_inline_controls">
+                      <button id="ml-noise-toggle" type="button">
+                        Pause Noise
+                      </button>
+                      <label for="ml-noise-speed">Noise Speed</label>
+                      <select id="ml-noise-speed">
+                        <option value="slow">Slow</option>
+                        <option value="normal" selected="selected">
+                          Normal
+                        </option>
+                        <option value="fast">Fast</option>
+                      </select>
+                    </div>
+                    <label for="ml-preset">Dataset Preset</label>
+                    <select id="ml-preset">
+                      <option value="linear" selected="selected">
+                        Linear Separable
+                      </option>
+                      <option value="moons">Two Moons</option>
+                      <option value="xor">XOR Quadrants</option>
+                      <option value="concentric">Concentric Rings</option>
+                    </select>
+                    <label for="ml-imbalance"
+                      >Class Imbalance (Class 1):
+                      <span id="ml-imbalance-value">50%</span></label
+                    >
+                    <input
+                      id="ml-imbalance"
+                      type="range"
+                      min="20"
+                      max="80"
+                      value="50"
+                    />
+                    <div class="ml_toggle_row">
+                      <label
+                        ><input id="ml-outliers" type="checkbox" /> Add
+                        Outliers</label
+                      >
+                      <label
+                        ><input
+                          id="ml-scale"
+                          type="checkbox"
+                          checked="checked"
+                        />
+                        Scale Features</label
+                      >
+                    </div>
+                    <label for="ml-split"
+                      >Train Split: <span id="ml-split-value">80%</span></label
+                    >
+                    <input
+                      id="ml-split"
+                      type="range"
+                      min="50"
+                      max="90"
+                      value="80"
+                    />
+                    <label for="ml-depth"
+                      >Tree Depth: <span id="ml-depth-value">3</span></label
+                    >
+                    <input
+                      id="ml-depth"
+                      type="range"
+                      min="1"
+                      max="6"
+                      value="3"
+                    />
+                    <label for="ml-forest-trees"
+                      >Forest Trees: <span id="ml-forest-value">7</span></label
+                    >
+                    <input
+                      id="ml-forest-trees"
+                      type="range"
+                      min="3"
+                      max="21"
+                      step="2"
+                      value="7"
+                    />
+                    <button id="ml-regenerate" type="button">
+                      Regenerate Dataset
+                    </button>
+                    <div
+                      class="demo_metric_grid ml_usecase_grid"
+                      aria-label="Algorithm selection guide"
+                    >
+                      <div>
+                        <span>Use When</span
+                        ><strong id="ml-metric-acc"
+                          >Linearity is acceptable and you need interpretable
+                          baselines.</strong
+                        >
+                      </div>
+                      <div>
+                        <span>Best Fit</span
+                        ><strong id="ml-metric-f1"
+                          >Small-to-medium tabular datasets with clean
+                          features.</strong
+                        >
+                      </div>
+                      <div>
+                        <span>Delivery Impact</span
+                        ><strong id="ml-metric-auc"
+                          >Fast iteration from baseline to production candidate
+                          with clear trade-offs.</strong
+                        >
+                      </div>
+                    </div>
+                    <div
+                      class="demo_metric_grid ml_diag_grid"
+                      aria-label="Model diagnostics"
+                    >
+                      <div>
+                        <span>Confusion Matrix</span
+                        ><strong id="ml-confusion"
+                          >TP 0 | FP 0 | TN 0 | FN 0</strong
+                        >
+                      </div>
+                      <div>
+                        <span>Validation Snapshot</span
+                        ><strong id="ml-validation"
+                          >Split 80/20 | AUC 0.00</strong
+                        >
+                      </div>
+                      <div>
+                        <span>Feature Signal</span
+                        ><strong id="ml-feature-signal"
+                          >x: 0.00 | y: 0.00</strong
+                        >
+                      </div>
+                    </div>
+                    <p
+                      id="ml-status"
+                      class="demo_lab_status"
+                      aria-live="polite"
+                    >
+                      Switch algorithms to see when each one should be used in a
+                      delivery workflow, not just how it scores.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="ai_blueprint_panel"
+              id="ai-view-edge"
+              role="tabpanel"
+              hidden
+            >
+              <div class="demo_lab_shell sorting_demo_shell">
+                <div class="demo_lab_head">
+                  <h4>Sorting Algorithms Live Demo</h4>
+                  <p>
+                    Visualize how each sorting strategy transforms an array over
+                    time and compare implementation trade-offs beyond just Big-O
+                    notation.
+                  </p>
+                </div>
+                <div class="demo_lab_layout">
+                  <div class="demo_lab_canvas_wrap sorting_demo_board">
+                    <canvas
+                      id="sort-demo-canvas"
+                      class="demo_lab_canvas"
+                      width="760"
+                      height="340"
+                      aria-label="Sorting algorithm visualization canvas"
+                    ></canvas>
+                    <p id="sort-algo-note" class="ml_algo_note">
+                      Scenario: choose a stable sorter for transaction feeds
+                      where duplicate keys must preserve upstream ordering.
+                    </p>
+                  </div>
+                  <div class="demo_lab_controls">
+                    <label for="sort-algo">Sorting Algorithm</label>
+                    <select id="sort-algo">
+                      <option value="bubble">Bubble Sort</option>
+                      <option value="selection">Selection Sort</option>
+                      <option value="insertion" selected="selected">
+                        Insertion Sort
+                      </option>
+                      <option value="merge">Merge Sort</option>
+                      <option value="quick">Quick Sort</option>
+                      <option value="heap">Heap Sort</option>
+                      <option value="counting">Counting Sort</option>
+                      <option value="radix">Radix Sort (LSD Base-10)</option>
+                    </select>
+                    <label for="sort-pattern">Input Pattern</label>
+                    <select id="sort-pattern">
+                      <option value="random" selected="selected">Random</option>
+                      <option value="nearly">Nearly Sorted</option>
+                      <option value="reversed">Reverse Sorted</option>
+                      <option value="few-unique">Few Unique Values</option>
+                    </select>
+                    <label for="sort-size"
+                      >Array Size: <span id="sort-size-value">56</span></label
+                    >
+                    <input
+                      id="sort-size"
+                      type="range"
+                      min="20"
+                      max="110"
+                      value="56"
+                    />
+                    <label for="sort-speed"
+                      >Animation Speed:
+                      <span id="sort-speed-value">42</span></label
+                    >
+                    <input
+                      id="sort-speed"
+                      type="range"
+                      min="8"
+                      max="90"
+                      value="42"
+                    />
+                    <div class="sort_demo_actions">
+                      <button id="sort-run" type="button">Run Sort</button>
+                      <button id="sort-shuffle" type="button">
+                        Shuffle Data
+                      </button>
+                    </div>
+                    <div
+                      class="demo_metric_grid ml_usecase_grid"
+                      aria-label="Sorting algorithm use guide"
+                    >
+                      <div>
+                        <span>Use When</span
+                        ><strong id="sort-use-when"
+                          >Dataset is almost sorted and online inserts happen
+                          frequently.</strong
+                        >
+                      </div>
+                      <div>
+                        <span>Best Fit</span
+                        ><strong id="sort-best-fit"
+                          >Small or near-sorted sequences where low overhead is
+                          critical.</strong
+                        >
+                      </div>
+                      <div>
+                        <span>Delivery Impact</span
+                        ><strong id="sort-impact"
+                          >Quick, stable behavior for real-time ranked feed
+                          maintenance.</strong
+                        >
+                      </div>
+                    </div>
+                    <div
+                      class="demo_metric_grid ml_diag_grid"
+                      aria-label="Sorting run diagnostics"
+                    >
+                      <div>
+                        <span>Comparisons</span
+                        ><strong id="sort-comparisons">0</strong>
+                      </div>
+                      <div>
+                        <span>Writes and Swaps</span
+                        ><strong id="sort-writes">0</strong>
+                      </div>
+                      <div>
+                        <span>Complexity Snapshot</span
+                        ><strong id="sort-complexity"
+                          >Best O(n), Avg O(n^2)</strong
+                        >
+                      </div>
+                      <div>
+                        <span>Stability</span
+                        ><strong id="sort-stability">Stable</strong>
+                      </div>
+                    </div>
+                    <p
+                      id="sort-status"
+                      class="demo_lab_status"
+                      aria-live="polite"
+                    >
+                      Ready: choose an algorithm, generate data, and run to
+                      inspect each strategy step-by-step.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="project_playbook wow fadeInUp animated"
+            data-wow-delay="0.16s"
+          >
+            <div class="playbook_head">
+              <h3>This Is How I Work on Projects</h3>
+              <p>
+                A practical delivery loop blending MS research habits with
+                production engineering discipline.
+              </p>
+            </div>
+            <div
+              class="playbook_steps"
+              role="tablist"
+              aria-label="Project workflow steps"
+            >
+              <button
+                class="playbook_step is-active"
+                type="button"
+                data-step-title="Discovery and Scope"
+                data-step-detail="Understand problem boundaries, users, constraints, and risk. Translate requirements into measurable success criteria before implementation."
+                data-step-output="Output: problem framing doc, measurable KPIs"
+                aria-selected="true"
+              >
+                01 Discover
+              </button>
+              <button
+                class="playbook_step"
+                type="button"
+                data-step-title="Design and Mockups"
+                data-step-detail="Create architecture sketches, data flows, wireframes, and experiment plans to visualize the system before heavy build effort."
+                data-step-output="Output: architecture draft, data flow map, interface mockups"
+                aria-selected="false"
+              >
+                02 Design
+              </button>
+              <button
+                class="playbook_step"
+                type="button"
+                data-step-title="Build and Integrate"
+                data-step-detail="Develop model pipelines and service interfaces incrementally. Integrate backend, model serving, and UI with versioned checkpoints."
+                data-step-output="Output: integrated prototype with tracked versions"
+                aria-selected="false"
+              >
+                03 Build
+              </button>
+              <button
+                class="playbook_step"
+                type="button"
+                data-step-title="Evaluate and Refine"
+                data-step-detail="Stress-test against edge cases, inspect failure buckets, tune performance, and close quality gaps before release decisions."
+                data-step-output="Output: evaluation report, risk/failure checklist"
+                aria-selected="false"
+              >
+                04 Validate
+              </button>
+              <button
+                class="playbook_step"
+                type="button"
+                data-step-title="Deploy and Monitor"
+                data-step-detail="Release with CI/CD, monitor reliability and drift signals, and iterate using operational feedback loops from real usage."
+                data-step-output="Output: monitored deployment with retraining triggers"
+                aria-selected="false"
+              >
+                05 Operate
+              </button>
+            </div>
+            <div class="playbook_detail" aria-live="polite">
+              <h4 id="playbook-step-title">Discovery and Scope</h4>
+              <p id="playbook-step-detail">
+                Understand problem boundaries, users, constraints, and risk.
+                Translate requirements into measurable success criteria before
+                implementation.
+              </p>
+              <span id="playbook-step-output"
+                >Output: problem framing doc, measurable KPIs</span
+              >
+            </div>
+          </div>
+        </section>
+        <section class="service_area" id="service">
+          <div class="main_title"><h2>Projects</h2></div>
+          <div class="modern_toolbar" aria-label="Project filters">
+            <button
+              class="modern_filter_btn is-active"
+              type="button"
+              data-filter="security"
+            >
+              Security
+            </button>
+            <button class="modern_filter_btn" type="button" data-filter="cv">
+              Vision
+            </button>
+            <button class="modern_filter_btn" type="button" data-filter="data">
+              Data Platforms
+            </button>
+            <button class="modern_filter_btn" type="button" data-filter="nlp">
+              NLP
+            </button>
+            <button
+              class="modern_filter_btn"
+              type="button"
+              data-filter="robotics"
+            >
+              Robotics
+            </button>
+          </div>
+          <div class="service_inner row project_group" data-group="security">
+            <div class="col-md-12 project_group_title">
+              <h3>Security and Abuse Research</h3>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="security,ml"
+                data-title="Microsoft Malware Prediction"
+                data-description="Developed a LightGBM malware risk model with strong ROC AUC performance and validated ensemble effectiveness on heterogeneous tabular signals."
+              >
+                <i class="fa fa-shield" aria-hidden="true"></i>
+                <h4>Microsoft Malware Prediction</h4>
+                <div class="project_tags">
+                  <span>Security</span><span>ML</span>
+                </div>
+                <p>
+                  Built malware risk prediction using ensemble learning and
+                  compared model families for practical detection workflows.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="security,ml"
+                data-title="Credit Card Fraud Detection"
+                data-description="Enhanced fraud detection under heavy class imbalance using Decision Trees and Naive Bayes with synthetic balancing methods such as SMOTE and ADASYN."
+              >
+                <i class="fa fa-credit-card" aria-hidden="true"></i>
+                <h4>Credit Card Fraud Detection</h4>
+                <div class="project_tags">
+                  <span>Security</span><span>ML</span>
+                </div>
+                <p>
+                  Applied imbalance-aware training strategies to improve fraud
+                  identification reliability in realistic transaction datasets.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="security"
+                data-title="MTD-Research"
+                data-description="Research repository focused on malicious domain tracking and scam infrastructure analysis workflows using automation and web measurement tools."
+              >
+                <i class="fa fa-search" aria-hidden="true"></i>
+                <h4>MTD-Research</h4>
+                <div class="project_tags">
+                  <span>Security</span><span>Web Measurement</span>
+                </div>
+                <p>
+                  Security research code and experiments around domain abuse
+                  tracking and suspicious infrastructure behavior.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="security"
+                data-title="Pyspark-Cryptoanalysis"
+                data-description="Distributed machine learning experiments for cryptocurrency analysis and prediction with scalable data processing."
+              >
+                <i class="fa fa-bitcoin" aria-hidden="true"></i>
+                <h4>Pyspark Cryptoanalysis</h4>
+                <div class="project_tags">
+                  <span>Security</span><span>Distributed ML</span>
+                </div>
+                <p>
+                  Crypto ecosystem analysis project combining PySpark pipelines
+                  with predictive modeling.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="service_inner row project_group" data-group="cv">
+            <div class="col-md-12 project_group_title">
+              <h3>Computer Vision and Remote Sensing</h3>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="cv,ml"
+                data-title="Levee Monitoring and Fault Detection WebApp"
+                data-description="Built and deployed a Streamlit application for levee fault segmentation with advanced post-processing and conflict-aware overlay handling."
+              >
+                <i class="fa fa-eye" aria-hidden="true"></i>
+                <h4>Levee Monitoring and Fault Detection WebApp</h4>
+                <div class="project_tags">
+                  <span>Vision</span><span>Applied AI</span>
+                </div>
+                <p>
+                  End-to-end deep learning deployment for levee deficiency
+                  analysis with practical controls for field usage.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="cv,ml"
+                data-title="Traffic Sign Classification"
+                data-description="Trained a deep CNN on 43 traffic sign classes with augmentation and optimization techniques for robust recognition."
+              >
+                <i class="fa fa-road" aria-hidden="true"></i>
+                <h4>Traffic Sign Classification</h4>
+                <div class="project_tags">
+                  <span>Vision</span><span>Deep Learning</span>
+                </div>
+                <p>
+                  Multi-class traffic sign recognition pipeline designed for
+                  autonomous driving-oriented scenarios.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="cv,ml"
+                data-title="Diabetic Retinopathy Detection"
+                data-description="Developed a ResNet-based medical imaging classifier and improved class-wise performance through augmentation and targeted hyperparameter tuning."
+              >
+                <i class="fa fa-heartbeat" aria-hidden="true"></i>
+                <h4>Diabetic Retinopathy Detection</h4>
+                <div class="project_tags">
+                  <span>Vision</span><span>Medical AI</span>
+                </div>
+                <p>
+                  Clinical image classification project with class imbalance
+                  mitigation and explainable performance reporting.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="cv,ml"
+                data-title="Facial Expression Classification"
+                data-description="Built a ResNet-based facial expression model across five classes using learning-rate scheduling, early stopping, and augmentation."
+              >
+                <i class="fa fa-smile-o" aria-hidden="true"></i>
+                <h4>Facial Expression Classification</h4>
+                <div class="project_tags">
+                  <span>Vision</span><span>ResNet</span>
+                </div>
+                <p>
+                  Emotion classification benchmark with precision/recall focused
+                  evaluation by class.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="service_inner row project_group" data-group="data">
+            <div class="col-md-12 project_group_title">
+              <h3>Data Platforms and Analytics</h3>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="data,timeseries,ml"
+                data-title="Stock Price Prediction"
+                data-description="Built market prediction workflows with deep sequence models and reinforcement-inspired optimization over NEPSE historical records."
+              >
+                <i class="fa fa-line-chart" aria-hidden="true"></i>
+                <h4>Stock Price Prediction</h4>
+                <div class="project_tags">
+                  <span>Time Series</span><span>ML</span>
+                </div>
+                <p>
+                  Forecasting and strategy optimization project for financial
+                  trend analysis and return-oriented decision support.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="data"
+                data-title="HYCOM Ocean Data Visualization"
+                data-description="Developed an interactive Streamlit + Plotly platform to analyze large-scale oceanographic variables with efficient filtering pipelines."
+              >
+                <i class="fa fa-area-chart" aria-hidden="true"></i>
+                <h4>HYCOM Ocean Data Visualization</h4>
+                <div class="project_tags">
+                  <span>Data Viz</span><span>Streamlit</span>
+                </div>
+                <p>
+                  Exploratory analytics platform to extract and communicate
+                  insights from large spatiotemporal ocean datasets.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="data"
+                data-title="Global Sales Dashboard"
+                data-description="Designed a Databricks + Delta Lake supply-chain analytics dashboard with near real-time reporting for decision support."
+              >
+                <i class="fa fa-dashboard" aria-hidden="true"></i>
+                <h4>Global Sales Dashboard</h4>
+                <div class="project_tags">
+                  <span>Databricks</span><span>Analytics</span>
+                </div>
+                <p>
+                  Business intelligence dashboard for supply-chain visibility
+                  and faster strategy decisions.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="data,nlp"
+                data-title="Document Similarity Analysis"
+                data-description="Implemented NLP similarity analysis using TF-IDF and cosine similarity with clustering visualization for semantic exploration."
+              >
+                <i class="fa fa-files-o" aria-hidden="true"></i>
+                <h4>Document Similarity Analysis</h4>
+                <div class="project_tags">
+                  <span>NLP</span><span>Information Retrieval</span>
+                </div>
+                <p>
+                  Text analytics pipeline for clustering and semantic proximity
+                  insights across corpora.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="service_inner row project_group" data-group="nlp">
+            <div class="col-md-12 project_group_title">
+              <h3>NLP and Language Modeling</h3>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="nlp,ml"
+                data-title="English-to-French Translator Using LSTMs"
+                data-description="Built a seq2seq translation model using LSTMs with large bilingual corpora preprocessing and TensorFlow/Keras training."
+              >
+                <i class="fa fa-language" aria-hidden="true"></i>
+                <h4>English-to-French Translator</h4>
+                <div class="project_tags">
+                  <span>NLP</span><span>LSTM</span>
+                </div>
+                <p>
+                  Neural machine translation pipeline with tokenization,
+                  sequence modeling, and bilingual evaluation workflows.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="nlp"
+                data-title="Natural Language Processing Projects"
+                data-description="Collection of NLP experiments including classical and deep learning text processing workflows from coursework and independent exploration."
+              >
+                <i class="fa fa-comments" aria-hidden="true"></i>
+                <h4>Natural Language Processing Projects</h4>
+                <div class="project_tags">
+                  <span>NLP</span><span>Text Mining</span>
+                </div>
+                <p>
+                  Hands-on NLP repository with preprocessing, feature
+                  engineering, and model experimentation tasks.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="nlp"
+                data-title="Generating Text with Markov Chains"
+                data-description="Implemented probabilistic text generation using Markov chain transitions for sequence modeling and synthetic text production."
+              >
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+                <h4>Generating Text with Markov Chains</h4>
+                <div class="project_tags">
+                  <span>NLP</span><span>Sequence Modeling</span>
+                </div>
+                <p>
+                  Language generation mini-project focused on transition-based
+                  stochastic text synthesis.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="nlp"
+                data-title="Boggle Word Solver"
+                data-description="Python implementation for efficient dictionary-based word solving on Boggle boards using algorithmic search strategies."
+              >
+                <i class="fa fa-font" aria-hidden="true"></i>
+                <h4>Boggle Word Solver</h4>
+                <div class="project_tags">
+                  <span>NLP</span><span>Algorithms</span>
+                </div>
+                <p>
+                  Word search and lexical matching project with
+                  performance-aware board traversal logic.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="service_inner row project_group" data-group="robotics">
+            <div class="col-md-12 project_group_title">
+              <h3>Robotics and Optimization</h3>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="robotics"
+                data-title="Adaptive Motion Planning for UGVs"
+                data-description="Integrated artificial potential fields with occupancy grid mapping in simulation to support dynamic target tracking and obstacle avoidance."
+              >
+                <i class="fa fa-crosshairs" aria-hidden="true"></i>
+                <h4>Adaptive Motion Planning for UGVs</h4>
+                <div class="project_tags">
+                  <span>Robotics</span><span>Simulation</span>
+                </div>
+                <p>
+                  Autonomous navigation study combining planning and
+                  environmental mapping for robust UGV movement.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="robotics,data"
+                data-title="Futoshiki Puzzle Solver"
+                data-description="Parallelized constraint-satisfaction solver with OpenMP task-based execution and up to 5x speedup on large grids."
+              >
+                <i class="fa fa-cogs" aria-hidden="true"></i>
+                <h4>Futoshiki Puzzle Solver</h4>
+                <div class="project_tags">
+                  <span>Parallel Computing</span><span>Optimization</span>
+                </div>
+                <p>
+                  High-performance solver leveraging backtracking and
+                  multi-threaded parallelism for faster complex puzzle
+                  resolution.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="robotics"
+                data-title="On-Device AI"
+                data-description="Edge deployment notes and code for model conversion, quantization, and real-time inference workflows on resource-constrained devices."
+              >
+                <i class="fa fa-microchip" aria-hidden="true"></i>
+                <h4>On-Device AI</h4>
+                <div class="project_tags">
+                  <span>Edge AI</span><span>Optimization</span>
+                </div>
+                <p>
+                  Practical edge AI deployment repository focused on latency,
+                  model size, and device execution constraints.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="service_item wow fadeIn animated"
+                data-tags="robotics"
+                data-title="Advanced Machine Learning Algorithms"
+                data-description="Algorithm-focused repository with implementations and assignments emphasizing optimization, model behavior, and evaluation techniques."
+              >
+                <i class="fa fa-sitemap" aria-hidden="true"></i>
+                <h4>Advanced ML Algorithms</h4>
+                <div class="project_tags">
+                  <span>Optimization</span><span>Algorithms</span>
+                </div>
+                <p>
+                  Advanced algorithmic implementations and comparative ML
+                  experimentation workflows.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div id="project-empty-state" class="project_empty_state" hidden>
+            No projects are tagged under this domain yet.
+          </div>
+        </section>
+        <section class="contact_area pad" id="contact">
+          <div class="main_title"><h2>Contact</h2></div>
+          <div class="row">
+            <div class="col-md-6">
+              <div
+                class="left_contact_details contact_panel contact_panel_info wow fadeInUp animated"
+              >
+                <div class="contact_title"><h3>Contact Info</h3></div>
+                <button
+                  id="contact-reveal-toggle"
+                  class="contact_reveal_btn"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="contact-reveal-content"
+                >
+                  Reveal Contact Details
+                </button>
+                <div
+                  id="contact-reveal-content"
+                  class="contact_reveal_content"
+                  hidden
+                >
+                  <div class="media">
+                    <div class="media-left"><i class="fa fa-envelope"></i></div>
+                    <div class="media-body">
+                      <h4>Email</h4>
+                      <p>
+                        <a href="mailto:tpadamjung@gmail.com"
+                          >tpadamjung@gmail.com</a
+                        >
+                      </p>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="media-left"><i class="fa fa-phone"></i></div>
+                    <div class="media-body">
+                      <h4>Phone</h4>
+                      <p><a href="tel:+13372670379">+1 (337) 267-0379</a></p>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="media-left">
+                      <i class="fa fa-map-marker"></i>
+                    </div>
+                    <div class="media-body">
+                      <h4>Address</h4>
+                      <p>612 Lamar St., Lafayette, Louisiana 70501</p>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="media-left"><i class="fa fa-github"></i></div>
+                    <div class="media-body">
+                      <h4>GitHub</h4>
+                      <p>
+                        <a
+                          href="https://github.com/padam56"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          >github.com/padam56</a
+                        >
+                      </p>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="media-left"><i class="fa fa-linkedin"></i></div>
+                    <div class="media-body">
+                      <h4>LinkedIn</h4>
+                      <p>
+                        <a
+                          href="https://www.linkedin.com/in/padamjung/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          >linkedin.com/in/padamjung</a
+                        >
+                      </p>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="media-left"><i class="fa fa-globe"></i></div>
+                    <div class="media-body">
+                      <h4>Web and Scholar</h4>
+                      <p>
+                        <a
+                          href="https://padamjungthapa.com.np"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          >padamjungthapa.com.np</a
+                        >
+                        |
+                        <a
+                          href="https://scholar.google.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          >Google Scholar</a
+                        >
+                        |
+                        <a
+                          href="https://public.tableau.com/app/profile/padam.jung.thapa/vizzes"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          >Tableau</a
+                        >
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div
+                class="contact_from_area contact_panel contact_panel_form wow fadeInUp animated"
+              >
+                <div class="contact_title"><h3>Send Message</h3></div>
+                <div class="row">
+                  <form
+                    method="POST"
+                    action="https://formspree.io/f/mqkwypyw"
+                    aria-label="Contact form"
+                  >
+                    <input
+                      type="hidden"
+                      name="_subject"
+                      value="New portfolio contact message"
+                    />
+                    <div class="form-group col-md-12">
+                      <label class="contact_field_label" for="contact-name"
+                        >Your Name</label
+                      ><input
+                        id="contact-name"
+                        name="name"
+                        placeholder="Your full name"
+                        autocomplete="name"
+                        required
+                      />
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label class="contact_field_label" for="contact-email"
+                        >Your Email</label
+                      ><input
+                        id="contact-email"
+                        type="email"
+                        name="_replyto"
+                        placeholder="name@example.com"
+                        autocomplete="email"
+                        required
+                      />
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label class="contact_field_label" for="contact-subject"
+                        >Subject</label
+                      ><input
+                        id="contact-subject"
+                        name="title"
+                        placeholder="Project / Collaboration Subject"
+                        required
+                      />
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label class="contact_field_label" for="contact-message"
+                        >Message</label
+                      ><textarea
+                        id="contact-message"
+                        name="message"
+                        placeholder="Write your message here..."
+                        required
+                      ></textarea>
+                    </div>
+                    <div class="form-group col-md-12">
+                      <input
+                        class="contact_btn"
+                        type="submit"
+                        value="Send Message"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <footer class="footer_area">
+      <div class="footer_copyright">
+        <div class="container">
+          <div class="pull-left">
+            <h5>© <span id="current-year">2026</span> Padam Jung Thapa.</h5>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="js/jquery-2.1.4.min.js" defer="defer"></script>
+    <script src="js/bootstrap.min.js" defer="defer"></script>
+    <script src="vendors/counter-up/waypoints.min.js" defer="defer"></script>
+    <script src="vendors/animate-css/wow.min.js" defer="defer"></script>
+    <script src="js/network-bg.js?v=20260316-5" defer="defer"></script>
+    <script src="js/tech-tagcloud.js?v=20260316-2" defer="defer"></script>
+    <script src="js/theme.js?v=20260316-39" defer="defer"></script>
+    <script src="js/apple-widgets.js?v=20260317-1" defer="defer"></script>
+    <script>
+      !(function () {
+        "use strict";
+        var n = !1;
+        function t(n) {
+          return new Promise(function (t, e) {
+            var o = document.createElement("script");
+            ((o.src = n),
+              (o.defer = !0),
+              (o.onload = t),
+              (o.onerror = e),
+              document.body.appendChild(o));
+          });
+        }
+        function e() {
+          n ||
+            ((n = !0),
+            t("https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js")
+              .then(function () {
+                return t(
+                  "https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js",
+                );
+              })
+              .then(function () {
+                return t("js/threat-map.js?v=20260316-8");
+              })
+              .catch(function () {
+                n = !1;
+              }));
+        }
+        function o() {
+          var t = document.getElementById("intel-map");
+          if (t) {
+            if ("IntersectionObserver" in window) {
+              var o = new IntersectionObserver(
+                function (n) {
+                  n.forEach(function (n) {
+                    n.isIntersecting && (e(), o.disconnect());
+                  });
+                },
+                { rootMargin: "300px 0px" },
+              );
+              o.observe(t);
+            } else e();
+            "requestIdleCallback" in window
+              ? window.requestIdleCallback(
+                  function () {
+                    n || e();
+                  },
+                  { timeout: 2800 },
+                )
+              : window.setTimeout(function () {
+                  n || e();
+                }, 2400);
+          }
+        }
+        "loading" === document.readyState
+          ? document.addEventListener("DOMContentLoaded", o)
+          : o();
+      })();
+    </script>
+  </body>
+</html>
