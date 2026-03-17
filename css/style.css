@@ -7851,8 +7851,10 @@ body.theme-light .ai_blueprint_area #ai-view-edge .demo_lab_shell {
 
 .apple_weather_3d.is-css-fallback {
   background:
-    radial-gradient(circle at 72% 52%, rgba(216, 243, 255, 0.98) 0%, rgba(188, 231, 255, 0.88) 10%, rgba(129, 194, 255, 0.65) 20%, rgba(64, 142, 235, 0.28) 34%, rgba(0, 0, 0, 0) 55%),
-    conic-gradient(from 40deg at 72% 52%, rgba(0, 0, 0, 0) 0deg, rgba(191, 229, 255, 0.4) 88deg, rgba(0, 0, 0, 0) 184deg, rgba(154, 217, 255, 0.35) 300deg, rgba(0, 0, 0, 0) 360deg);
+    radial-gradient(circle at 72% 52%, rgba(226, 246, 255, 0.95) 0%, rgba(110, 175, 232, 0.88) 12%, rgba(72, 138, 206, 0.66) 22%, rgba(19, 77, 148, 0.26) 35%, rgba(0, 0, 0, 0) 56%),
+    radial-gradient(ellipse at 66% 49%, rgba(115, 192, 140, 0.48) 0%, rgba(95, 177, 129, 0.2) 17%, rgba(0, 0, 0, 0) 34%),
+    radial-gradient(ellipse at 78% 56%, rgba(142, 211, 160, 0.42) 0%, rgba(112, 185, 138, 0.18) 13%, rgba(0, 0, 0, 0) 28%),
+    conic-gradient(from 40deg at 72% 52%, rgba(0, 0, 0, 0) 0deg, rgba(176, 221, 255, 0.38) 84deg, rgba(0, 0, 0, 0) 184deg, rgba(118, 206, 166, 0.26) 306deg, rgba(0, 0, 0, 0) 360deg);
   animation: appleWeatherCssSpin 7.4s linear infinite;
 }
 

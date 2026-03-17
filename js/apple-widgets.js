@@ -133,11 +133,11 @@
       markLiveOrbital();
 
       var mood = {
-        core: "#8cc7ff",
-        glow: "rgba(140, 199, 255, 0.38)",
-        ringA: "rgba(191, 229, 255, 0.7)",
-        ringB: "rgba(154, 217, 255, 0.58)",
-        dots: "rgba(240, 249, 255, 0.75)"
+        core: "#4a8fdd",
+        glow: "rgba(74, 143, 221, 0.42)",
+        ringA: "rgba(170, 214, 255, 0.62)",
+        ringB: "rgba(110, 208, 170, 0.52)",
+        dots: "rgba(225, 244, 255, 0.72)"
       };
 
       function setFallbackMood(weatherCode, tempC) {
@@ -146,27 +146,27 @@
         var snowy = weatherCode >= 71 && weatherCode <= 77;
 
         if (typeof tempC === "number" && tempC >= 30) {
-          mood.core = "#ffaf73";
+          mood.core = "#3f86d1";
           mood.glow = "rgba(255, 175, 115, 0.36)";
-          mood.ringA = "rgba(255, 213, 166, 0.72)";
-          mood.ringB = "rgba(255, 178, 136, 0.58)";
+          mood.ringA = "rgba(244, 214, 174, 0.72)";
+          mood.ringB = "rgba(120, 205, 166, 0.62)";
           mood.dots = "rgba(255, 235, 217, 0.82)";
           return;
         }
 
         if (typeof tempC === "number" && tempC <= 2) {
-          mood.core = "#b3e7ff";
-          mood.glow = "rgba(179, 231, 255, 0.4)";
+          mood.core = "#6aa6e0";
+          mood.glow = "rgba(155, 208, 248, 0.44)";
           mood.ringA = "rgba(214, 244, 255, 0.72)";
-          mood.ringB = "rgba(173, 230, 255, 0.6)";
+          mood.ringB = "rgba(150, 225, 196, 0.58)";
           mood.dots = "rgba(240, 250, 255, 0.86)";
           return;
         }
 
-        mood.core = storm ? "#8ba7ff" : (snowy ? "#d8f3ff" : (rainy ? "#66beff" : "#8cc7ff"));
-        mood.glow = storm ? "rgba(139, 167, 255, 0.36)" : "rgba(140, 199, 255, 0.38)";
-        mood.ringA = storm ? "rgba(182, 200, 255, 0.68)" : "rgba(191, 229, 255, 0.7)";
-        mood.ringB = rainy ? "rgba(140, 211, 255, 0.62)" : "rgba(154, 217, 255, 0.58)";
+        mood.core = storm ? "#4a74bf" : (snowy ? "#6ea6dc" : (rainy ? "#468fda" : "#4a8fdd"));
+        mood.glow = storm ? "rgba(96, 130, 206, 0.38)" : "rgba(74, 143, 221, 0.42)";
+        mood.ringA = storm ? "rgba(167, 189, 244, 0.66)" : "rgba(170, 214, 255, 0.62)";
+        mood.ringB = rainy ? "rgba(112, 203, 171, 0.62)" : "rgba(110, 208, 170, 0.52)";
         mood.dots = "rgba(240, 249, 255, 0.75)";
       }
 
@@ -301,47 +301,130 @@
       var root = new THREE.Group();
       scene.add(root);
 
+      function createEarthSurfaceTexture() {
+        var size = 512;
+        var c = document.createElement("canvas");
+        c.width = size;
+        c.height = size;
+        var ctx = c.getContext("2d");
+        if (!ctx) return null;
+
+        var ocean = ctx.createLinearGradient(0, 0, size, size);
+        ocean.addColorStop(0, "#163d78");
+        ocean.addColorStop(0.45, "#1f5da1");
+        ocean.addColorStop(1, "#18467f");
+        ctx.fillStyle = ocean;
+        ctx.fillRect(0, 0, size, size);
+
+        for (var y = 0; y < size; y += 2) {
+          var v = y / size;
+          var lat = (v - 0.5) * Math.PI;
+          var latAbs = Math.abs(Math.sin(lat));
+          for (var x = 0; x < size; x += 2) {
+            var u = x / size;
+            var wave =
+              Math.sin(u * 17.2) * 0.36 +
+              Math.cos(v * 13.6) * 0.28 +
+              Math.sin((u + v) * 22.0) * 0.2 +
+              Math.cos((u * 2.1 - v * 1.3) * 11.0) * 0.16;
+            var continentBias = 0.78 - latAbs * 0.62;
+            if (wave > continentBias) {
+              var lush = Math.max(0, 1 - latAbs * 1.25);
+              var r = Math.round(62 + lush * 24 + Math.random() * 5);
+              var g = Math.round(118 + lush * 54 + Math.random() * 6);
+              var b = Math.round(68 + lush * 28 + Math.random() * 4);
+              if (wave > continentBias + 0.24) {
+                r += 18;
+                g += 18;
+                b += 10;
+              }
+              ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
+              ctx.fillRect(x, y, 2, 2);
+            }
+          }
+        }
+
+        var ice = ctx.createLinearGradient(0, 0, 0, size);
+        ice.addColorStop(0, "rgba(236, 246, 255, 0.9)");
+        ice.addColorStop(0.08, "rgba(236, 246, 255, 0)");
+        ice.addColorStop(0.92, "rgba(236, 246, 255, 0)");
+        ice.addColorStop(1, "rgba(236, 246, 255, 0.92)");
+        ctx.fillStyle = ice;
+        ctx.fillRect(0, 0, size, size);
+
+        return new THREE.CanvasTexture(c);
+      }
+
+      function createCloudTexture() {
+        var size = 512;
+        var c = document.createElement("canvas");
+        c.width = size;
+        c.height = size;
+        var ctx = c.getContext("2d");
+        if (!ctx) return null;
+
+        ctx.clearRect(0, 0, size, size);
+        for (var iCloud = 0; iCloud < 42; iCloud += 1) {
+          var x = Math.random() * size;
+          var y = Math.random() * size;
+          var r = 18 + Math.random() * 46;
+          var g = ctx.createRadialGradient(x, y, r * 0.15, x, y, r);
+          g.addColorStop(0, "rgba(255,255,255,0.3)");
+          g.addColorStop(0.55, "rgba(255,255,255,0.14)");
+          g.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        return new THREE.CanvasTexture(c);
+      }
+
+      var earthMap = createEarthSurfaceTexture();
+      var cloudMap = createCloudTexture();
+
       var globe = new THREE.Mesh(
-        new THREE.SphereGeometry(1.05, 32, 32),
+        new THREE.SphereGeometry(1.05, 48, 48),
         new THREE.MeshStandardMaterial({
-          color: 0x5fa8ff,
-          roughness: 0.28,
-          metalness: 0.26,
+          color: 0x7fb7ef,
+          map: earthMap || null,
+          roughness: 0.82,
+          metalness: 0.02,
+          emissive: 0x0b2c5e,
+          emissiveIntensity: 0.1,
           transparent: true,
-          opacity: 0.82
+          opacity: 0.98
         })
       );
       root.add(globe);
 
-      var innerCore = new THREE.Mesh(
-        new THREE.IcosahedronGeometry(0.42, 1),
+      var cloudShell = new THREE.Mesh(
+        new THREE.SphereGeometry(1.1, 36, 36),
         new THREE.MeshStandardMaterial({
-          color: 0xc9eeff,
-          emissive: 0x2fd0ff,
-          emissiveIntensity: 0.3,
-          roughness: 0.2,
-          metalness: 0.3,
+          color: 0xffffff,
+          map: cloudMap || null,
+          alphaMap: cloudMap || null,
+          roughness: 0.85,
+          metalness: 0,
           transparent: true,
-          opacity: 0.88
+          opacity: 0.24,
+          depthWrite: false
         })
       );
-      root.add(innerCore);
+      root.add(cloudShell);
 
-      var ring = new THREE.Mesh(
-        new THREE.TorusGeometry(1.56, 0.03, 12, 120),
-        new THREE.MeshBasicMaterial({ color: 0xbfe5ff, transparent: true, opacity: 0.58 })
+      var atmosphere = new THREE.Mesh(
+        new THREE.SphereGeometry(1.17, 32, 32),
+        new THREE.MeshBasicMaterial({
+          color: 0x8ecaff,
+          transparent: true,
+          opacity: 0.14,
+          side: THREE.BackSide,
+          depthWrite: false
+        })
       );
-      ring.rotation.x = Math.PI * 0.28;
-      ring.rotation.y = Math.PI * 0.17;
-      root.add(ring);
-
-      var ringB = new THREE.Mesh(
-        new THREE.TorusGeometry(1.18, 0.018, 10, 90),
-        new THREE.MeshBasicMaterial({ color: 0x9ad9ff, transparent: true, opacity: 0.52 })
-      );
-      ringB.rotation.x = Math.PI * 0.78;
-      ringB.rotation.z = Math.PI * 0.21;
-      root.add(ringB);
+      root.add(atmosphere);
 
       var dotsGeo = new THREE.BufferGeometry();
       var dots = new Float32Array(220 * 3);
@@ -371,17 +454,17 @@
         var rainy = weatherCode >= 51 && weatherCode <= 82;
         var storm = weatherCode >= 95;
         var snowy = weatherCode >= 71 && weatherCode <= 77;
-        var base = 0x5fa8ff;
-        if (rainy) base = 0x45b4ff;
-        if (snowy) base = 0xd8f3ff;
-        if (storm) base = 0x7aa2ff;
-        if (typeof tempC === "number" && tempC >= 30) base = 0xff9a5f;
-        if (typeof tempC === "number" && tempC <= 2) base = 0xa6e3ff;
+        var base = 0x7fb7ef;
+        if (rainy) base = 0x6ea7df;
+        if (snowy) base = 0x9bcaf1;
+        if (storm) base = 0x678ec2;
+        if (typeof tempC === "number" && tempC >= 30) base = 0x87bddf;
+        if (typeof tempC === "number" && tempC <= 2) base = 0xaed3f4;
 
         globe.material.color.setHex(base);
-        innerCore.material.emissive.setHex(storm ? 0x6c8bff : 0x2fd0ff);
-        ring.material.color.setHex(storm ? 0x9fb8ff : 0xbfe5ff);
-        ringB.material.color.setHex(rainy ? 0x8cd3ff : 0x9ad9ff);
+        cloudShell.material.opacity = storm ? 0.32 : (rainy ? 0.3 : 0.24);
+        atmosphere.material.color.setHex(storm ? 0x84a9e1 : 0x8ecaff);
+        atmosphere.material.opacity = snowy ? 0.2 : (storm ? 0.18 : 0.14);
       }
 
       accentController = {
@@ -404,13 +487,11 @@
       function animate() {
         markLiveOrbital();
         var t = (performance.now() - start) * 0.001;
-        globe.rotation.y += 0.0023;
-        globe.rotation.x = Math.sin(t * 0.34) * 0.06;
-        innerCore.rotation.x += 0.005;
-        innerCore.rotation.y -= 0.0042;
-        innerCore.scale.setScalar(0.96 + Math.sin(t * 1.8) * 0.045);
-        ring.rotation.z += 0.0018;
-        ringB.rotation.y -= 0.0022;
+        globe.rotation.y += 0.0019;
+        globe.rotation.x = Math.sin(t * 0.25) * 0.045;
+        cloudShell.rotation.y += 0.0023;
+        cloudShell.rotation.x = Math.sin(t * 0.42) * 0.028;
+        atmosphere.rotation.y -= 0.0004;
         dotCloud.rotation.y -= 0.0013;
         dotCloud.rotation.x = Math.sin(t * 0.4) * 0.08;
         dotCloud.position.y = Math.sin(t * 0.8) * 0.05;
