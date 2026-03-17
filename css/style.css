@@ -7828,7 +7828,7 @@ body.theme-light .ai_blueprint_area #ai-view-edge .demo_lab_shell {
 }
 
 .apple_weather_hilo { margin-top: 2px; }
-.apple_weather_loc,
+.apple_weather_loc { margin-top: 3px; }
 .apple_weather_meta { display: none; }
 
 .apple_weather_3d {
@@ -7842,6 +7842,13 @@ body.theme-light .ai_blueprint_area #ai-view-edge .demo_lab_shell {
   filter:
     drop-shadow(0 0 22px rgba(99, 203, 255, 0.22))
     drop-shadow(0 0 6px rgba(125, 211, 252, 0.26));
+}
+
+.apple_weather_3d.is-fallback {
+  opacity: 0.84;
+  filter:
+    drop-shadow(0 0 18px rgba(99, 203, 255, 0.28))
+    drop-shadow(0 0 8px rgba(125, 211, 252, 0.3));
 }
 
 body.theme-light .apple_widget_panel {
@@ -7921,6 +7928,10 @@ body.theme-light .apple_panel_timeblock {
   .apple_weather_3d {
     inset: -8px -10px -10px 42%;
     opacity: 0.58;
+  }
+
+  .apple_weather_3d.is-fallback {
+    opacity: 0.72;
   }
 }
 

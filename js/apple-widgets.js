@@ -14,9 +14,15 @@
   var weatherTempEl = document.getElementById("apple-weather-temp");
   var weatherCondEl = document.getElementById("apple-weather-cond");
   var weatherHiLoEl = document.getElementById("apple-weather-hilo");
+  var weatherLocEl = document.getElementById("apple-weather-loc");
   var accentController = null;
 
   var CACHE_KEY = "appleWidgetsWeatherCacheV1";
+  var DEFAULT_WEATHER_LABEL = "New Orleans, Louisiana, United States";
+  var DEFAULT_WEATHER_COORDS = {
+    lat: 29.9511,
+    lon: -90.0715
+  };
 
   var weatherCodeMap = {
     0: "Clear",
@@ -88,7 +94,151 @@
   }
 
   function initThreeAccent() {
-    if (!canvas3d || !window.WebGLRenderingContext) return;
+    if (!canvas3d) return;
+
+    function initCanvasFallback() {
+      var ctx = canvas3d.getContext("2d");
+      if (!ctx) return;
+
+      canvas3d.classList.add("is-fallback");
+
+      var mood = {
+        core: "#8cc7ff",
+        glow: "rgba(140, 199, 255, 0.38)",
+        ringA: "rgba(191, 229, 255, 0.7)",
+        ringB: "rgba(154, 217, 255, 0.58)",
+        dots: "rgba(240, 249, 255, 0.75)"
+      };
+
+      function setFallbackMood(weatherCode, tempC) {
+        var rainy = weatherCode >= 51 && weatherCode <= 82;
+        var storm = weatherCode >= 95;
+        var snowy = weatherCode >= 71 && weatherCode <= 77;
+
+        if (typeof tempC === "number" && tempC >= 30) {
+          mood.core = "#ffaf73";
+          mood.glow = "rgba(255, 175, 115, 0.36)";
+          mood.ringA = "rgba(255, 213, 166, 0.72)";
+          mood.ringB = "rgba(255, 178, 136, 0.58)";
+          mood.dots = "rgba(255, 235, 217, 0.82)";
+          return;
+        }
+
+        if (typeof tempC === "number" && tempC <= 2) {
+          mood.core = "#b3e7ff";
+          mood.glow = "rgba(179, 231, 255, 0.4)";
+          mood.ringA = "rgba(214, 244, 255, 0.72)";
+          mood.ringB = "rgba(173, 230, 255, 0.6)";
+          mood.dots = "rgba(240, 250, 255, 0.86)";
+          return;
+        }
+
+        mood.core = storm ? "#8ba7ff" : (snowy ? "#d8f3ff" : (rainy ? "#66beff" : "#8cc7ff"));
+        mood.glow = storm ? "rgba(139, 167, 255, 0.36)" : "rgba(140, 199, 255, 0.38)";
+        mood.ringA = storm ? "rgba(182, 200, 255, 0.68)" : "rgba(191, 229, 255, 0.7)";
+        mood.ringB = rainy ? "rgba(140, 211, 255, 0.62)" : "rgba(154, 217, 255, 0.58)";
+        mood.dots = "rgba(240, 249, 255, 0.75)";
+      }
+
+      accentController = {
+        setWeather: setFallbackMood
+      };
+
+      function setCanvasSize() {
+        var w = canvas3d.clientWidth || 260;
+        var h = canvas3d.clientHeight || 172;
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas3d.width = Math.max(1, Math.round(w * dpr));
+        canvas3d.height = Math.max(1, Math.round(h * dpr));
+      }
+
+      setCanvasSize();
+      window.addEventListener("resize", setCanvasSize, { passive: true });
+
+      var particles = [];
+      for (var i = 0; i < 70; i += 1) {
+        particles.push({
+          angle: Math.random() * Math.PI * 2,
+          radius: 0.3 + Math.random() * 0.75,
+          speed: 0.1 + Math.random() * 0.42,
+          size: 0.6 + Math.random() * 1.8
+        });
+      }
+
+      function draw(tMs) {
+        var t = tMs * 0.001;
+        var w = canvas3d.width;
+        var h = canvas3d.height;
+        if (!w || !h) {
+          window.requestAnimationFrame(draw);
+          return;
+        }
+
+        var cx = w * 0.72;
+        var cy = h * 0.52;
+        var base = Math.min(w, h) * 0.19;
+
+        ctx.clearRect(0, 0, w, h);
+
+        var glow = ctx.createRadialGradient(cx, cy, base * 0.15, cx, cy, base * 2.4);
+        glow.addColorStop(0, mood.glow);
+        glow.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(cx, cy, base * 2.4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = mood.ringA;
+        ctx.lineWidth = Math.max(1, base * 0.06);
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, base * 1.8, base * 0.7, t * 0.3, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = mood.ringB;
+        ctx.lineWidth = Math.max(1, base * 0.045);
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, base * 1.3, base * 0.52, -t * 0.44 + 0.5, 0, Math.PI * 2);
+        ctx.stroke();
+
+        var corePulse = 0.9 + Math.sin(t * 2.2) * 0.08;
+        ctx.fillStyle = mood.core;
+        ctx.beginPath();
+        ctx.arc(cx, cy, base * corePulse, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = mood.dots;
+        for (var p = 0; p < particles.length; p += 1) {
+          var particle = particles[p];
+          var angle = particle.angle + t * particle.speed;
+          var rx = base * (1.8 + particle.radius * 1.4);
+          var ry = base * (0.6 + particle.radius * 0.45);
+          var x = cx + Math.cos(angle) * rx;
+          var y = cy + Math.sin(angle * 1.18) * ry;
+          ctx.beginPath();
+          ctx.arc(x, y, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        window.requestAnimationFrame(draw);
+      }
+
+      window.requestAnimationFrame(draw);
+    }
+
+    function canUseWebGL() {
+      if (!window.WebGLRenderingContext) return false;
+      try {
+        var gl = canvas3d.getContext("webgl") || canvas3d.getContext("experimental-webgl");
+        return !!gl;
+      } catch (_e) {
+        return false;
+      }
+    }
+
+    if (!canUseWebGL()) {
+      initCanvasFallback();
+      return;
+    }
 
     function loadThree() {
       return import("./vendor/three.module.js").catch(function () {
@@ -237,6 +387,7 @@
       animate();
     }).catch(function () {
       // Keep widget functional when Three.js module is unavailable.
+      initCanvasFallback();
     });
   }
 
@@ -395,26 +546,9 @@
     if (weatherTempEl) weatherTempEl.textContent = "--";
     if (weatherCondEl) weatherCondEl.textContent = "Weather";
     if (weatherHiLoEl) weatherHiLoEl.textContent = "H --\u00b0 / L --\u00b0";
+    if (weatherLocEl) weatherLocEl.textContent = DEFAULT_WEATHER_LABEL;
 
-    if (!navigator.geolocation) {
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      function (pos) {
-        var lat = pos.coords.latitude;
-        var lon = pos.coords.longitude;
-        loadWeatherForPosition(lat, lon);
-      },
-      function () {
-        // Silently keep default placeholders if permission is denied.
-      },
-      {
-        enableHighAccuracy: false,
-        timeout: 12000,
-        maximumAge: 30 * 60 * 1000
-      }
-    );
+    loadWeatherForPosition(DEFAULT_WEATHER_COORDS.lat, DEFAULT_WEATHER_COORDS.lon);
   }
 
   updateClock();
