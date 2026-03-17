@@ -2456,10 +2456,24 @@ body.theme-light .focus_typewriter_text::after {
 
 #about .person_details {
   position: relative;
-  padding: 6px 18px;
+  padding: 6px 10px;
   margin-left: -4px;
   animation: bioZoomOutOnly 0.62s cubic-bezier(0.2, 0.9, 0.25, 1) both;
   transform-origin: 50% 22%;
+}
+
+#about .person_details h3 {
+  text-transform: none;
+  white-space: nowrap;
+  letter-spacing: -0.35px;
+  font-size: clamp(34px, 3.2vw, 46px);
+}
+
+#about .person_details h4 {
+  text-transform: none;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+  font-size: 15px;
 }
 
 #about .person_details:before,
@@ -2501,7 +2515,8 @@ body.theme-light .focus_typewriter_text::after {
 
 #about .person_details > p {
   min-height: auto;
-  max-width: 68ch;
+  max-width: none;
+  width: 100%;
   margin-top: 10px;
   padding: 16px 18px;
   border-radius: 14px;
@@ -6622,6 +6637,11 @@ body.theme-light .project_empty_state {
   #about .about_cloud_col .technology_cloud_wrap {
     padding-right: 0;
     padding-left: 0;
+  }
+
+  #about .person_details h3,
+  #about .person_details h4 {
+    white-space: normal;
   }
 
   #about .person_details:before,
