@@ -426,6 +426,57 @@
       );
       root.add(atmosphere);
 
+      var orbitShell = new THREE.Group();
+      root.add(orbitShell);
+
+      var orbitA = new THREE.Mesh(
+        new THREE.TorusGeometry(1.62, 0.014, 10, 180),
+        new THREE.MeshBasicMaterial({
+          color: 0xb9dcff,
+          transparent: true,
+          opacity: 0.6,
+          depthWrite: false
+        })
+      );
+      orbitA.rotation.x = Math.PI * 0.32;
+      orbitA.rotation.y = Math.PI * 0.16;
+      orbitShell.add(orbitA);
+
+      var orbitB = new THREE.Mesh(
+        new THREE.TorusGeometry(1.5, 0.012, 10, 170),
+        new THREE.MeshBasicMaterial({
+          color: 0x90d8b1,
+          transparent: true,
+          opacity: 0.56,
+          depthWrite: false
+        })
+      );
+      orbitB.rotation.x = Math.PI * 0.78;
+      orbitB.rotation.z = Math.PI * 0.24;
+      orbitShell.add(orbitB);
+
+      var sweepA = new THREE.Mesh(
+        new THREE.SphereGeometry(0.03, 10, 10),
+        new THREE.MeshBasicMaterial({
+          color: 0xe5f4ff,
+          transparent: true,
+          opacity: 0.9,
+          depthWrite: false
+        })
+      );
+      orbitA.add(sweepA);
+
+      var sweepB = new THREE.Mesh(
+        new THREE.SphereGeometry(0.026, 10, 10),
+        new THREE.MeshBasicMaterial({
+          color: 0xd5f5e3,
+          transparent: true,
+          opacity: 0.86,
+          depthWrite: false
+        })
+      );
+      orbitB.add(sweepB);
+
       var dotsGeo = new THREE.BufferGeometry();
       var dots = new Float32Array(220 * 3);
       for (var i = 0; i < 220; i += 1) {
@@ -465,6 +516,10 @@
         cloudShell.material.opacity = storm ? 0.32 : (rainy ? 0.3 : 0.24);
         atmosphere.material.color.setHex(storm ? 0x84a9e1 : 0x8ecaff);
         atmosphere.material.opacity = snowy ? 0.2 : (storm ? 0.18 : 0.14);
+        orbitA.material.color.setHex(storm ? 0xaec3eb : 0xb9dcff);
+        orbitB.material.color.setHex(rainy ? 0x85d3ac : 0x90d8b1);
+        orbitA.material.opacity = storm ? 0.66 : 0.6;
+        orbitB.material.opacity = rainy ? 0.62 : 0.56;
       }
 
       accentController = {
@@ -492,6 +547,10 @@
         cloudShell.rotation.y += 0.0023;
         cloudShell.rotation.x = Math.sin(t * 0.42) * 0.028;
         atmosphere.rotation.y -= 0.0004;
+        orbitShell.rotation.y += 0.0017;
+        orbitShell.rotation.x = Math.sin(t * 0.33) * 0.06;
+        sweepA.position.set(Math.cos(t * 1.6) * 1.62, Math.sin(t * 1.6) * 1.62, 0);
+        sweepB.position.set(Math.cos(-t * 1.2 + 1.4) * 1.5, Math.sin(-t * 1.2 + 1.4) * 1.5, 0);
         dotCloud.rotation.y -= 0.0013;
         dotCloud.rotation.x = Math.sin(t * 0.4) * 0.08;
         dotCloud.position.y = Math.sin(t * 0.8) * 0.05;
