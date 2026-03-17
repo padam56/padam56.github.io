@@ -3341,6 +3341,140 @@ body.theme-light .left_contact_details .media .media-body a {
   min-height: 52px;
 }
 
+.project_tags {
+  display: none;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 10px;
+}
+
+.project_tags span {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(125, 211, 252, 0.34);
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #d6ebff;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.service_item.is-selected {
+  border-color: rgba(45, 212, 191, 0.72) !important;
+  box-shadow: 0 16px 34px rgba(2, 8, 23, 0.36);
+}
+
+.project_detail_overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: radial-gradient(circle at 50% 30%, rgba(34, 211, 238, 0.14) 0%, rgba(6, 12, 22, 0.75) 48%, rgba(2, 6, 12, 0.82) 100%);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.project_detail_overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.project_detail_popup {
+  width: min(720px, calc(100vw - 28px));
+  max-height: min(80vh, 680px);
+  overflow: auto;
+  border: 1px solid rgba(125, 211, 252, 0.38);
+  border-radius: 16px;
+  background: linear-gradient(152deg, rgba(8, 19, 35, 0.95) 0%, rgba(14, 27, 44, 0.9) 100%);
+  box-shadow: 0 34px 80px rgba(1, 6, 14, 0.62), inset 0 1px 0 rgba(186, 230, 253, 0.16);
+  padding: 20px 22px 18px;
+  position: relative;
+  transform: perspective(1200px) rotateX(12deg) scale(0.92) translateY(18px);
+  transform-origin: 50% 30%;
+  opacity: 0;
+  transition: transform 0.34s cubic-bezier(0.22, 0.84, 0.24, 1), opacity 0.28s ease;
+}
+
+.project_detail_overlay.is-open .project_detail_popup {
+  transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0);
+  opacity: 1;
+}
+
+.project_detail_close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 999px;
+  background: rgba(30, 41, 59, 0.66);
+  color: #dcecff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  padding: 4px 9px;
+}
+
+.project_detail_title {
+  margin: 0 0 8px;
+  padding-right: 64px;
+  color: #f6fbff;
+  font-size: 16px;
+  line-height: 1.32;
+}
+
+.project_detail_tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.project_detail_tags span {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(45, 212, 191, 0.4);
+  border-radius: 999px;
+  background: rgba(20, 32, 52, 0.7);
+  color: #d9f2ff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  padding: 3px 9px;
+}
+
+.project_detail_desc {
+  margin: 0;
+  color: #c2d7ee;
+  font-size: 13px;
+  line-height: 1.62;
+}
+
+body.project-detail-open .service_area .modern_toolbar,
+body.project-detail-open .service_area .service_inner,
+body.project-detail-open .service_area .project_empty_state {
+  filter: blur(2px) brightness(0.7);
+  transition: filter 0.25s ease;
+}
+
+@media (max-width: 767px) {
+  .project_detail_popup {
+    padding: 16px 14px 14px;
+    width: min(680px, calc(100vw - 16px));
+    border-radius: 14px;
+  }
+
+  .project_detail_title {
+    font-size: 15px;
+  }
+}
+
 .project_empty_state {
   margin-top: 12px;
   text-align: center;
@@ -7751,24 +7885,57 @@ body.theme-light .apple_panel_timeblock {
   }
 
   .apple_panel_main {
-    grid-template-columns: 1fr;
-    gap: 7px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 6px;
   }
 
   .apple_panel_timeblock {
-    border-right: 0;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.22);
-    padding-right: 0;
-    padding-bottom: 6px;
+    border-right: 1px solid rgba(148, 163, 184, 0.22);
+    border-bottom: 0;
+    padding-right: 6px;
+    padding-bottom: 0;
+    min-width: 0;
   }
 
   .apple_panel_weatherblock {
-    padding-left: 0;
+    padding-left: 1px;
+    min-width: 0;
+  }
+
+  .apple_clock_time {
+    font-size: 19px;
+  }
+
+  .apple_weather_temp {
+    font-size: 28px;
+  }
+
+  .apple_date_weekday {
+    font-size: 13px;
+  }
+
+  .apple_weather_cond {
+    font-size: 11px;
   }
 
   .apple_weather_3d {
-    inset: 35% -10px -12px 34%;
-    opacity: 0.44;
+    inset: -8px -10px -10px 42%;
+    opacity: 0.58;
+  }
+}
+
+@media (max-width: 575px) {
+  .apple_panel_main {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    column-gap: 6px;
+  }
+
+  .apple_clock_time {
+    font-size: 18px;
+  }
+
+  .apple_weather_temp {
+    font-size: 24px;
   }
 }
 

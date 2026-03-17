@@ -347,6 +347,99 @@
         apply(defaultBtn.getAttribute("data-filter"));
     }
 
+    function setupProjectDetailsPopup() {
+        var cards = document.querySelectorAll(".service_item");
+        if (!cards.length) return;
+
+        var body = document.body;
+        if (!body) return;
+
+        var overlay = document.createElement("div");
+        overlay.className = "project_detail_overlay";
+        overlay.innerHTML = [
+            '<div class="project_detail_popup" role="dialog" aria-modal="true" aria-label="Project details" aria-live="polite">',
+            '<button type="button" class="project_detail_close" aria-label="Close project details">Close</button>',
+            '<h4 class="project_detail_title">Project Details</h4>',
+            '<div class="project_detail_tags"></div>',
+            '<p class="project_detail_desc">Click any project tile to view the full summary.</p>',
+            '</div>'
+        ].join("");
+        body.appendChild(overlay);
+
+        var popup = overlay.querySelector(".project_detail_popup");
+
+        var titleEl = popup.querySelector(".project_detail_title");
+        var tagsEl = popup.querySelector(".project_detail_tags");
+        var descEl = popup.querySelector(".project_detail_desc");
+        var closeBtn = popup.querySelector(".project_detail_close");
+        var selectedCard = null;
+
+        function clearSelection() {
+            cards.forEach(function(card) {
+                card.classList.remove("is-selected");
+            });
+            selectedCard = null;
+        }
+
+        function closePopup() {
+            overlay.classList.remove("is-open");
+            body.classList.remove("project-detail-open");
+            clearSelection();
+        }
+
+        function openPopup(card) {
+            var title = card.getAttribute("data-title") || card.querySelector("h4") && card.querySelector("h4").textContent || "Project";
+            var desc = card.getAttribute("data-description") || card.querySelector("p") && card.querySelector("p").textContent || "No additional description.";
+            var tagSpans = card.querySelectorAll(".project_tags span");
+
+            clearSelection();
+            card.classList.add("is-selected");
+            selectedCard = card;
+
+            titleEl.textContent = title;
+            descEl.textContent = desc;
+            tagsEl.innerHTML = "";
+            if (tagSpans.length) {
+                Array.prototype.forEach.call(tagSpans, function(tag) {
+                    var pill = document.createElement("span");
+                    pill.textContent = tag.textContent;
+                    tagsEl.appendChild(pill);
+                });
+            }
+
+            overlay.classList.add("is-open");
+            body.classList.add("project-detail-open");
+        }
+
+        cards.forEach(function(card) {
+            card.addEventListener("click", function() {
+                if (selectedCard === card) {
+                    closePopup();
+                    return;
+                }
+                openPopup(card);
+            });
+        });
+
+        if (closeBtn) {
+            closeBtn.addEventListener("click", closePopup);
+        }
+
+        overlay.addEventListener("click", function(evt) {
+            if (!evt.target.closest(".project_detail_popup")) {
+                closePopup();
+            }
+        });
+
+        document.addEventListener("keydown", function(evt) {
+            if (evt.key === "Escape") closePopup();
+        });
+
+        document.querySelectorAll(".modern_filter_btn").forEach(function(btn) {
+            btn.addEventListener("click", closePopup);
+        });
+    }
+
     function setupContactReveal() {
         var toggle = document.getElementById("contact-reveal-toggle");
         var panel = document.getElementById("contact-reveal-content");
@@ -1154,6 +1247,7 @@
         setupCardPointerGlow();
         setupScrollProgress();
         setupProjectFilter();
+        setupProjectDetailsPopup();
         setupContactReveal();
         setupAiBlueprintTabs();
         setupAiBlueprintInteractions();
