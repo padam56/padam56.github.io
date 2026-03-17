@@ -2455,7 +2455,48 @@ body.theme-light .focus_typewriter_text::after {
 }
 
 #about .person_details {
-  padding-right: 14px;
+  position: relative;
+  padding: 6px 18px;
+  margin-left: -4px;
+  animation: bioZoomOutOnly 0.62s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  transform-origin: 50% 22%;
+}
+
+#about .person_details:before,
+#about .person_details:after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(34, 211, 238, 0.08) 0%, rgba(34, 211, 238, 0.8) 46%, rgba(245, 158, 11, 0.8) 74%, rgba(245, 158, 11, 0.1) 100%);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.24);
+}
+
+#about .person_details:before {
+  left: 0;
+}
+
+#about .person_details:after {
+  right: 0;
+}
+
+#about .person_details h3,
+#about .person_details h4,
+#about .person_details > p {
+  animation: none !important;
+}
+
+@keyframes bioZoomOutOnly {
+  0% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 #about .person_details > p {
@@ -2480,6 +2521,12 @@ body.theme-light #about .person_details > p {
   border-color: rgba(31, 41, 55, 0.16);
   background: linear-gradient(150deg, rgba(255, 255, 255, 0.72) 0%, rgba(241, 246, 255, 0.68) 100%);
   box-shadow: 0 12px 24px rgba(31, 41, 55, 0.08);
+}
+
+body.theme-light #about .person_details:before,
+body.theme-light #about .person_details:after {
+  background: linear-gradient(180deg, rgba(14, 165, 164, 0.08) 0%, rgba(14, 165, 164, 0.76) 48%, rgba(56, 189, 248, 0.72) 78%, rgba(56, 189, 248, 0.12) 100%);
+  box-shadow: 0 0 14px rgba(14, 165, 164, 0.2);
 }
 
 #about .person_details.bio-condensed > p {
@@ -6575,6 +6622,12 @@ body.theme-light .project_empty_state {
   #about .about_cloud_col .technology_cloud_wrap {
     padding-right: 0;
     padding-left: 0;
+  }
+
+  #about .person_details:before,
+  #about .person_details:after {
+    top: 0;
+    bottom: 0;
   }
 
   .intel_view_selector {
