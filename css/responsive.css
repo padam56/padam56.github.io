@@ -399,7 +399,8 @@
     }
 
     .quick_cta .cta_resume {
-        width: calc(100% - 104px);
+        width: 100%;
+        flex: 1 0 100%;
         justify-content: center;
     }
 
