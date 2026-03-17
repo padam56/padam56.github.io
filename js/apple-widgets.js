@@ -108,6 +108,9 @@
   function initThreeAccent() {
     if (!canvas3d) return;
     var isLiveOrbital = false;
+    var coarsePointer = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    var smallViewport = window.innerWidth <= 991;
+    var lowMemory = typeof navigator.deviceMemory === "number" && navigator.deviceMemory <= 4;
 
     canvas3d.classList.add("is-css-fallback");
 
@@ -266,7 +269,9 @@
       }
     }
 
-    if (!canUseWebGL()) {
+    // Mobile browsers can aggressively kill tabs with heavy WebGL scenes.
+    // Prefer lightweight fallback on touch/low-memory devices.
+    if (coarsePointer || smallViewport || lowMemory || !canUseWebGL()) {
       initCanvasFallback();
       return;
     }
@@ -285,6 +290,10 @@
         alpha: true,
         powerPreference: "low-power"
       });
+      canvas3d.addEventListener("webglcontextlost", function (evt) {
+        evt.preventDefault();
+        initCanvasFallback();
+      }, { passive: false });
 
       var scene = new THREE.Scene();
       var camera = new THREE.PerspectiveCamera(48, 1, 0.1, 100);
@@ -529,7 +538,7 @@
       function onResize() {
         var w = canvas3d.clientWidth || 260;
         var h = canvas3d.clientHeight || 172;
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
         renderer.setSize(w, h, false);
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
@@ -572,6 +581,29 @@
 
   function initPanelTilt() {
     if (!panel) return;
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    var touchTimer = 0;
+
+    function markTouching() {
+      panel.classList.add("is-touching");
+      if (touchTimer) window.clearTimeout(touchTimer);
+      touchTimer = window.setTimeout(function () {
+        panel.classList.remove("is-touching");
+      }, 700);
+    }
+
+    panel.addEventListener("touchstart", markTouching, { passive: true });
+    panel.addEventListener("pointerdown", function (evt) {
+      if (evt.pointerType === "touch") markTouching();
+    }, { passive: true });
+
+    if (reduced || coarsePointer) {
+      panel.style.setProperty("--aw-tilt-y", "0deg");
+      panel.style.setProperty("--aw-tilt-x", "0deg");
+      return;
+    }
+
     var mx = 0;
     var my = 0;
 
