@@ -109,8 +109,6 @@
   function initThreeAccent() {
     if (!canvas3d) return;
     var isLiveOrbital = false;
-    var coarsePointer = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
-    var smallViewport = window.innerWidth <= 991;
     var lowMemory = typeof navigator.deviceMemory === "number" && navigator.deviceMemory <= 4;
 
     canvas3d.classList.add("is-css-fallback");
@@ -209,8 +207,9 @@
           return;
         }
 
-        var cx = w * 0.72;
-        var cy = h * 0.52;
+        var centerOrbit = t * 0.42;
+        var cx = w * 0.56 + Math.cos(centerOrbit) * (w * 0.11);
+        var cy = h * 0.52 + Math.sin(centerOrbit * 0.9) * (h * 0.07);
         var base = Math.min(w, h) * 0.19;
 
         ctx.clearRect(0, 0, w, h);
@@ -272,14 +271,14 @@
 
     // Mobile browsers can aggressively kill tabs with heavy WebGL scenes.
     // Prefer lightweight fallback on touch/low-memory devices.
-    if (coarsePointer || smallViewport || lowMemory || !canUseWebGL()) {
+    if (lowMemory || !canUseWebGL()) {
       initCanvasFallback();
       return;
     }
 
     function loadThree() {
       if (!dynamicImport) return Promise.reject(new Error("dynamic import unavailable"));
-      return dynamicImport("./vendor/three.module.js").catch(function () {
+      return dynamicImport("./js/vendor/three.module.js").catch(function () {
         return dynamicImport("https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js");
       });
     }
@@ -552,6 +551,8 @@
       function animate() {
         markLiveOrbital();
         var t = (performance.now() - start) * 0.001;
+        root.position.x = Math.cos(t * 0.42) * 0.62;
+        root.position.y = Math.sin(t * 0.36) * 0.22;
         globe.rotation.y += 0.0019;
         globe.rotation.x = Math.sin(t * 0.25) * 0.045;
         cloudShell.rotation.y += 0.0023;

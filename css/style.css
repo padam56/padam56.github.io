@@ -7838,13 +7838,16 @@ body.theme-light .ai_blueprint_area #ai-view-edge .demo_lab_shell {
 
 .apple_weather_3d {
   position: absolute;
-  inset: -12px 10% -12px 10%;
+  inset: -14px 2% -12px 2%;
   width: auto;
   height: auto;
   z-index: 1;
   pointer-events: none;
   opacity: 0.74;
   transform: translate3d(0, 0, 0);
+  transform-origin: 50% 52%;
+  will-change: transform;
+  animation: appleWeatherOrbitalDrift 10.8s ease-in-out infinite alternate;
   filter:
     drop-shadow(0 0 22px rgba(99, 203, 255, 0.22))
     drop-shadow(0 0 6px rgba(125, 211, 252, 0.26));
@@ -7945,11 +7948,8 @@ body.theme-light .apple_panel_timeblock {
   }
 
   .apple_weather_3d {
-    inset: -10px 7% -10px 7%;
+    inset: -10px 4% -10px 4%;
     opacity: 0.64;
-    animation: appleWeatherOrbitalMobile 8.4s ease-in-out infinite alternate;
-    transform-origin: 58% 52%;
-    will-change: transform;
   }
 
   .apple_weather_3d.is-fallback {
@@ -8001,15 +8001,15 @@ body.theme-light .apple_panel_timeblock {
   }
 }
 
-@keyframes appleWeatherOrbitalMobile {
+@keyframes appleWeatherOrbitalDrift {
   0% {
-    transform: translate3d(-6%, -3%, 0) rotate(-6deg) scale(0.96);
+    transform: translate3d(-8%, -4%, 0) rotate(-5deg) scale(0.97);
   }
   50% {
-    transform: translate3d(3%, 4%, 0) rotate(6deg) scale(1.01);
+    transform: translate3d(4%, 5%, 0) rotate(4deg) scale(1.01);
   }
   100% {
-    transform: translate3d(6%, -3%, 0) rotate(12deg) scale(0.97);
+    transform: translate3d(8%, -4%, 0) rotate(7deg) scale(0.98);
   }
 }
 
