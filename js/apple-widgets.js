@@ -90,7 +90,13 @@
   function initThreeAccent() {
     if (!canvas3d || !window.WebGLRenderingContext) return;
 
-    import("./vendor/three.module.js").then(function (THREE) {
+    function loadThree() {
+      return import("./vendor/three.module.js").catch(function () {
+        return import("https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js");
+      });
+    }
+
+    loadThree().then(function (THREE) {
       var renderer = new THREE.WebGLRenderer({
         canvas: canvas3d,
         antialias: true,
