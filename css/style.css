@@ -454,7 +454,7 @@ body, p, h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(34, 211, 238, 0.06) 100%);
   filter: none;
   --frame-zoom: 1;
-  --pic-zoom: 1.03;
+  --pic-zoom: 1;
   transform: scale(var(--frame-zoom));
   cursor: pointer;
 }
@@ -474,8 +474,8 @@ body, p, h1, h2, h3, h4, h5, h6 {
 }
 
 .about_person_area .person_img.is-lower-focus-frame img {
-  --frame-zoom: 1.12;
-  --pic-zoom: 1.12;
+  --frame-zoom: 1;
+  --pic-zoom: 1;
   object-position: 50% 84%;
   transform-origin: center 78%;
 }
@@ -7838,15 +7838,20 @@ body.theme-light .ai_blueprint_area #ai-view-edge .demo_lab_shell {
 
 .apple_weather_3d {
   position: absolute;
-  inset: -10px -14px -12px 43%;
+  inset: -12px 10% -12px 10%;
   width: auto;
   height: auto;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
-  opacity: 0.72;
+  opacity: 0.74;
+  transform: translate3d(0, 0, 0);
   filter:
     drop-shadow(0 0 22px rgba(99, 203, 255, 0.22))
     drop-shadow(0 0 6px rgba(125, 211, 252, 0.26));
+}
+
+.apple_widget_panel.is-touching .apple_weather_3d {
+  opacity: 0.82;
 }
 
 .apple_weather_3d.is-css-fallback {
@@ -7940,8 +7945,8 @@ body.theme-light .apple_panel_timeblock {
   }
 
   .apple_weather_3d {
-    inset: -8px -10px -10px 42%;
-    opacity: 0.58;
+    inset: -10px 7% -10px 7%;
+    opacity: 0.64;
     animation: appleWeatherOrbitalMobile 8.4s ease-in-out infinite alternate;
     transform-origin: 58% 52%;
     will-change: transform;
@@ -7998,13 +8003,13 @@ body.theme-light .apple_panel_timeblock {
 
 @keyframes appleWeatherOrbitalMobile {
   0% {
-    transform: translate3d(-11%, -6%, 0) rotate(-7deg) scale(0.93);
+    transform: translate3d(-6%, -3%, 0) rotate(-6deg) scale(0.96);
   }
   50% {
-    transform: translate3d(5%, 7%, 0) rotate(8deg) scale(1.02);
+    transform: translate3d(3%, 4%, 0) rotate(6deg) scale(1.01);
   }
   100% {
-    transform: translate3d(14%, -5%, 0) rotate(15deg) scale(0.95);
+    transform: translate3d(6%, -3%, 0) rotate(12deg) scale(0.97);
   }
 }
 

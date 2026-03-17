@@ -1175,7 +1175,7 @@
         var shell = document.querySelector(".about_person_area .person_img");
         var badge = document.getElementById("photo-story-badge");
 
-        var firstImpression = "img/member/member-photo-14.jpeg";
+        var firstImpression = "img/member/member-photo-13.jpg";
         var lowerFocusFrame = "img/member/member-photo-12.jpeg";
         var frameTags = {
             "img/member/member-photo-07.jpeg": "With Mom",
@@ -1258,7 +1258,6 @@
         setupAiBlueprintInteractions();
         setupAboutFocusTypewriter();
         setupMemberPhotoSequence();
-        setupProfilePic3DSmoothing();
     }
 
     if (document.readyState === "loading") {

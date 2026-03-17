@@ -2,8 +2,6 @@ name: Update Threat Live Feed
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "23 */6 * * *"
 
 permissions:
   contents: write
@@ -21,10 +19,20 @@ jobs:
           node-version: "20"
 
       - name: Refresh live feed data
-        run: node scripts/update-threat-feed.mjs
+        run: |
+          if [ -f scripts/update-threat-feed.mjs ]; then
+            node scripts/update-threat-feed.mjs || echo "Skipping live feed refresh after script error"
+          else
+            echo "Skipping live feed refresh: scripts/update-threat-feed.mjs not found"
+          fi
 
       - name: Refresh TLD insights data
-        run: python3 scripts/update_tld_insights.py
+        run: |
+          if [ -f scripts/update_tld_insights.py ]; then
+            python3 scripts/update_tld_insights.py || echo "Skipping TLD refresh after script error"
+          else
+            echo "Skipping TLD refresh: scripts/update_tld_insights.py not found"
+          fi
 
       - name: Commit updates
         run: |

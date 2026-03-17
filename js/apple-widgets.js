@@ -23,6 +23,7 @@
     lat: 29.9511,
     lon: -90.0715
   };
+  var BROWSER_LOCATION_LABEL = "Current Location";
 
   var weatherCodeMap = {
     0: "Clear",
@@ -724,6 +725,55 @@
     return fetchJson(url, 10000);
   }
 
+  function getBrowserLocation() {
+    return new Promise(function (resolve, reject) {
+      if (!navigator.geolocation || typeof navigator.geolocation.getCurrentPosition !== "function") {
+        reject(new Error("geolocation unavailable"));
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(function (position) {
+        if (!position || !position.coords) {
+          reject(new Error("geolocation missing coords"));
+          return;
+        }
+
+        resolve({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+          label: BROWSER_LOCATION_LABEL
+        });
+      }, function (err) {
+        reject(err || new Error("geolocation rejected"));
+      }, {
+        enableHighAccuracy: false,
+        timeout: 7000,
+        maximumAge: 300000
+      });
+    });
+  }
+
+  function fetchIpLocation() {
+    return fetchJson("https://ipapi.co/json/", 7000).then(function (payload) {
+      if (!payload || typeof payload.latitude !== "number" || typeof payload.longitude !== "number") {
+        throw new Error("ip location invalid");
+      }
+
+      var city = payload.city ? String(payload.city).trim() : "";
+      var region = payload.region ? String(payload.region).trim() : "";
+      var country = payload.country_name ? String(payload.country_name).trim() : "";
+      var parts = [city, region, country].filter(function (v) {
+        return !!v;
+      });
+
+      return {
+        lat: payload.latitude,
+        lon: payload.longitude,
+        label: parts.length ? parts.join(", ") : "Approximate IP Location"
+      };
+    });
+  }
+
   function loadWeatherForPosition(lat, lon) {
     var cache = getCachedWeather();
 
@@ -757,9 +807,20 @@
     if (weatherTempEl) weatherTempEl.textContent = "--";
     if (weatherCondEl) weatherCondEl.textContent = "Weather";
     if (weatherHiLoEl) weatherHiLoEl.textContent = "H --\u00b0 / L --\u00b0";
-    if (weatherLocEl) weatherLocEl.textContent = DEFAULT_WEATHER_LABEL;
+    if (weatherLocEl) weatherLocEl.textContent = "Requesting location...";
 
-    loadWeatherForPosition(DEFAULT_WEATHER_COORDS.lat, DEFAULT_WEATHER_COORDS.lon);
+    return getBrowserLocation().then(function (geo) {
+      if (weatherLocEl) weatherLocEl.textContent = geo.label;
+      return loadWeatherForPosition(geo.lat, geo.lon);
+    }).catch(function () {
+      return fetchIpLocation().then(function (ipLoc) {
+        if (weatherLocEl) weatherLocEl.textContent = ipLoc.label;
+        return loadWeatherForPosition(ipLoc.lat, ipLoc.lon);
+      }).catch(function () {
+        if (weatherLocEl) weatherLocEl.textContent = DEFAULT_WEATHER_LABEL;
+        return loadWeatherForPosition(DEFAULT_WEATHER_COORDS.lat, DEFAULT_WEATHER_COORDS.lon);
+      });
+    });
   }
 
   updateClock();
