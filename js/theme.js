@@ -32,28 +32,31 @@
     /*----------------------------------------------------*/
     /*  Skill js
     /*----------------------------------------------------*/
-    $(".skill_item_inner").each(function() {
-        $(this).waypoint(function() {
-            var progressBar = $(".progress-bar");
-            progressBar.each(function(indx){
-                var $bar = $(this);
-                $bar.css("width", "0%");
-                setTimeout(function() {
-                    $bar.css("width", $bar.attr("aria-valuenow") + "%").addClass("bar-animated");
-                }, 55 * indx);
-            });
-        }, {
-            triggerOnce: true,
-            offset: '85%'
+    if (typeof $.fn.waypoint === 'function') {
+        $(".skill_item_inner").each(function() {
+            $(this).waypoint(function() {
+                var progressBar = $(".progress-bar");
+                progressBar.each(function(indx){
+                    var $bar = $(this);
+                    $bar.css("width", "0%");
+                    setTimeout(function() {
+                        $bar.css("width", $bar.attr("aria-valuenow") + "%").addClass("bar-animated");
+                    }, 55 * indx);
+                });
+            }, {
+                triggerOnce: true,
+                offset: '85%'
 
+            });
         });
-    });
+    }
     
     /*----------------------------------------------------*/
     /*  portfolio_isotope
     /*----------------------------------------------------*/
     function our_gallery(){
         if ( $('.portfolio_area').length ){
+            if (typeof $.fn.imagesLoaded !== 'function' || typeof $.fn.isotope !== 'function') return;
             // Activate isotope in container
             $(".portfolio_list_inner").imagesLoaded( function() {
                 $(".portfolio_list_inner").isotope({
@@ -86,6 +89,7 @@
     /*----------------------------------------------------*/
     function blog_slider(){
         if ( $('.blog_slider_inner').length ){
+            if (typeof $.fn.owlCarousel !== 'function') return;
             $('.blog_slider_inner').owlCarousel({
                 loop: true,
                 margin: 0,
@@ -106,7 +110,7 @@
     /*  Google map js
     /*----------------------------------------------------*/
     
-    if ( $('#mapBox').length ){
+    if ( $('#mapBox').length && typeof window.GMaps === 'function' ){
         var $lat = $('#mapBox').data('lat');
         var $lon = $('#mapBox').data('lon');
         var $zoom = $('#mapBox').data('zoom');
@@ -197,6 +201,7 @@
     function bodyScrollAnimation() {
         var scrollAnimate = $('body').data('scroll-animation');
         if (scrollAnimate === true) {
+            if (typeof window.WOW !== 'function') return;
             new WOW({
                 mobile: false
             }).init()
@@ -234,7 +239,7 @@
         if (!sections.length) return;
 
         var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (prefersReducedMotion) {
+        if (prefersReducedMotion || typeof window.IntersectionObserver !== "function") {
             sections.forEach(function(section) {
                 section.classList.add("section-visible");
             });

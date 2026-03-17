@@ -96,6 +96,13 @@
   function initThreeAccent() {
     if (!canvas3d) return;
 
+    var dynamicImport = null;
+    try {
+      dynamicImport = new Function("u", "return import(u);");
+    } catch (_e) {
+      dynamicImport = null;
+    }
+
     function initCanvasFallback() {
       var ctx = canvas3d.getContext("2d");
       if (!ctx) return;
@@ -241,8 +248,9 @@
     }
 
     function loadThree() {
-      return import("./vendor/three.module.js").catch(function () {
-        return import("https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js");
+      if (!dynamicImport) return Promise.reject(new Error("dynamic import unavailable"));
+      return dynamicImport("./vendor/three.module.js").catch(function () {
+        return dynamicImport("https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js");
       });
     }
 
