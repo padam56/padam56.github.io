@@ -15,11 +15,6 @@
   var weatherCondEl = document.getElementById("apple-weather-cond");
   var weatherHiLoEl = document.getElementById("apple-weather-hilo");
   var accentController = null;
-  var usePadamFallback = false;
-
-  var PADAM_LAT = 30.2241;
-  var PADAM_LON = -92.0198;
-  var PADAM_TZ = "America/Chicago";
 
   var CACHE_KEY = "appleWidgetsWeatherCacheV1";
 
@@ -64,38 +59,29 @@
 
   function updateClock() {
     var now = new Date();
-    var tz = usePadamFallback ? PADAM_TZ : undefined;
 
     var timeFmt = new Intl.DateTimeFormat(undefined, {
       hour: "numeric",
-      minute: "2-digit",
-      timeZone: tz
+      minute: "2-digit"
     });
     var zoneFmt = new Intl.DateTimeFormat(undefined, {
-      timeZoneName: "short",
-      timeZone: tz
+      timeZoneName: "short"
     });
     var weekdayFmt = new Intl.DateTimeFormat(undefined, {
-      weekday: "long",
-      timeZone: tz
+      weekday: "long"
     });
     var longDateFmt = new Intl.DateTimeFormat(undefined, {
       month: "long",
       day: "numeric",
-      year: "numeric",
-      timeZone: tz
+      year: "numeric"
     });
 
     if (clockTimeEl) clockTimeEl.textContent = timeFmt.format(now);
     if (clockZoneEl) {
-      if (usePadamFallback) {
-        clockZoneEl.textContent = "Padam · Lafayette, LA";
-      } else {
-        var zoneText = zoneFmt.formatToParts(now).find(function (p) {
-          return p.type === "timeZoneName";
-        });
-        clockZoneEl.textContent = zoneText ? zoneText.value : "Local time";
-      }
+      var zoneText = zoneFmt.formatToParts(now).find(function (p) {
+        return p.type === "timeZoneName";
+      });
+      clockZoneEl.textContent = zoneText ? zoneText.value : "Local time";
     }
     if (dateWeekdayEl) dateWeekdayEl.textContent = weekdayFmt.format(now);
     if (dateLongEl) dateLongEl.textContent = longDateFmt.format(now);
@@ -199,63 +185,21 @@
       );
       root.add(dotCloud);
 
-      var rainGeo = new THREE.BufferGeometry();
-      var rain = new Float32Array(90 * 3);
-      for (var r = 0; r < 90; r += 1) {
-        var r3 = r * 3;
-        rain[r3] = rand(-2.2, 2.2);
-        rain[r3 + 1] = rand(-1.4, 1.6);
-        rain[r3 + 2] = rand(-1.4, 1.4);
-      }
-      rainGeo.setAttribute("position", new THREE.Float32BufferAttribute(rain, 3));
-      var rainMat = new THREE.PointsMaterial({
-        color: 0x9bd8ff,
-        size: 0.035,
-        transparent: true,
-        opacity: 0
-      });
-      var rainCloud = new THREE.Points(rainGeo, rainMat);
-      root.add(rainCloud);
-
-      var weatherVisual = {
-        isDay: true,
-        rain: 0,
-        snow: 0,
-        gloom: 0,
-        storm: 0
-      };
-
-      function setAccentMood(weatherCode, tempC, isDay) {
+      function setAccentMood(weatherCode, tempC) {
         var rainy = weatherCode >= 51 && weatherCode <= 82;
         var storm = weatherCode >= 95;
         var snowy = weatherCode >= 71 && weatherCode <= 77;
-        var gloomy = weatherCode === 3 || weatherCode === 45 || weatherCode === 48;
-        weatherVisual.isDay = isDay !== false;
-        weatherVisual.rain = rainy ? 1 : 0;
-        weatherVisual.snow = snowy ? 1 : 0;
-        weatherVisual.gloom = gloomy ? 1 : 0;
-        weatherVisual.storm = storm ? 1 : 0;
-
-        var base = weatherVisual.isDay ? 0xffc46e : 0x8db8ff;
-        if (weatherVisual.gloom) base = 0x95a7be;
+        var base = 0x5fa8ff;
         if (rainy) base = 0x45b4ff;
-        if (snowy) base = 0xdaf4ff;
-        if (storm) base = 0x7a93ff;
+        if (snowy) base = 0xd8f3ff;
+        if (storm) base = 0x7aa2ff;
         if (typeof tempC === "number" && tempC >= 30) base = 0xff9a5f;
-        if (typeof tempC === "number" && tempC <= 2 && !snowy) base = 0xa6e3ff;
+        if (typeof tempC === "number" && tempC <= 2) base = 0xa6e3ff;
 
         globe.material.color.setHex(base);
-        globe.material.opacity = weatherVisual.isDay ? 0.9 : 0.78;
-        innerCore.material.color.setHex(weatherVisual.isDay ? 0xfff2c7 : 0xd2e8ff);
-        innerCore.material.emissive.setHex(storm ? 0x6c8bff : (weatherVisual.isDay ? 0xffb347 : 0x2f6dff));
-        innerCore.material.emissiveIntensity = storm ? 0.5 : (weatherVisual.isDay ? 0.36 : 0.22);
-        ring.material.color.setHex(storm ? 0x9fb8ff : (weatherVisual.isDay ? 0xffdf94 : 0xbfe5ff));
-        ring.material.opacity = weatherVisual.gloom ? 0.34 : 0.58;
-        ringB.material.color.setHex(rainy ? 0x8cd3ff : (weatherVisual.isDay ? 0xffe0aa : 0x9ad9ff));
-        ringB.material.opacity = weatherVisual.gloom ? 0.3 : 0.5;
-        dotsMat.color.setHex(snowy ? 0xffffff : (weatherVisual.isDay ? 0xfff0d3 : 0xf0f9ff));
-        dotsMat.opacity = weatherVisual.gloom ? 0.42 : 0.62;
-        rainMat.opacity = rainy || storm ? 0.58 : 0;
+        innerCore.material.emissive.setHex(storm ? 0x6c8bff : 0x2fd0ff);
+        ring.material.color.setHex(storm ? 0x9fb8ff : 0xbfe5ff);
+        ringB.material.color.setHex(rainy ? 0x8cd3ff : 0x9ad9ff);
       }
 
       accentController = {
@@ -277,31 +221,16 @@
       var start = performance.now();
       function animate() {
         var t = (performance.now() - start) * 0.001;
-        globe.rotation.y += weatherVisual.isDay ? 0.0018 : 0.0028;
-        globe.rotation.x = Math.sin(t * 0.34) * (weatherVisual.gloom ? 0.035 : 0.06);
+        globe.rotation.y += 0.0023;
+        globe.rotation.x = Math.sin(t * 0.34) * 0.06;
         innerCore.rotation.x += 0.005;
         innerCore.rotation.y -= 0.0042;
         innerCore.scale.setScalar(0.96 + Math.sin(t * 1.8) * 0.045);
-        ring.rotation.z += weatherVisual.storm ? 0.0034 : 0.0018;
-        ringB.rotation.y -= weatherVisual.storm ? 0.0032 : 0.0022;
-        dotCloud.rotation.y -= weatherVisual.gloom ? 0.0007 : 0.0013;
+        ring.rotation.z += 0.0018;
+        ringB.rotation.y -= 0.0022;
+        dotCloud.rotation.y -= 0.0013;
         dotCloud.rotation.x = Math.sin(t * 0.4) * 0.08;
         dotCloud.position.y = Math.sin(t * 0.8) * 0.05;
-
-        if (rainMat.opacity > 0.01) {
-          var arr = rainGeo.attributes.position.array;
-          for (var p = 0; p < arr.length; p += 3) {
-            arr[p + 1] -= weatherVisual.storm ? 0.065 : 0.045;
-            arr[p] += Math.sin(t + p) * 0.0015;
-            if (arr[p + 1] < -1.6) {
-              arr[p + 1] = 1.7;
-              arr[p] = rand(-2.2, 2.2);
-              arr[p + 2] = rand(-1.4, 1.4);
-            }
-          }
-          rainGeo.attributes.position.needsUpdate = true;
-        }
-
         renderer.render(scene, camera);
         window.requestAnimationFrame(animate);
       }
@@ -358,12 +287,8 @@
         : ("H " + hi + "\u00b0 / L " + lo + "\u00b0");
     }
 
-    var isDay = payload.current && typeof payload.current.is_day === "number"
-      ? payload.current.is_day === 1
-      : (new Date().getHours() >= 6 && new Date().getHours() < 18);
-
     if (accentController && typeof accentController.setWeather === "function") {
-      accentController.setWeather(code, temp, isDay);
+      accentController.setWeather(code, temp);
     }
   }
 
@@ -429,7 +354,7 @@
     var url = "https://api.open-meteo.com/v1/forecast"
       + "?latitude=" + encodeURIComponent(String(lat))
       + "&longitude=" + encodeURIComponent(String(lon))
-      + "&current=temperature_2m,weather_code,is_day"
+      + "&current=temperature_2m,weather_code"
       + "&daily=temperature_2m_max,temperature_2m_min"
       + "&forecast_days=1"
       + "&timezone=auto";
@@ -472,24 +397,17 @@
     if (weatherHiLoEl) weatherHiLoEl.textContent = "H --\u00b0 / L --\u00b0";
 
     if (!navigator.geolocation) {
-      usePadamFallback = true;
-      updateClock();
-      loadWeatherForPosition(PADAM_LAT, PADAM_LON);
       return;
     }
 
     navigator.geolocation.getCurrentPosition(
       function (pos) {
-        usePadamFallback = false;
-        updateClock();
         var lat = pos.coords.latitude;
         var lon = pos.coords.longitude;
         loadWeatherForPosition(lat, lon);
       },
       function () {
-        usePadamFallback = true;
-        updateClock();
-        loadWeatherForPosition(PADAM_LAT, PADAM_LON);
+        // Silently keep default placeholders if permission is denied.
       },
       {
         enableHighAccuracy: false,
