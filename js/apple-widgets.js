@@ -175,6 +175,37 @@
       ringB.rotation.z = Math.PI * 0.21;
       root.add(ringB);
 
+      var sunCorona = new THREE.Mesh(
+        new THREE.SphereGeometry(0.78, 24, 24),
+        new THREE.MeshBasicMaterial({ color: 0xffd36f, transparent: true, opacity: 0 })
+      );
+      root.add(sunCorona);
+
+      var sunRays = new THREE.Mesh(
+        new THREE.TorusGeometry(1.02, 0.026, 12, 90),
+        new THREE.MeshBasicMaterial({ color: 0xffe8a8, transparent: true, opacity: 0 })
+      );
+      sunRays.rotation.x = Math.PI * 0.12;
+      root.add(sunRays);
+
+      var cloudMaterial = new THREE.MeshBasicMaterial({
+        color: 0xd8e4f2,
+        transparent: true,
+        opacity: 0
+      });
+      var cloudGroup = new THREE.Group();
+      var c1 = new THREE.Mesh(new THREE.SphereGeometry(0.24, 16, 16), cloudMaterial);
+      var c2 = new THREE.Mesh(new THREE.SphereGeometry(0.31, 16, 16), cloudMaterial);
+      var c3 = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 16), cloudMaterial);
+      c1.position.set(-0.26, 0.05, 0);
+      c2.position.set(0.02, 0.12, 0);
+      c3.position.set(0.28, 0.02, 0);
+      cloudGroup.add(c1);
+      cloudGroup.add(c2);
+      cloudGroup.add(c3);
+      cloudGroup.position.set(-0.12, 0.22, 0.82);
+      root.add(cloudGroup);
+
       var dotsGeo = new THREE.BufferGeometry();
       var dots = new Float32Array(220 * 3);
       for (var i = 0; i < 220; i += 1) {
@@ -222,7 +253,9 @@
         rain: 0,
         snow: 0,
         gloom: 0,
-        storm: 0
+        storm: 0,
+        sun: 1,
+        clouds: 0
       };
 
       function setAccentMood(weatherCode, tempC, isDay) {
@@ -235,6 +268,8 @@
         weatherVisual.snow = snowy ? 1 : 0;
         weatherVisual.gloom = gloomy ? 1 : 0;
         weatherVisual.storm = storm ? 1 : 0;
+        weatherVisual.sun = weatherVisual.isDay && !gloomy && !rainy && !storm ? 1 : (weatherVisual.isDay ? 0.35 : 0);
+        weatherVisual.clouds = gloomy || rainy || storm ? 1 : 0;
 
         var base = weatherVisual.isDay ? 0xffc46e : 0x8db8ff;
         if (weatherVisual.gloom) base = 0x95a7be;
@@ -256,6 +291,13 @@
         dotsMat.color.setHex(snowy ? 0xffffff : (weatherVisual.isDay ? 0xfff0d3 : 0xf0f9ff));
         dotsMat.opacity = weatherVisual.gloom ? 0.42 : 0.62;
         rainMat.opacity = rainy || storm ? 0.58 : 0;
+
+        sunCorona.material.opacity = 0.62 * weatherVisual.sun;
+        sunRays.material.opacity = 0.74 * weatherVisual.sun;
+        sunRays.material.color.setHex(storm ? 0xa8b8ff : 0xffe8a8);
+
+        cloudMaterial.opacity = weatherVisual.clouds ? (storm ? 0.78 : 0.58) : 0;
+        cloudMaterial.color.setHex(storm ? 0xaebcd6 : (snowy ? 0xe6f3ff : 0xd8e4f2));
       }
 
       accentController = {
@@ -284,6 +326,10 @@
         innerCore.scale.setScalar(0.96 + Math.sin(t * 1.8) * 0.045);
         ring.rotation.z += weatherVisual.storm ? 0.0034 : 0.0018;
         ringB.rotation.y -= weatherVisual.storm ? 0.0032 : 0.0022;
+        sunCorona.scale.setScalar(1 + Math.sin(t * 1.4) * 0.06);
+        sunRays.rotation.z += weatherVisual.sun > 0.01 ? 0.0028 : 0.001;
+        cloudGroup.position.x = -0.12 + Math.sin(t * 0.42) * 0.16;
+        cloudGroup.position.y = 0.22 + Math.cos(t * 0.58) * 0.04;
         dotCloud.rotation.y -= weatherVisual.gloom ? 0.0007 : 0.0013;
         dotCloud.rotation.x = Math.sin(t * 0.4) * 0.08;
         dotCloud.position.y = Math.sin(t * 0.8) * 0.05;
