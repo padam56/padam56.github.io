@@ -148,6 +148,18 @@
     this.targetNodes = desired;
     while (this.nodes.length < desired) this.nodes.push(this.createNode());
     if (this.nodes.length > desired) this.nodes.length = desired;
+
+    for (var i = 0; i < this.nodes.length; i += 1) {
+      var n = this.nodes[i];
+      n.x = clamp(n.x, 0, this.width);
+      n.y = clamp(n.y, 0, this.height);
+      if (typeof n.homeX !== "number" || typeof n.homeY !== "number") {
+        n.homeX = n.x;
+        n.homeY = n.y;
+      }
+      n.homeX = clamp(n.homeX, 0, this.width);
+      n.homeY = clamp(n.homeY, 0, this.height);
+    }
   };
 
   NetworkBackground.prototype.seedNodes = function() {
@@ -163,11 +175,15 @@
     var patternSeed = Math.random();
     var pattern = patternSeed < 0.56 ? "drift" : (patternSeed < 0.82 ? "orbit" : "weave");
     var phase = rand(0, Math.PI * 2);
+    var px = x != null ? x : rand(0, this.width);
+    var py = y != null ? y : rand(0, this.height);
     return {
-      x: x != null ? x : rand(0, this.width),
-      y: y != null ? y : rand(0, this.height),
+      x: px,
+      y: py,
       vx: rand(-0.52, 0.52),
       vy: rand(-0.52, 0.52),
+      homeX: clamp(px, 0, this.width),
+      homeY: clamp(py, 0, this.height),
       radius: rand(1.4, 2.5),
       alpha: rand(0.72, 0.98),
       hue: rand(188, 214),
@@ -251,6 +267,11 @@
   };
 
   NetworkBackground.prototype.stepNode = function(node) {
+    if (typeof node.homeX !== "number" || typeof node.homeY !== "number") {
+      node.homeX = node.x;
+      node.homeY = node.y;
+    }
+
     var basePhase = this.time * 0.0016 + node.phase;
 
     if (node.pattern === "orbit") {
@@ -278,6 +299,11 @@
     node.vx *= 0.998;
     node.vy *= 0.998;
 
+    // Soft spring to keep long-run distribution even across the full canvas.
+    var spring = this.pointer.active ? 0.00045 : 0.00125;
+    node.vx += (node.homeX - node.x) * spring;
+    node.vy += (node.homeY - node.y) * spring;
+
     if (node.x < 0 || node.x > this.width) node.vx *= -1;
     if (node.y < 0 || node.y > this.height) node.vy *= -1;
 
@@ -293,10 +319,17 @@
       var force = (interactionRadius - d) / interactionRadius;
       var dx = this.pointer.x - node.x;
       var dy = this.pointer.y - node.y;
-      var pull = this.pointer.active ? 0.000014 : 0.000005;
+      var pull = this.pointer.active ? 0.000009 : 0.0000048;
       var swirl = this.pointer.active ? 0.0000065 : 0.0000024;
-      node.vx += dx * pull * force;
-      node.vy += dy * pull * force;
+      if (this.pointer.active && d < 105) {
+        // Prevent core hotspot collapse under cursor.
+        var repel = ((105 - d) / 105) * 0.00006;
+        node.vx -= dx * repel;
+        node.vy -= dy * repel;
+      } else {
+        node.vx += dx * pull * force;
+        node.vy += dy * pull * force;
+      }
       node.vx += -dy * swirl * force;
       node.vy += dx * swirl * force;
       node.alpha = Math.min(1, node.alpha + force * (this.pointer.active ? 0.017 : 0.007));
