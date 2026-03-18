@@ -220,15 +220,15 @@
           <button id="mode-particles" class="mode_btn is-active" type="button">
             Particles
           </button>
-          <button id="mode-pointsdyn" class="mode_btn" type="button">
-            PointsDyn
-          </button>
           <button id="mode-birds" class="mode_btn" type="button">Birds</button>
           <button id="mode-compute" class="mode_btn" type="button">
             Compute
           </button>
           <button id="mode-bloomsel" class="mode_btn" type="button">
             BloomSel
+          </button>
+          <button id="mode-instancing-raycast" class="mode_btn" type="button">
+            InstRaycast
           </button>
           <button id="mode-keyframes" class="mode_btn" type="button">
             Keyframes
@@ -308,10 +308,12 @@
       const demoTitle = document.getElementById("demo-title");
       const demoNote = document.getElementById("demo-note");
       const particlesBtn = document.getElementById("mode-particles");
-      const pointsDynBtn = document.getElementById("mode-pointsdyn");
       const birdsBtn = document.getElementById("mode-birds");
       const computeBtn = document.getElementById("mode-compute");
       const bloomSelBtn = document.getElementById("mode-bloomsel");
+      const instancingRaycastBtn = document.getElementById(
+        "mode-instancing-raycast",
+      );
       const keyframesBtn = document.getElementById("mode-keyframes");
       const minecraftBtn = document.getElementById("mode-minecraft");
       const multiTextBtn = document.getElementById("mode-multitext");
@@ -1174,6 +1176,80 @@
         };
       }
 
+      function buildInstancingRaycastDemo() {
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
+
+        const amount = isMobileLike ? 8 : 10;
+        const count = Math.pow(amount, 3);
+
+        const camera = new THREE.PerspectiveCamera(
+          60,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          100,
+        );
+        camera.position.set(amount, amount, amount);
+        camera.lookAt(0, 0, 0);
+
+        const light = new THREE.HemisphereLight(0xffffff, 0x888888, 3);
+        light.position.set(0, 1, 0);
+        scene.add(light);
+
+        const geometry = new THREE.IcosahedronGeometry(0.5, 3);
+        const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
+        const mesh = new THREE.InstancedMesh(geometry, material, count);
+
+        let i = 0;
+        const offset = (amount - 1) / 2;
+        const matrix = new THREE.Matrix4();
+        const color = new THREE.Color();
+        const white = new THREE.Color(0xffffff);
+
+        for (let x = 0; x < amount; x += 1) {
+          for (let y = 0; y < amount; y += 1) {
+            for (let z = 0; z < amount; z += 1) {
+              matrix.setPosition(offset - x, offset - y, offset - z);
+              mesh.setMatrixAt(i, matrix);
+              mesh.setColorAt(i, white);
+              i += 1;
+            }
+          }
+        }
+
+        scene.add(mesh);
+
+        return {
+          scene,
+          camera,
+          orbit: {
+            target: new THREE.Vector3(0, 0, 0),
+            yaw: 0.78,
+            pitch: 0.6,
+            radius: amount * 1.75,
+            minRadius: amount * 1.2,
+            maxRadius: amount * 3.2,
+          },
+          update(_delta, _elapsed) {
+            raycaster.setFromCamera(ndcPointer, camera);
+            const intersection = raycaster.intersectObject(mesh, false);
+            if (intersection.length === 0) return;
+
+            const instanceId = intersection[0].instanceId;
+            if (!Number.isInteger(instanceId)) return;
+
+            mesh.getColorAt(instanceId, color);
+            if (!color.equals(white)) return;
+
+            mesh.setColorAt(instanceId, color.setHex(Math.random() * 0xffffff));
+            if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+          },
+          dispose() {
+            disposeObject3D(scene);
+          },
+        };
+      }
+
       function buildKeyframesDemo() {
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x050a18);
@@ -1699,31 +1775,18 @@
       function setMode(mode) {
         if (activeDemo && activeDemo.dispose) activeDemo.dispose();
         activeMode = mode;
-        if (mode === "pointsdyn") {
-          activeDemo = buildPointsDynamicDemo();
-          if (demoTitle) demoTitle.textContent = "3D Exp: Dynamic Points";
-          if (demoNote)
-            demoNote.textContent =
-              "Inspired by webgl_points_dynamic: animated wavefield driven by shader point scales and buffer updates.";
-          particlesBtn.classList.remove("is-active");
-          pointsDynBtn.classList.add("is-active");
-          birdsBtn.classList.remove("is-active");
-          computeBtn.classList.remove("is-active");
-          bloomSelBtn.classList.remove("is-active");
-          keyframesBtn.classList.remove("is-active");
-          minecraftBtn.classList.remove("is-active");
-          multiTextBtn.classList.remove("is-active");
-        } else if (mode === "birds") {
+        if (demoNote) demoNote.style.display = "";
+        if (mode === "birds") {
           activeDemo = buildBirdsDemo();
           if (demoTitle) demoTitle.textContent = "3D Exp: GPGPU Birds Inspired";
           if (demoNote)
             demoNote.textContent =
               "Inspired by webgl_gpgpu_birds with flock steering, boid dynamics, and click-to-direct movement.";
           particlesBtn.classList.remove("is-active");
-          pointsDynBtn.classList.remove("is-active");
           birdsBtn.classList.add("is-active");
           computeBtn.classList.remove("is-active");
           bloomSelBtn.classList.remove("is-active");
+          instancingRaycastBtn.classList.remove("is-active");
           keyframesBtn.classList.remove("is-active");
           minecraftBtn.classList.remove("is-active");
           multiTextBtn.classList.remove("is-active");
@@ -1735,10 +1798,10 @@
             demoNote.textContent =
               "Inspired by webgpu_compute_particles with compute-style simulation, ping-pong buffers, and click-to-move attractor.";
           particlesBtn.classList.remove("is-active");
-          pointsDynBtn.classList.remove("is-active");
           birdsBtn.classList.remove("is-active");
           computeBtn.classList.add("is-active");
           bloomSelBtn.classList.remove("is-active");
+          instancingRaycastBtn.classList.remove("is-active");
           keyframesBtn.classList.remove("is-active");
           minecraftBtn.classList.remove("is-active");
           multiTextBtn.classList.remove("is-active");
@@ -1750,10 +1813,26 @@
             demoNote.textContent =
               "Inspired by webgl_postprocessing_unreal_bloom_selective. Click a glowing object to selectively boost its bloom.";
           particlesBtn.classList.remove("is-active");
-          pointsDynBtn.classList.remove("is-active");
           birdsBtn.classList.remove("is-active");
           computeBtn.classList.remove("is-active");
           bloomSelBtn.classList.add("is-active");
+          instancingRaycastBtn.classList.remove("is-active");
+          keyframesBtn.classList.remove("is-active");
+          minecraftBtn.classList.remove("is-active");
+          multiTextBtn.classList.remove("is-active");
+        } else if (mode === "instancingraycast") {
+          activeDemo = buildInstancingRaycastDemo();
+          if (demoTitle)
+            demoTitle.textContent = "3D Exp: Instancing + Raycast";
+          if (demoNote) {
+            demoNote.textContent = "";
+            demoNote.style.display = "none";
+          }
+          particlesBtn.classList.remove("is-active");
+          birdsBtn.classList.remove("is-active");
+          computeBtn.classList.remove("is-active");
+          bloomSelBtn.classList.remove("is-active");
+          instancingRaycastBtn.classList.add("is-active");
           keyframesBtn.classList.remove("is-active");
           minecraftBtn.classList.remove("is-active");
           multiTextBtn.classList.remove("is-active");
@@ -1764,10 +1843,10 @@
             demoNote.textContent =
               "Inspired by Three.js keyframes animation examples, using an AnimationMixer clip-driven scene.";
           particlesBtn.classList.remove("is-active");
-          pointsDynBtn.classList.remove("is-active");
           birdsBtn.classList.remove("is-active");
           computeBtn.classList.remove("is-active");
           bloomSelBtn.classList.remove("is-active");
+          instancingRaycastBtn.classList.remove("is-active");
           keyframesBtn.classList.add("is-active");
           minecraftBtn.classList.remove("is-active");
           multiTextBtn.classList.remove("is-active");
@@ -1778,10 +1857,10 @@
             demoNote.textContent =
               "Voxel terrain and blocky trees inspired by Three.js minecraft-geometry style scenes.";
           particlesBtn.classList.remove("is-active");
-          pointsDynBtn.classList.remove("is-active");
           birdsBtn.classList.remove("is-active");
           computeBtn.classList.remove("is-active");
           bloomSelBtn.classList.remove("is-active");
+          instancingRaycastBtn.classList.remove("is-active");
           keyframesBtn.classList.remove("is-active");
           minecraftBtn.classList.add("is-active");
           multiTextBtn.classList.remove("is-active");
@@ -1793,10 +1872,10 @@
             demoNote.textContent =
               "Inspired by webgl_multiple_elements_text: multiple text elements linked to separate animated wave geometries.";
           particlesBtn.classList.remove("is-active");
-          pointsDynBtn.classList.remove("is-active");
           birdsBtn.classList.remove("is-active");
           computeBtn.classList.remove("is-active");
           bloomSelBtn.classList.remove("is-active");
+          instancingRaycastBtn.classList.remove("is-active");
           keyframesBtn.classList.remove("is-active");
           minecraftBtn.classList.remove("is-active");
           multiTextBtn.classList.add("is-active");
@@ -1808,10 +1887,10 @@
               "Pointer movement steers camera drift. Shader attributes drive particle size and wave motion.";
           keyframesBtn.classList.remove("is-active");
           particlesBtn.classList.add("is-active");
-          pointsDynBtn.classList.remove("is-active");
           birdsBtn.classList.remove("is-active");
           computeBtn.classList.remove("is-active");
           bloomSelBtn.classList.remove("is-active");
+          instancingRaycastBtn.classList.remove("is-active");
           minecraftBtn.classList.remove("is-active");
           multiTextBtn.classList.remove("is-active");
         }
@@ -1858,6 +1937,7 @@
       }
 
       function onCanvasPointerMove(event) {
+        setNdcFromEvent(event);
         if (!orbit.dragging || orbit.pointerId !== event.pointerId) return;
         const dx = event.clientX - orbit.lastX;
         const dy = event.clientY - orbit.lastY;
@@ -1918,10 +1998,12 @@
       }
 
       particlesBtn.addEventListener("click", () => setMode("particles"));
-      pointsDynBtn.addEventListener("click", () => setMode("pointsdyn"));
       birdsBtn.addEventListener("click", () => setMode("birds"));
       computeBtn.addEventListener("click", () => setMode("compute"));
       bloomSelBtn.addEventListener("click", () => setMode("bloomsel"));
+      instancingRaycastBtn.addEventListener("click", () =>
+        setMode("instancingraycast"),
+      );
       keyframesBtn.addEventListener("click", () => setMode("keyframes"));
       minecraftBtn.addEventListener("click", () => setMode("minecraft"));
       multiTextBtn.addEventListener("click", () => setMode("multitext"));
