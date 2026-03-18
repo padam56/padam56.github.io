@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Padam Jung Thapa - Research writings and technical articles." />
+    <meta name="theme-color" content="#071225" />
+    <link rel="icon" href="img/tablogo.jpg" type="image/jpeg" />
+    <title>Writings | Padam Jung Thapa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["\\(", "\\)"]],
+          displayMath: [["$$", "$$"]]
+        },
+        options: {
+          skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"]
+        }
+      };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+      :root {
+        --bg-0: #020617;
+        --bg-1: #071225;
+        --text-main: #e6f3ff;
+        --text-soft: #9eb5cf;
+        --stroke: rgba(148, 163, 184, 0.3);
+        --glow: rgba(125, 211, 252, 0.34);
+      }
+
+      * { box-sizing: border-box; }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        color: var(--text-main);
+        background: radial-gradient(circle at 20% 12%, #10253f 0%, var(--bg-1) 34%, var(--bg-0) 74%);
+      }
+
+      #stage {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+      }
+
+      #stage canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .backdrop_overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        background:
+          radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.18) 0%, transparent 40%),
+          radial-gradient(circle at 82% 4%, rgba(16, 185, 129, 0.12) 0%, transparent 35%);
+        pointer-events: none;
+      }
+
+      .page_shell {
+        position: relative;
+        z-index: 3;
+        width: min(1160px, calc(100vw - 30px));
+        margin: 0 auto;
+        padding: 20px 0 56px;
+      }
+
+      .top_nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+      }
+
+      .home_link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #def6ff;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        padding: 10px 16px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.48);
+        backdrop-filter: blur(5px);
+      }
+
+      .home_link:hover,
+      .home_link:focus-visible {
+        outline: none;
+        border-color: var(--glow);
+        background: rgba(14, 165, 164, 0.24);
+      }
+
+      .hero {
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        border-radius: 24px;
+        background: linear-gradient(
+          160deg,
+          rgba(8, 15, 31, 0.34) 0%,
+          rgba(9, 16, 34, 0.26) 56%,
+          rgba(11, 23, 45, 0.34) 100%
+        );
+        backdrop-filter: blur(6px);
+        box-shadow: 0 22px 46px rgba(0, 0, 0, 0.28);
+        padding: 26px;
+      }
+
+      .eyebrow {
+        margin: 0;
+        color: #8dd8ff;
+        letter-spacing: 0.26em;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 10px 0 8px;
+        font-size: clamp(30px, 4.2vw, 50px);
+        line-height: 1.1;
+        color: #f8fcff;
+      }
+
+      .article_tiles {
+        margin-top: 18px;
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .article_tile {
+        grid-column: span 6;
+        border: 1px solid var(--stroke);
+        border-radius: 18px;
+        background: rgba(9, 16, 34, 0.24);
+        backdrop-filter: blur(5px);
+        padding: 16px;
+        display: grid;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      }
+
+      .article_tile::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        padding: 1px;
+        background: linear-gradient(120deg, var(--tile-a), var(--tile-b), var(--tile-a));
+        background-size: 200% 200%;
+        animation: tileBorderShift 6.2s ease-in-out infinite;
+        opacity: 0.66;
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+
+      @keyframes tileBorderShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      .article_tile--gen {
+        --tile-a: rgba(56, 189, 248, 0.85);
+        --tile-b: rgba(45, 212, 191, 0.8);
+      }
+
+      .article_tile--sys {
+        --tile-a: rgba(251, 191, 36, 0.9);
+        --tile-b: rgba(249, 115, 22, 0.82);
+      }
+
+      .article_tile:hover {
+        transform: translateY(-4px);
+        border-color: rgba(125, 211, 252, 0.52);
+        box-shadow: 0 18px 30px rgba(0, 0, 0, 0.28);
+      }
+
+      .tile_tag {
+        color: #96ddff;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .tile_title {
+        margin: 0;
+        font-size: 22px;
+        line-height: 1.3;
+        color: #eef8ff;
+      }
+
+      .tile_desc {
+        margin: 0;
+        color: var(--text-soft);
+        font-size: 14px;
+        line-height: 1.58;
+      }
+
+      .tile_btn {
+        justify-self: start;
+        border: 1px solid rgba(125, 211, 252, 0.5);
+        background: rgba(8, 23, 42, 0.5);
+        color: #e8f8ff;
+        border-radius: 999px;
+        padding: 9px 14px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .tile_btn:hover,
+      .tile_btn:focus-visible {
+        outline: none;
+        border-color: rgba(45, 212, 191, 0.85);
+        background: rgba(10, 30, 54, 0.74);
+      }
+
+      .modal_backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 25;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(2, 6, 14, 0.62);
+        padding: 16px;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        backdrop-filter: blur(0px);
+        transition: opacity 0.28s ease, backdrop-filter 0.28s ease, visibility 0s linear 0.28s;
+      }
+
+      .modal_backdrop.is-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        backdrop-filter: blur(6px);
+        transition: opacity 0.28s ease, backdrop-filter 0.28s ease, visibility 0s;
+      }
+
+      .article_modal {
+        width: min(980px, 100%);
+        max-height: calc(100vh - 32px);
+        overflow: auto;
+        border: 1px solid rgba(148, 163, 184, 0.36);
+        border-radius: 18px;
+        background: rgba(7, 14, 28, 0.68);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 28px 64px rgba(0, 0, 0, 0.45);
+        opacity: 0;
+        transform: translateY(22px) scale(0.975);
+        transition: transform 0.28s ease, opacity 0.28s ease;
+      }
+
+      .modal_backdrop.is-open .article_modal {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      .modal_head {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 18px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+        background: rgba(8, 18, 35, 0.82);
+      }
+
+      .modal_head h2 {
+        margin: 0;
+        font-size: 22px;
+        line-height: 1.35;
+        color: #f2fbff;
+      }
+
+      .modal_sub {
+        margin-top: 4px;
+        color: #9bd5f0;
+        font-size: 12px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .close_btn {
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        border-radius: 10px;
+        background: rgba(15, 23, 42, 0.72);
+        color: #e8f8ff;
+        padding: 7px 10px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .close_btn:hover,
+      .close_btn:focus-visible {
+        outline: none;
+        border-color: var(--glow);
+      }
+
+      .article_content {
+        padding: 18px;
+      }
+
+      .article_content h3 {
+        margin: 18px 0 8px;
+        color: #e9f7ff;
+        font-size: 21px;
+      }
+
+      .article_content h4 {
+        margin: 14px 0 6px;
+        color: #d9f0ff;
+        font-size: 17px;
+      }
+
+      .article_content p {
+        margin: 10px 0;
+        color: var(--text-soft);
+        font-size: 15px;
+        line-height: 1.78;
+      }
+
+      .article_content ul {
+        margin: 8px 0 12px 20px;
+        color: var(--text-soft);
+      }
+
+      .article_content li {
+        margin: 6px 0;
+        line-height: 1.6;
+      }
+
+      .math_block {
+        margin: 14px 0;
+        border: 1px solid rgba(125, 211, 252, 0.34);
+        border-radius: 12px;
+        background: rgba(2, 12, 27, 0.6);
+        color: #d3eeff;
+        padding: 12px 14px;
+        overflow-x: auto;
+      }
+
+      .math_block mjx-container {
+        margin: 0 !important;
+      }
+
+      .article_note {
+        margin-top: 14px;
+        border-left: 3px solid #38bdf8;
+        padding: 8px 12px;
+        background: rgba(8, 23, 42, 0.58);
+        color: #c2e7ff;
+      }
+
+      @media (max-width: 940px) {
+        .article_tile { grid-column: span 12; }
+        .article_modal { width: 100%; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .article_tile,
+        .article_modal,
+        .modal_backdrop,
+        .tile_btn,
+        .home_link {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage" aria-hidden="true"><canvas id="particle-bg"></canvas></div>
+    <div class="backdrop_overlay" aria-hidden="true"></div>
+
+    <main class="page_shell">
+      <div class="top_nav">
+        <a class="home_link transition-all duration-300" href="index.html">← Back to Portfolio</a>
+      </div>
+
+      <section class="hero shadow-2xl" aria-label="Writings">
+        <p class="eyebrow">Knowledge Hub</p>
+        <h1 class="bg-gradient-to-r from-cyan-100 via-sky-200 to-teal-100 bg-clip-text text-transparent">Writings</h1>
+
+        <div class="article_tiles">
+          <article class="article_tile article_tile--gen ring-1 ring-white/10">
+            <span class="tile_tag">Generative Modeling</span>
+            <h2 class="tile_title">KL Divergence, Wasserstein Distance, FID, and KID in Generative Models</h2>
+            <p class="tile_desc">Mathematical intuition plus practical evaluation guidance for image generation pipelines.</p>
+            <button class="tile_btn transition-all duration-300" data-open-article="article-gen">Open Article</button>
+          </article>
+
+          <article class="article_tile article_tile--sys ring-1 ring-white/10">
+            <span class="tile_tag">System Design Research</span>
+            <h2 class="tile_title">System Design in Research vs Industry: A PhD-Style Systems Perspective</h2>
+            <p class="tile_desc">A research-oriented systems article on objective functions, reproducibility, and deployment transfer.</p>
+            <button class="tile_btn transition-all duration-300" data-open-article="article-sys">Open Article</button>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal_backdrop" id="article-modal" role="dialog" aria-modal="true" aria-label="Article modal">
+      <article class="article_modal">
+        <header class="modal_head">
+          <div>
+            <h2 id="modal-title">Article</h2>
+            <div class="modal_sub" id="modal-sub">Research Writing</div>
+          </div>
+          <button class="close_btn transition-all duration-300" id="modal-close" type="button">Close</button>
+        </header>
+        <section class="article_content" id="modal-content"></section>
+      </article>
+    </div>
+
+    <template id="article-gen">
+      <h3>1. Why Distribution Metrics Matter in Generative Modeling</h3>
+      <p>A generative model is successful only if samples from its learned distribution \(p_g(x)\) are close to the true data distribution \(p_r(x)\). In research terms, this is a two-part problem: estimate divergence in high dimensions, and preserve semantic fidelity under finite-sample evaluation.</p>
+
+      <h3>2. KL Divergence and Reverse KL</h3>
+      <p>KL divergence is asymmetric, which creates different optimization biases in training dynamics.</p>
+      <div class="math_block">$$
+      D_{KL}(p_r\|\|p_g)=\mathbb{E}_{x\sim p_r}[\log p_r(x)-\log p_g(x)],\qquad
+      D_{KL}(p_g\|\|p_r)=\mathbb{E}_{x\sim p_g}[\log p_g(x)-\log p_r(x)]
+      $$</div>
+      <p>Forward KL is mode-covering; reverse KL is mode-seeking. This maps directly to coverage versus sharpness tradeoffs in generated samples.</p>
+
+      <h3>3. Wasserstein Distance (Earth Mover)</h3>
+      <p>When support overlap is weak, Wasserstein distance provides smoother optimization geometry than KL-like divergences.</p>
+      <div class="math_block">$$
+      W_1(p_r,p_g)=\inf_{\gamma\in\Pi(p_r,p_g)}\mathbb{E}_{(x,y)\sim\gamma}[\|x-y\|]
+      $$</div>
+
+      <h3>4. FID and KID</h3>
+      <p>FID compares Gaussian approximations of feature embeddings; KID estimates kernel MMD with a finite-sample unbiased estimator.</p>
+      <div class="math_block">$$
+      \mathrm{FID}=\|\mu_r-\mu_g\|_2^2+\mathrm{Tr}(\Sigma_r+\Sigma_g-2(\Sigma_r\Sigma_g)^{1/2})
+      $$</div>
+      <div class="math_block">$$
+      \mathrm{MMD}^2(P,Q)=\mathbb{E}[k(x,x')]+\mathbb{E}[k(y,y')]-2\mathbb{E}[k(x,y)]
+      $$</div>
+
+      <h3>5. Practical Evaluation Policy</h3>
+      <p>Do not optimize one metric in isolation. Use triangulation and guard against hidden regressions.</p>
+      <div class="math_block">$$
+      \Delta\text{Quality}>0\;\land\;\Delta\text{Coverage}\ge0\;\land\;\Pr(\text{regression})<\alpha
+      $$</div>
+      <div class="article_note">Bottom line: strong generative evaluation is inherently multi-metric and protocol-sensitive.</div>
+    </template>
+
+    <template id="article-sys">
+      <h3>1. Core Thesis</h3>
+      <p>Industry system design and PhD-style systems research solve similar architecture problems, but they are optimized for different outcomes. Industry optimizes for continuity, scale, and operational efficiency. Research optimizes for explainability, novelty, and defensible evidence.</p>
+
+      <h3>2. What Is Similar Between Research and Industry</h3>
+      <ul>
+        <li>Both require decomposition into bounded components with clear interfaces.</li>
+        <li>Both depend on observability, error handling, and failure isolation.</li>
+        <li>Both benefit from incremental rollout and controlled experiments.</li>
+      </ul>
+
+      <h3>3. Where They Diverge in Practice</h3>
+      <h4>Data assumptions</h4>
+      <p>Industry pipelines prioritize changing distributions and imperfect labels. Research pipelines prioritize controlled comparability and ablation interpretability.</p>
+      <h4>Validation protocol</h4>
+      <p>Industry emphasizes SLA and A/B outcomes. Research emphasizes confidence intervals, effect sizes, and baseline rigor.</p>
+      <h4>Time horizon</h4>
+      <p>Industry optimizes for shorter release cycles and sustained uptime. Research accepts slower cycles when needed to isolate causality and produce reproducible claims.</p>
+
+      <h3>4. Reproducibility as a Systems Requirement</h3>
+      <p>In research, reproducibility is first-class: results should remain stable across random seeds, different splits, and hardware variation. In industry, the same discipline improves rollback confidence and deployment trust.</p>
+
+      <h3>5. A PhD-Compatible System Design Loop</h3>
+      <p>Start with a specific hypothesis, build the smallest system that can falsify it, stress the design under realistic perturbations, and then update architecture using a documented failure taxonomy. This gives research depth without losing engineering relevance.</p>
+
+      <h3>6. Practical Bridge: From Lab Artifact to Production Service</h3>
+      <ul>
+        <li>Keep experiment tracking and infra metadata with each result.</li>
+        <li>Document assumptions as explicit contracts, not implicit behavior.</li>
+        <li>Treat negative results as design feedback loops.</li>
+      </ul>
+
+      <div class="article_note">Strong systems work unifies both worlds: production realism and research-grade explanation.</div>
+    </template>
+
+    <script>
+      (function() {
+        "use strict";
+
+        var modal = document.getElementById("article-modal");
+        var modalClose = document.getElementById("modal-close");
+        var modalTitle = document.getElementById("modal-title");
+        var modalSub = document.getElementById("modal-sub");
+        var modalContent = document.getElementById("modal-content");
+        var triggers = document.querySelectorAll("[data-open-article]");
+
+        function openModal(articleId) {
+          var tpl = document.getElementById(articleId);
+          if (!tpl || !modal || !modalContent) return;
+
+          if (articleId === "article-gen") {
+            modalTitle.textContent = "KL Divergence, Wasserstein Distance, FID, and KID in Generative Models";
+            modalSub.textContent = "Generative Modeling";
+          } else {
+            modalTitle.textContent = "System Design in Research vs Industry: A PhD-Style Systems Perspective";
+            modalSub.textContent = "System Design Research";
+          }
+
+          modalContent.innerHTML = "";
+          modalContent.appendChild(tpl.content.cloneNode(true));
+          modal.classList.add("is-open");
+          document.body.style.overflow = "hidden";
+
+          if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+            window.MathJax.typesetPromise([modalContent]).catch(function () {});
+          }
+        }
+
+        function closeModal() {
+          if (!modal) return;
+          modal.classList.remove("is-open");
+          document.body.style.overflow = "";
+        }
+
+        triggers.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            openModal(btn.getAttribute("data-open-article"));
+          });
+        });
+
+        if (modalClose) {
+          modalClose.addEventListener("click", closeModal);
+        }
+
+        if (modal) {
+          modal.addEventListener("click", function (evt) {
+            if (evt.target === modal) closeModal();
+          });
+        }
+
+        window.addEventListener("keydown", function (evt) {
+          if (evt.key === "Escape") closeModal();
+        });
+      })();
+    </script>
+
+    <script id="vertexshader" type="x-shader/x-vertex">
+      attribute float scale;
+      varying float vPulse;
+
+      void main() {
+        vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+        gl_PointSize = max(1.0, scale * (280.0 / -mvPosition.z));
+        gl_Position = projectionMatrix * mvPosition;
+        vPulse = scale;
+      }
+    </script>
+    <script id="fragmentshader" type="x-shader/x-fragment">
+      varying float vPulse;
+
+      void main() {
+        float dist = length(gl_PointCoord - vec2(0.5));
+        if (dist > 0.48) discard;
+        vec3 base = vec3(0.33, 0.83, 1.0);
+        vec3 glow = vec3(0.98, 0.92, 0.52);
+        float t = clamp((vPulse - 4.0) / 28.0, 0.0, 1.0);
+        vec3 color = mix(base, glow, t);
+        float alpha = smoothstep(0.48, 0.02, dist);
+        gl_FragColor = vec4(color, alpha);
+      }
+    </script>
+
+    <script type="module">
+      import * as THREE from "./js/vendor/three.module.js";
+
+      const stage = document.getElementById("stage");
+      const canvas = document.getElementById("particle-bg");
+      if (!stage || !canvas) throw new Error("Missing stage canvas for particles background");
+
+      function supportsWebgl() {
+        try {
+          const c = document.createElement("canvas");
+          return !!(c.getContext("webgl2") || c.getContext("webgl") || c.getContext("experimental-webgl"));
+        } catch (_e) {
+          return false;
+        }
+      }
+
+      if (!supportsWebgl()) throw new Error("WebGL not available");
+
+      const isMobileLike = window.matchMedia("(max-width: 900px), (pointer: coarse)").matches;
+      const perfProfile = isMobileLike
+        ? { antialias: false, pixelRatioMax: 1.0, particleGrid: 44 }
+        : { antialias: true, pixelRatioMax: 1.8, particleGrid: 86 };
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: perfProfile.antialias,
+        powerPreference: "high-performance",
+        alpha: true,
+      });
+
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, perfProfile.pixelRatioMax));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const separation = isMobileLike ? 62 : 48;
+      const amountX = isMobileLike ? perfProfile.particleGrid : 86;
+      const amountY = isMobileLike ? perfProfile.particleGrid : 86;
+
+      const camera = new THREE.PerspectiveCamera(68, window.innerWidth / window.innerHeight, 1, 10000);
+      camera.position.set(0, 310, 900);
+      camera.lookAt(0, 0, 0);
+
+      const pointer = {
+        x: 0,
+        y: 0,
+        halfW: window.innerWidth / 2,
+        halfH: window.innerHeight / 2,
+      };
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x030916);
+      scene.fog = new THREE.Fog(0x030916, 700, 2600);
+
+      const total = amountX * amountY;
+      const positions = new Float32Array(total * 3);
+      const scales = new Float32Array(total);
+
+      let idx = 0;
+      let idScale = 0;
+      for (let ix = 0; ix < amountX; ix += 1) {
+        for (let iy = 0; iy < amountY; iy += 1) {
+          positions[idx] = ix * separation - (amountX * separation) / 2;
+          positions[idx + 1] = 0;
+          positions[idx + 2] = iy * separation - (amountY * separation) / 2;
+          scales[idScale] = 8;
+          idx += 3;
+          idScale += 1;
+        }
+      }
+
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute("scale", new THREE.BufferAttribute(scales, 1));
+
+      const material = new THREE.ShaderMaterial({
+        vertexShader: document.getElementById("vertexshader").textContent,
+        fragmentShader: document.getElementById("fragmentshader").textContent,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      });
+
+      const particles = new THREE.Points(geometry, material);
+      scene.add(particles);
+
+      let waveTick = 0;
+
+      function onPointerMove(event) {
+        const px =
+          event.clientX !== undefined
+            ? event.clientX
+            : event.touches && event.touches[0]
+              ? event.touches[0].clientX
+              : pointer.halfW;
+        const py =
+          event.clientY !== undefined
+            ? event.clientY
+            : event.touches && event.touches[0]
+              ? event.touches[0].clientY
+              : pointer.halfH;
+
+        pointer.x = px - pointer.halfW;
+        pointer.y = py - pointer.halfH;
+      }
+
+      function onResize() {
+        pointer.halfW = window.innerWidth / 2;
+        pointer.halfH = window.innerHeight / 2;
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+      }
+
+      function animate() {
+        window.requestAnimationFrame(animate);
+        const arrPos = geometry.attributes.position.array;
+        const arrScale = geometry.attributes.scale.array;
+        let i = 0;
+        let j = 0;
+
+        for (let x = 0; x < amountX; x += 1) {
+          for (let y = 0; y < amountY; y += 1) {
+            arrPos[i + 1] =
+              Math.sin((x + waveTick) * 0.31) * 34 +
+              Math.sin((y + waveTick) * 0.47) * 34;
+
+            arrScale[j] =
+              (Math.sin((x + waveTick) * 0.31) + 1.0) * 9 +
+              (Math.sin((y + waveTick) * 0.47) + 1.0) * 9 +
+              2.0;
+
+            i += 3;
+            j += 1;
+          }
+        }
+
+        geometry.attributes.position.needsUpdate = true;
+        geometry.attributes.scale.needsUpdate = true;
+        waveTick += 0.105;
+
+        const targetX = pointer.x * 0.38;
+        const targetY = 310 - pointer.y * 0.22;
+        camera.position.x += (targetX - camera.position.x) * 0.032;
+        camera.position.y += (targetY - camera.position.y) * 0.032;
+        camera.lookAt(0, 0, 0);
+
+        renderer.render(scene, camera);
+      }
+
+      window.addEventListener("resize", onResize, { passive: true });
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+      window.addEventListener("touchmove", onPointerMove, { passive: true });
+      animate();
+    </script>
+  </body>
+</html>

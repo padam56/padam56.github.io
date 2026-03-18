@@ -111,6 +111,14 @@
     var isLiveOrbital = false;
     var contextLossTimer = 0;
 
+    function isIOSWebKit() {
+      var ua = (navigator.userAgent || "").toLowerCase();
+      var isiOS = /iphone|ipad|ipod/.test(ua)
+        || (navigator.platform === "MacIntel" && (navigator.maxTouchPoints || 0) > 1);
+      var isWebKit = /webkit/.test(ua) && !/crios|fxios|edgios/.test(ua);
+      return isiOS && isWebKit;
+    }
+
     canvas3d.classList.add("is-css-fallback");
 
     function markLiveOrbital() {
@@ -260,6 +268,9 @@
     }
 
     function canUseWebGL() {
+      // iPhone/iPad Safari is more prone to context loss and tab crashes with
+      // layered real-time effects, so use the lighter 2D fallback there.
+      if (isIOSWebKit()) return false;
       if (!window.WebGLRenderingContext) return false;
       try {
         var gl = canvas3d.getContext("webgl") || canvas3d.getContext("experimental-webgl");
@@ -692,6 +703,39 @@
     return null;
   }
 
+  function hasCachedCoords(cache) {
+    return !!(
+      cache &&
+      typeof cache === "object" &&
+      typeof cache.lat === "number" &&
+      typeof cache.lon === "number"
+    );
+  }
+
+  function persistLocationChoice(location, extras) {
+    if (!location || typeof location.lat !== "number" || typeof location.lon !== "number") {
+      return;
+    }
+
+    var prev = getCachedWeather() || {};
+    var next = {
+      dateKey: prev.dateKey,
+      lat: location.lat,
+      lon: location.lon,
+      label: location.label || prev.label || DEFAULT_WEATHER_LABEL,
+      source: location.source || prev.source || "unknown",
+      payload: extractWeatherPayload(prev)
+    };
+
+    if (extras && typeof extras === "object") {
+      Object.keys(extras).forEach(function (k) {
+        next[k] = extras[k];
+      });
+    }
+
+    setCachedWeather(next);
+  }
+
   function shouldUseCache(cache, lat, lon) {
     var payload = extractWeatherPayload(cache);
     if (!cache || !cache.dateKey || !payload) return false;
@@ -802,6 +846,9 @@
         dateKey: todayKey(new Date()),
         lat: lat,
         lon: lon,
+        label: cache && cache.label ? cache.label : DEFAULT_WEATHER_LABEL,
+        source: cache && cache.source ? cache.source : "unknown",
+        browserGeoDisabled: !!(cache && cache.browserGeoDisabled),
         payload: payload
       });
     }).catch(function () {
@@ -813,18 +860,55 @@
   }
 
   function initWeather() {
+    var cache = getCachedWeather();
+
     if (weatherTempEl) weatherTempEl.textContent = "--";
     if (weatherCondEl) weatherCondEl.textContent = "Weather";
     if (weatherHiLoEl) weatherHiLoEl.textContent = "H --\u00b0 / L --\u00b0";
+
+    // Use persisted location first so users are not prompted repeatedly.
+    if (hasCachedCoords(cache)) {
+      if (weatherLocEl) weatherLocEl.textContent = cache.label || DEFAULT_WEATHER_LABEL;
+      return loadWeatherForPosition(cache.lat, cache.lon);
+    }
+
     if (weatherLocEl) weatherLocEl.textContent = "Requesting location...";
 
-    return getBrowserLocation().then(function (geo) {
-      if (weatherLocEl) weatherLocEl.textContent = geo.label;
-      return loadWeatherForPosition(geo.lat, geo.lon);
+    // If browser geolocation was previously rejected, skip re-prompting and use IP/default.
+    var browserGeoDisabled = !!(cache && cache.browserGeoDisabled);
+    var browserGeoPromise = browserGeoDisabled
+      ? Promise.reject(new Error("browser geolocation disabled"))
+      : getBrowserLocation();
+
+    return browserGeoPromise.then(function (geo) {
+      var browserLoc = {
+        lat: geo.lat,
+        lon: geo.lon,
+        label: geo.label,
+        source: "browser"
+      };
+      persistLocationChoice(browserLoc, { browserGeoDisabled: false });
+      if (weatherLocEl) weatherLocEl.textContent = browserLoc.label;
+      return loadWeatherForPosition(browserLoc.lat, browserLoc.lon);
     }).catch(function () {
+      // Persist this so we do not keep triggering the browser permission prompt.
+      persistLocationChoice({
+        lat: DEFAULT_WEATHER_COORDS.lat,
+        lon: DEFAULT_WEATHER_COORDS.lon,
+        label: DEFAULT_WEATHER_LABEL,
+        source: "default"
+      }, { browserGeoDisabled: true });
+
       return fetchIpLocation().then(function (ipLoc) {
-        if (weatherLocEl) weatherLocEl.textContent = ipLoc.label;
-        return loadWeatherForPosition(ipLoc.lat, ipLoc.lon);
+        var resolvedIp = {
+          lat: ipLoc.lat,
+          lon: ipLoc.lon,
+          label: ipLoc.label,
+          source: "ip"
+        };
+        persistLocationChoice(resolvedIp, { browserGeoDisabled: true });
+        if (weatherLocEl) weatherLocEl.textContent = resolvedIp.label;
+        return loadWeatherForPosition(resolvedIp.lat, resolvedIp.lon);
       }).catch(function () {
         if (weatherLocEl) weatherLocEl.textContent = DEFAULT_WEATHER_LABEL;
         return loadWeatherForPosition(DEFAULT_WEATHER_COORDS.lat, DEFAULT_WEATHER_COORDS.lon);

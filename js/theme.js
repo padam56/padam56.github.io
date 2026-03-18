@@ -238,7 +238,8 @@
         var sections = document.querySelectorAll("#about, #skill, #journey, #intel-map, #service, #contact");
         if (!sections.length) return;
 
-        var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+            (window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
         if (prefersReducedMotion || typeof window.IntersectionObserver !== "function") {
             sections.forEach(function(section) {
                 section.classList.add("section-visible");
@@ -658,7 +659,8 @@
         var stageTitle = document.getElementById("ml-stage-title");
         var stageDetail = document.getElementById("ml-stage-detail");
         var stageArtifact = document.getElementById("ml-stage-artifact");
-        var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+            (window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
 
         function activateStage(card) {
             if (!card || !stageTitle || !stageDetail || !stageArtifact) return;

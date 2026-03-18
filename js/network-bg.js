@@ -70,7 +70,13 @@
     var saveData = !!(navigator.connection && navigator.connection.saveData);
     var lowThreads = (navigator.hardwareConcurrency || 8) <= 4;
     var lowMemory = (navigator.deviceMemory || 8) <= 4;
-    this.lowPowerMode = reducedMotion || saveData || lowThreads || lowMemory;
+    var ua = (navigator.userAgent || "").toLowerCase();
+    var isiOS = /iphone|ipad|ipod/.test(ua)
+      || (navigator.platform === "MacIntel" && (navigator.maxTouchPoints || 0) > 1);
+    var isWebKit = /webkit/.test(ua) && !/crios|fxios|edgios/.test(ua);
+    var safariLike = isiOS && isWebKit;
+
+    this.lowPowerMode = reducedMotion || saveData || lowThreads || lowMemory || safariLike;
 
     this.dpr = Math.min(window.devicePixelRatio || 1, this.isCompact ? 1.05 : 1.25);
     if (this.lowPowerMode) {
