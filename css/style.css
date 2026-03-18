@@ -28,6 +28,7 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   width: 100%;
+  overscroll-behavior-y: none;
 }
 
 @media (max-width: 767px) {
@@ -46,6 +47,7 @@ body {
   text-rendering: optimizeLegibility;
   width: 100%;
   overflow-x: hidden;
+  overscroll-behavior-y: none;
 }
 
 body.light_bg {
@@ -7855,6 +7857,16 @@ body.theme-light .ai_blueprint_area #ai-view-edge .demo_lab_shell {
 
 .apple_widget_panel.is-touching .apple_weather_3d {
   opacity: 0.82;
+}
+
+@media (pointer: coarse) {
+  .apple_widget_panel {
+    transform: none !important;
+  }
+
+  .apple_widget_panel.is-touching .apple_weather_3d {
+    opacity: 0.74;
+  }
 }
 
 .apple_weather_3d.is-css-fallback {

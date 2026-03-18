@@ -109,7 +109,7 @@
   function initThreeAccent() {
     if (!canvas3d) return;
     var isLiveOrbital = false;
-    var lowMemory = typeof navigator.deviceMemory === "number" && navigator.deviceMemory <= 4;
+    var contextLossTimer = 0;
 
     canvas3d.classList.add("is-css-fallback");
 
@@ -269,9 +269,7 @@
       }
     }
 
-    // Mobile browsers can aggressively kill tabs with heavy WebGL scenes.
-    // Prefer lightweight fallback on touch/low-memory devices.
-    if (lowMemory || !canUseWebGL()) {
+    if (!canUseWebGL()) {
       initCanvasFallback();
       return;
     }
@@ -292,8 +290,17 @@
       });
       canvas3d.addEventListener("webglcontextlost", function (evt) {
         evt.preventDefault();
-        initCanvasFallback();
+        if (contextLossTimer) window.clearTimeout(contextLossTimer);
+        contextLossTimer = window.setTimeout(function () {
+          initCanvasFallback();
+        }, 2200);
       }, { passive: false });
+      canvas3d.addEventListener("webglcontextrestored", function () {
+        if (contextLossTimer) {
+          window.clearTimeout(contextLossTimer);
+          contextLossTimer = 0;
+        }
+      }, { passive: true });
 
       var scene = new THREE.Scene();
       var camera = new THREE.PerspectiveCamera(48, 1, 0.1, 100);
@@ -585,6 +592,13 @@
     if (!panel) return;
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+
+    if (reduced || coarsePointer) {
+      panel.style.setProperty("--aw-tilt-y", "0deg");
+      panel.style.setProperty("--aw-tilt-x", "0deg");
+      return;
+    }
+
     var touchTimer = 0;
 
     function markTouching() {
@@ -599,12 +613,6 @@
     panel.addEventListener("pointerdown", function (evt) {
       if (evt.pointerType === "touch") markTouching();
     }, { passive: true });
-
-    if (reduced || coarsePointer) {
-      panel.style.setProperty("--aw-tilt-y", "0deg");
-      panel.style.setProperty("--aw-tilt-x", "0deg");
-      return;
-    }
 
     var mx = 0;
     var my = 0;
