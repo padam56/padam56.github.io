@@ -535,7 +535,10 @@
   function initNetworkBackground() {
     var canvas = document.getElementById("network-canvas");
     if (!canvas) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var coarse = window.matchMedia("(pointer: coarse)").matches;
+    var saveData = !!(navigator.connection && navigator.connection.saveData);
+    if (reduced || coarse || saveData) {
       canvas.style.display = "none";
       return;
     }

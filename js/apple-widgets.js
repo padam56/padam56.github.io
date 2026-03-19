@@ -17,6 +17,34 @@
   var weatherLocEl = document.getElementById("apple-weather-loc");
   var accentController = null;
 
+  var timeFmt;
+  var zoneFmt;
+  var weekdayFmt;
+  var longDateFmt;
+
+  try {
+    timeFmt = new Intl.DateTimeFormat(undefined, {
+      hour: "numeric",
+      minute: "2-digit"
+    });
+    zoneFmt = new Intl.DateTimeFormat(undefined, {
+      timeZoneName: "short"
+    });
+    weekdayFmt = new Intl.DateTimeFormat(undefined, {
+      weekday: "long"
+    });
+    longDateFmt = new Intl.DateTimeFormat(undefined, {
+      month: "long",
+      day: "numeric",
+      year: "numeric"
+    });
+  } catch (_fmtErr) {
+    timeFmt = null;
+    zoneFmt = null;
+    weekdayFmt = null;
+    longDateFmt = null;
+  }
+
   var CACHE_KEY = "appleWidgetsWeatherCacheV1";
   var DEFAULT_WEATHER_LABEL = "New Orleans, Louisiana, United States";
   var DEFAULT_WEATHER_COORDS = {
@@ -68,26 +96,10 @@
     try {
       var now = new Date();
 
-      var timeFmt = new Intl.DateTimeFormat(undefined, {
-        hour: "numeric",
-        minute: "2-digit"
-      });
-      var zoneFmt = new Intl.DateTimeFormat(undefined, {
-        timeZoneName: "short"
-      });
-      var weekdayFmt = new Intl.DateTimeFormat(undefined, {
-        weekday: "long"
-      });
-      var longDateFmt = new Intl.DateTimeFormat(undefined, {
-        month: "long",
-        day: "numeric",
-        year: "numeric"
-      });
-
-      if (clockTimeEl) clockTimeEl.textContent = timeFmt.format(now);
+      if (clockTimeEl) clockTimeEl.textContent = timeFmt ? timeFmt.format(now) : now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
       if (clockZoneEl) {
         var zoneText = "";
-        if (typeof zoneFmt.formatToParts === "function") {
+        if (zoneFmt && typeof zoneFmt.formatToParts === "function") {
           var zonePart = zoneFmt.formatToParts(now).find(function (p) {
             return p.type === "timeZoneName";
           });
@@ -95,8 +107,8 @@
         }
         clockZoneEl.textContent = zoneText || "Local time";
       }
-      if (dateWeekdayEl) dateWeekdayEl.textContent = weekdayFmt.format(now);
-      if (dateLongEl) dateLongEl.textContent = longDateFmt.format(now);
+      if (dateWeekdayEl) dateWeekdayEl.textContent = weekdayFmt ? weekdayFmt.format(now) : now.toLocaleDateString([], { weekday: "long" });
+      if (dateLongEl) dateLongEl.textContent = longDateFmt ? longDateFmt.format(now) : now.toLocaleDateString([], { month: "long", day: "numeric", year: "numeric" });
     } catch (_e) {
       var fallbackNow = new Date();
       if (clockTimeEl) clockTimeEl.textContent = fallbackNow.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -919,7 +931,7 @@
   updateClock();
   window.setInterval(function () {
     updateClock();
-  }, 1000);
+  }, 15000);
 
   try {
     initWeather();

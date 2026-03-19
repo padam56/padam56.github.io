@@ -580,13 +580,18 @@
   camera.position.set(0, 0, 430);
 
   var renderer;
+  var coarsePointer = window.matchMedia("(pointer: coarse)").matches;
   try {
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+    renderer = new THREE.WebGLRenderer({
+      antialias: !coarsePointer,
+      alpha: true,
+      powerPreference: coarsePointer ? "low-power" : "high-performance"
+    });
   } catch (err) {
     renderSvgFallback();
     return;
   }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, coarsePointer ? 1.25 : 2));
   container.innerHTML = "";
   container.appendChild(renderer.domElement);
 
@@ -622,8 +627,10 @@
   var damping = mediaCompact ? 0.83 : 0.88;
   var spring = mediaCompact ? 0.055 : 0.065;
 
-  var rotVelX = 0.0062;
-  var rotVelY = -0.0188;
+  var baseRotX = coarsePointer ? 0.0014 : 0.0062;
+  var baseRotY = coarsePointer ? -0.0066 : -0.0188;
+  var rotVelX = baseRotX;
+  var rotVelY = baseRotY;
   var targetRotX = rotVelX;
   var targetRotY = rotVelY;
   var isDragging = false;
@@ -833,16 +840,20 @@
       lastDragX = evt.clientX;
       lastDragY = evt.clientY;
 
-      rotVelY = dx * 0.0017;
-      rotVelX = dy * 0.0012;
+      var dragScaleY = coarsePointer ? 0.00085 : 0.0017;
+      var dragScaleX = coarsePointer ? 0.00065 : 0.0012;
+      rotVelY = dx * dragScaleY;
+      rotVelX = dy * dragScaleX;
       cloudGroup.rotation.y += rotVelY;
       cloudGroup.rotation.x += rotVelX;
       cloudGroup.rotation.x = Math.max(-1.2, Math.min(1.2, cloudGroup.rotation.x));
       targetRotY = rotVelY;
       targetRotX = rotVelX;
     } else {
-      targetRotY = pointer.x * 0.019;
-      targetRotX = pointer.y * 0.015;
+      var pointerScaleY = coarsePointer ? 0.0068 : 0.019;
+      var pointerScaleX = coarsePointer ? 0.0054 : 0.015;
+      targetRotY = pointer.x * pointerScaleY;
+      targetRotX = pointer.y * pointerScaleX;
     }
   }
 
@@ -854,8 +865,8 @@
     hideHoverLabel();
     isDragging = false;
     renderer.domElement.style.cursor = "grab";
-    targetRotX = 0.0062;
-    targetRotY = -0.0188;
+    targetRotX = baseRotX;
+    targetRotY = baseRotY;
   }
 
   function pickNodeFromEvent(evt) {
@@ -871,26 +882,48 @@
   }
 
   function bindInteractions() {
+    renderer.domElement.style.touchAction = "none";
     renderer.domElement.addEventListener("mouseenter", function() {
       pointerInside = true;
     }, { passive: true });
 
     renderer.domElement.style.cursor = "grab";
 
-    renderer.domElement.addEventListener("mousedown", function(evt) {
+    renderer.domElement.addEventListener("pointerdown", function(evt) {
       isDragging = true;
       lastDragX = evt.clientX;
       lastDragY = evt.clientY;
+      if (renderer.domElement.setPointerCapture && typeof evt.pointerId === "number") {
+        renderer.domElement.setPointerCapture(evt.pointerId);
+      }
       renderer.domElement.style.cursor = "grabbing";
+      if (evt.pointerType === "touch") evt.preventDefault();
     });
 
-    window.addEventListener("mouseup", function() {
+    window.addEventListener("pointerup", function(evt) {
+      isDragging = false;
+      if (renderer.domElement.releasePointerCapture && typeof evt.pointerId === "number") {
+        try {
+          renderer.domElement.releasePointerCapture(evt.pointerId);
+        } catch (_e) {
+          // Ignore capture release errors.
+        }
+      }
+      if (coarsePointer) {
+        // On touch devices, settle to near-still state after interaction.
+        targetRotX = 0;
+        targetRotY = 0;
+      }
+      renderer.domElement.style.cursor = "grab";
+    }, { passive: true });
+
+    window.addEventListener("pointercancel", function() {
       isDragging = false;
       renderer.domElement.style.cursor = "grab";
     }, { passive: true });
 
-    renderer.domElement.addEventListener("mousemove", onPointerMove, { passive: true });
-    renderer.domElement.addEventListener("mouseleave", onPointerLeave, { passive: true });
+    renderer.domElement.addEventListener("pointermove", onPointerMove, { passive: true });
+    renderer.domElement.addEventListener("pointerleave", onPointerLeave, { passive: true });
 
     renderer.domElement.addEventListener("click", function(evt) {
       var clickedNode = pickNodeFromEvent(evt) || hoveredNode;

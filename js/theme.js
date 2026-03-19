@@ -1207,7 +1207,7 @@
 
         var idx = frames.indexOf(firstImpression);
         if (idx < 0) idx = 0;
-        var stepMs = 2100;
+        var stepMs = 5000;
 
         function applyFrame(src) {
             if (!src) return;
@@ -1233,7 +1233,7 @@
             }
         }
 
-        // First impression: always hold this frame for 2 seconds.
+        // First impression: hold for the same duration as the rest of frames.
         applyFrame(firstImpression);
 
         window.setTimeout(function() {
@@ -1245,7 +1245,7 @@
                 idx = (idx + 1) % frames.length;
                 applyFrame(frames[idx]);
             }, stepMs);
-        }, 2000);
+        }, stepMs);
     }
 
     function initModernEnhancements() {

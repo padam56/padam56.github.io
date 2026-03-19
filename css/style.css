@@ -28,6 +28,8 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
   overscroll-behavior-y: none;
 }
 
@@ -46,6 +48,8 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
   overflow-x: hidden;
   overscroll-behavior-y: none;
 }
@@ -58,6 +62,84 @@ body.light_bg {
 body.dark_bg {
   background: url(../img/Pattern_Drak.png) repeat scroll center center;
   background-size: contain;
+}
+
+.microspace_nav_presence {
+  margin-left: 8px;
+  padding-top: 11px;
+}
+
+.microspace_nav_presence.is-hidden {
+  display: none !important;
+}
+
+.microspace_nav_stack {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  direction: rtl;
+}
+
+.microspace_nav_avatar {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  margin-left: -7px;
+  border: 2px solid rgba(9, 20, 38, 0.96);
+  background: color-mix(in srgb, var(--avatar-accent, #22d3ee) 25%, #0c1f3b 75%);
+  display: inline-grid;
+  place-items: center;
+  font-size: 13px;
+  box-shadow:
+    0 0 0 1px rgba(132, 209, 255, 0.34),
+    0 8px 14px rgba(2, 9, 20, 0.42);
+}
+
+.microspace_nav_avatar::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--avatar-accent, #22d3ee) 72%, #ffffff 14%);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--avatar-accent, #22d3ee) 58%, transparent 42%);
+  opacity: 0.55;
+  animation: microspacePulse 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.microspace_nav_overflow {
+  direction: ltr;
+  font-size: 10px;
+  font-weight: 700;
+  color: #d7efff;
+}
+
+@keyframes microspacePulse {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.22;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.72;
+  }
+  100% {
+    transform: scale(1.14);
+    opacity: 0.08;
+  }
+}
+
+@media (max-width: 991px) {
+  .microspace_nav_presence {
+    float: none !important;
+    padding: 8px 14px 10px;
+    margin-left: 0;
+  }
+
+  .microspace_nav_avatar {
+    margin-left: -4px;
+  }
 }
 
 body .content_inner_bg {
@@ -2630,9 +2712,14 @@ body.theme-light #about .person_details:after {
   border-radius: 50%;
   border: none;
   box-shadow: none;
-  overflow: visible;
+  overflow: hidden;
   background: transparent;
   cursor: grab;
+  touch-action: none;
+}
+
+#tagcloud canvas {
+  touch-action: none;
 }
 
 #tagcloud:before,
@@ -6977,6 +7064,12 @@ body.theme-light .project_empty_state {
 
   #tagcloud {
     width: 100%;
+    max-width: 100vw;
+  }
+
+  .technology_cloud_wrap,
+  .tech-div {
+    overflow-x: hidden;
   }
 
   #about .technology_cloud_wrap {
