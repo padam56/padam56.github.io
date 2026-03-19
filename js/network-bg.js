@@ -57,7 +57,6 @@
     this.animate = this.animate.bind(this);
     this.onPointerMove = this.onPointerMove.bind(this);
     this.onPointerLeave = this.onPointerLeave.bind(this);
-    this.onWindowClick = this.onWindowClick.bind(this);
     this.onVisibilityChange = this.onVisibilityChange.bind(this);
     this.onThemeChange = this.onThemeChange.bind(this);
 
@@ -101,7 +100,6 @@
     window.addEventListener("resize", this.resize, { passive: true });
     window.addEventListener("mousemove", this.onPointerMove, { passive: true });
     window.addEventListener("mouseleave", this.onPointerLeave, { passive: true });
-    window.addEventListener("click", this.onWindowClick, { passive: true });
     window.addEventListener("themechange", this.onThemeChange, { passive: true });
     document.addEventListener("visibilitychange", this.onVisibilityChange);
     requestAnimationFrame(this.animate);
@@ -245,27 +243,6 @@
      var smooth = this.pointer.active ? 0.95 : 0.04;
     this.pointer.x += (this.pointer.tx - this.pointer.x) * smooth;
     this.pointer.y += (this.pointer.ty - this.pointer.y) * smooth;
-  };
-
-  NetworkBackground.prototype.onWindowClick = function(evt) {
-    var interactive = evt.target.closest("a, button, input, textarea, select, label");
-    if (interactive) return;
-
-    var burstCount = this.isCompact ? 5 : 8;
-    for (var i = 0; i < burstCount; i += 1) {
-      var angle = (Math.PI * 2 * i) / burstCount;
-      var d = rand(7, 34);
-      var node = this.createNode(evt.clientX + Math.cos(angle) * d, evt.clientY + Math.sin(angle) * d, true);
-      node.vx = Math.cos(angle) * rand(0.5, 1.35);
-      node.vy = Math.sin(angle) * rand(0.5, 1.35);
-      node.alpha = 0.95;
-      node.radius = rand(1.6, 3.2);
-      this.nodes.push(node);
-    }
-
-    if (this.nodes.length > this.maxNodes + 54) {
-      this.nodes.splice(0, this.nodes.length - (this.maxNodes + 54));
-    }
   };
 
   NetworkBackground.prototype.onVisibilityChange = function() {
