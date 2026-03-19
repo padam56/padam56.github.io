@@ -636,6 +636,7 @@
   var isDragging = false;
   var lastDragX = 0;
   var lastDragY = 0;
+  var interactionPauseUntil = 0;
 
   function setSize() {
     var size = Math.min(container.clientWidth || 540, 760);
@@ -891,8 +892,16 @@
 
     renderer.domElement.addEventListener("pointerdown", function(evt) {
       isDragging = true;
+      interactionPauseUntil = performance.now() + 2200;
       lastDragX = evt.clientX;
       lastDragY = evt.clientY;
+      if (coarsePointer) {
+        // On mobile, immediately suppress auto orbit while user starts interacting.
+        targetRotX = 0;
+        targetRotY = 0;
+        rotVelX *= 0.25;
+        rotVelY *= 0.25;
+      }
       if (renderer.domElement.setPointerCapture && typeof evt.pointerId === "number") {
         renderer.domElement.setPointerCapture(evt.pointerId);
       }
@@ -910,15 +919,25 @@
         }
       }
       if (coarsePointer) {
-        // On touch devices, settle to near-still state after interaction.
+        // On touch devices, settle to still state after interaction.
         targetRotX = 0;
         targetRotY = 0;
+        rotVelX = 0;
+        rotVelY = 0;
+        interactionPauseUntil = performance.now() + 2800;
       }
       renderer.domElement.style.cursor = "grab";
     }, { passive: true });
 
     window.addEventListener("pointercancel", function() {
       isDragging = false;
+      if (coarsePointer) {
+        targetRotX = 0;
+        targetRotY = 0;
+        rotVelX = 0;
+        rotVelY = 0;
+        interactionPauseUntil = performance.now() + 2000;
+      }
       renderer.domElement.style.cursor = "grab";
     }, { passive: true });
 
@@ -949,6 +968,7 @@
 
   function animate() {
     var dt = Math.min(clock.getDelta(), 0.032);
+    var shouldPauseForTouch = coarsePointer && (isDragging || performance.now() < interactionPauseUntil);
 
     raycaster.setFromCamera(pointer, camera);
     var intersects = raycaster.intersectObjects(nodes.filter(function(n) { return !n.removed; }).map(function(n) { return n.sprite; }), false);
@@ -962,12 +982,15 @@
       hideHoverLabel();
     }
 
-    if (!pausedByHover) {
+    if (!pausedByHover && !shouldPauseForTouch) {
       rotVelX += (targetRotX - rotVelX) * 0.16;
       rotVelY += (targetRotY - rotVelY) * 0.16;
       cloudGroup.rotation.x += rotVelX;
       cloudGroup.rotation.y += rotVelY;
       cloudGroup.rotation.x = Math.max(-1.2, Math.min(1.2, cloudGroup.rotation.x));
+    } else if (shouldPauseForTouch) {
+      rotVelX *= 0.75;
+      rotVelY *= 0.75;
     }
 
     nodes.forEach(function(node) {

@@ -7042,6 +7042,14 @@ body.theme-light .project_empty_state {
 }
 
 @media (max-width: 767px) {
+  html,
+  body,
+  .main_container,
+  .content_inner_bg {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
   .intel_data_note {
     max-width: 100%;
   }

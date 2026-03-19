@@ -217,7 +217,7 @@
                 window.setTimeout(function() {
                     $preloader.hide();
                 }, 760);
-                $('body').css({'overflow':'visible'})
+                $('body').css({'overflow-y':'visible','overflow-x':'hidden'})
                 setActiveNav();
 
                 var now = new Date().getFullYear();
