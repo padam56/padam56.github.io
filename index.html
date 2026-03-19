@@ -29,6 +29,14 @@
     <meta name="theme-color" content="#0f172a" />
     <link rel="canonical" href="https://www.padamjungthapa.com.np/" />
     <link rel="icon" href="img/tablogo.jpg" type="image/jpeg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="image"
+      href="img/member/member-photo-14.jpeg"
+      fetchpriority="high"
+    />
     <title>Padam Jung Thapa | Internet Security and ML Portfolio</title>
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="website" />
@@ -202,7 +210,9 @@
                 <img
                   src="img/member/member-photo-14.jpeg"
                   alt="Padam Jung Thapa portrait"
-                  loading="lazy"
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="async"
                 />
                 <span
                   class="photo_story_badge"
