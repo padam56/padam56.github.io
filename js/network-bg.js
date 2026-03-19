@@ -99,6 +99,9 @@
     this.pointerLastMove = performance.now();
     window.addEventListener("resize", this.resize, { passive: true });
     window.addEventListener("mousemove", this.onPointerMove, { passive: true });
+    window.addEventListener("touchstart", this.onPointerMove, { passive: true });
+    window.addEventListener("touchmove", this.onPointerMove, { passive: true });
+    window.addEventListener("touchend", this.onPointerLeave, { passive: true });
     window.addEventListener("mouseleave", this.onPointerLeave, { passive: true });
     window.addEventListener("themechange", this.onThemeChange, { passive: true });
     document.addEventListener("visibilitychange", this.onVisibilityChange);
@@ -201,8 +204,13 @@
   };
 
   NetworkBackground.prototype.onPointerMove = function(evt) {
-    this.pointer.tx = evt.clientX;
-    this.pointer.ty = evt.clientY;
+    var point = evt;
+    if (evt && evt.touches && evt.touches[0]) {
+      point = evt.touches[0];
+    }
+    if (!point) return;
+    this.pointer.tx = point.clientX;
+    this.pointer.ty = point.clientY;
     this.pointer.active = true;
     this.pointerLastMove = performance.now();
   };
@@ -513,9 +521,7 @@
     var canvas = document.getElementById("network-canvas");
     if (!canvas) return;
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var coarse = window.matchMedia("(pointer: coarse)").matches;
-    var saveData = !!(navigator.connection && navigator.connection.saveData);
-    if (reduced || coarse || saveData) {
+    if (reduced) {
       canvas.style.display = "none";
       return;
     }
