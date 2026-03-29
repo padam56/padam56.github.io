@@ -288,6 +288,9 @@
           <button id="mode-multitext" class="mode_btn" type="button">
             MultiText
           </button>
+          <button id="mode-afterimage" class="mode_btn" type="button">
+            AfterImage
+          </button>
         </div>
       </section>
       <a class="hud-btn" href="index.html#service">Back to Main</a>
@@ -366,6 +369,7 @@
       const keyframesBtn = document.getElementById("mode-keyframes");
       const minecraftBtn = document.getElementById("mode-minecraft");
       const multiTextBtn = document.getElementById("mode-multitext");
+      const afterImageBtn = document.getElementById("mode-afterimage");
       const textElementsPanel = document.getElementById("text-elements");
       const textCards = Array.from(document.querySelectorAll(".text_element"));
       let activeMode = "particles";
@@ -1639,6 +1643,260 @@
         };
       }
 
+      function buildAfterImageDemo() {
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
+
+        const camera = new THREE.PerspectiveCamera(
+          60,
+          window.innerWidth / window.innerHeight,
+          1,
+          10000,
+        );
+        camera.position.z = 1000;
+
+        // — Particle geometry on a sphere (matching the Three.js example) —
+        const radius = 600;
+        const count = isMobileLike ? 20000 : 50000;
+        const vertices = [];
+        const colors = [];
+        const timeOffsets = [];
+        const color = new THREE.Color();
+
+        for (let i = 0; i < count; i++) {
+          // Random point on sphere
+          const angle = Math.random() * Math.PI * 2;
+          const u = Math.random() * 2 - 1;
+          const sq = Math.sqrt(1 - u * u);
+          vertices.push(
+            Math.cos(angle) * sq * radius,
+            Math.sin(angle) * sq * radius,
+            u * radius,
+          );
+          color.setHSL(i / count, 0.7, 0.7);
+          colors.push(color.r, color.g, color.b);
+          timeOffsets.push(i / count);
+        }
+
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute(
+          "position",
+          new THREE.Float32BufferAttribute(vertices, 3),
+        );
+        geometry.setAttribute(
+          "aColor",
+          new THREE.Float32BufferAttribute(colors, 3),
+        );
+        geometry.setAttribute(
+          "aTimeOffset",
+          new THREE.Float32BufferAttribute(timeOffsets, 1),
+        );
+
+        // Load circle sprite for soft particles
+        const sprite = new THREE.TextureLoader().load(
+          "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAa5JREFUWIW1l8FuwzAMQ5+d///l7tBiS2NLIp1ugB5aJ7YoUqK9hhhjpf+19o4RP55z7TkvniPe5zz69lyv+T7XU51v3a/BN/AAkB8AJ0hHkI4gXY+Heh6RdOI8sXnhPDDrwg2gEoIriM4HLvAVZEO6Z/RMc92oA9gD8K4B6ADUBDn2gq4Ht+xzHDgB7s7eO8kT8LMC4P1gLQFuQi0Bq0LwNqBkpxnWNqQ7nXwHqQuKAlY54U8K+BZAfgk3Fsh/I/s3GthFoKthWVALxTB3AE2LFgnCugFNqS5rX6dL3yHCwD+iYAR0INASMFVBJKCqVbA+wbwCLCzYr5eBSjA+oEd8LRCWvQBZkU4JN3nCNdARtS3I7LbwSbL0r0RWD12xqBmgxZI1iWFKxzRPL6Y/T3AFqAXCNYvxHuR6BfBa3r4VTdAHFKK1m2sJcAmvH4BcQ7gP8K5AngCf8WsJcAmo9lBJwjWJOCWgC+ADoBqAL2JYl2AT9ZAa+S3CPYhkB+AJwgWK9E4ArAAfIkeCkBXhJcUhB3wZlDCbiO5kzwH4F6FLcpoC2B7wD4BMgxhs+IxE7+AAAAASUVORK5CYII=",
+        );
+
+        const particleMaterial = new THREE.ShaderMaterial({
+          uniforms: {
+            uTime: { value: 0 },
+            uSprite: { value: sprite },
+          },
+          vertexShader: `
+            attribute vec3 aColor;
+            attribute float aTimeOffset;
+            uniform float uTime;
+            varying vec3 vColor;
+            varying float vAlpha;
+
+            void main() {
+              float localTime = aTimeOffset + uTime * 0.1;
+              float modTime = fract(localTime);
+              float accTime = modTime * modTime;
+              float angle = accTime * 40.0;
+              vec2 pulse = vec2(sin(angle) * 20.0, cos(angle) * 20.0);
+
+              vec3 animated = vec3(
+                position.x * accTime + pulse.x,
+                position.y * accTime + pulse.y,
+                position.z * accTime * 1.75
+              );
+
+              vColor = aColor;
+              vAlpha = (1.0 - modTime) * 2.0;
+
+              vec4 mvPosition = modelViewMatrix * vec4(animated, 1.0);
+              gl_PointSize = max(1.0, 2.0 * (300.0 / -mvPosition.z));
+              gl_Position = projectionMatrix * mvPosition;
+            }
+          `,
+          fragmentShader: `
+            uniform sampler2D uSprite;
+            varying vec3 vColor;
+            varying float vAlpha;
+
+            void main() {
+              vec4 tex = texture2D(uSprite, gl_PointCoord);
+              gl_FragColor = tex * vec4(vColor, vAlpha);
+            }
+          `,
+          transparent: true,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+        });
+
+        const particles = new THREE.Points(geometry, particleMaterial);
+        scene.add(particles);
+
+        // — AfterImage post-processing via ping-pong render targets —
+        const damp = 0.8;
+        const rtParams = {
+          minFilter: THREE.LinearFilter,
+          magFilter: THREE.LinearFilter,
+          format: THREE.RGBAFormat,
+          type: THREE.HalfFloatType,
+        };
+        let rtA = new THREE.WebGLRenderTarget(
+          window.innerWidth * (window.devicePixelRatio || 1),
+          window.innerHeight * (window.devicePixelRatio || 1),
+          rtParams,
+        );
+        let rtB = rtA.clone();
+        let rtScene = new THREE.WebGLRenderTarget(
+          rtA.width,
+          rtA.height,
+          rtParams,
+        );
+
+        // Fullscreen quad for compositing
+        const compMaterial = new THREE.ShaderMaterial({
+          uniforms: {
+            tOld: { value: null },
+            tNew: { value: null },
+            damp: { value: damp },
+          },
+          vertexShader: `
+            varying vec2 vUv;
+            void main() {
+              vUv = uv;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+          `,
+          fragmentShader: `
+            uniform sampler2D tOld;
+            uniform sampler2D tNew;
+            uniform float damp;
+            varying vec2 vUv;
+
+            void main() {
+              vec4 texelOld = texture2D(tOld, vUv);
+              vec4 texelNew = texture2D(tNew, vUv);
+              texelOld *= damp;
+              gl_FragColor = max(texelNew, texelOld);
+            }
+          `,
+        });
+
+        const compScene = new THREE.Scene();
+        const compCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        const compQuad = new THREE.Mesh(
+          new THREE.PlaneGeometry(2, 2),
+          compMaterial,
+        );
+        compScene.add(compQuad);
+
+        // Output quad
+        const outputMaterial = new THREE.ShaderMaterial({
+          uniforms: {
+            tDiffuse: { value: null },
+          },
+          vertexShader: `
+            varying vec2 vUv;
+            void main() {
+              vUv = uv;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+          `,
+          fragmentShader: `
+            uniform sampler2D tDiffuse;
+            varying vec2 vUv;
+            void main() {
+              gl_FragColor = texture2D(tDiffuse, vUv);
+            }
+          `,
+        });
+
+        const outputScene = new THREE.Scene();
+        const outputQuad = new THREE.Mesh(
+          new THREE.PlaneGeometry(2, 2),
+          outputMaterial,
+        );
+        outputScene.add(outputQuad);
+
+        let needsResize = false;
+
+        return {
+          scene,
+          camera,
+          orbit: {
+            target: new THREE.Vector3(0, 0, 0),
+            yaw: 0,
+            pitch: 0,
+            radius: 1000,
+            minRadius: 400,
+            maxRadius: 2200,
+          },
+          customRender: true,
+          render(rendererRef) {
+            if (needsResize) {
+              const w = window.innerWidth * Math.min(window.devicePixelRatio || 1, perfProfile.pixelRatioMax);
+              const h = window.innerHeight * Math.min(window.devicePixelRatio || 1, perfProfile.pixelRatioMax);
+              rtA.setSize(w, h);
+              rtB.setSize(w, h);
+              rtScene.setSize(w, h);
+              needsResize = false;
+            }
+
+            // 1. Render scene to rtScene
+            rendererRef.setRenderTarget(rtScene);
+            rendererRef.clear();
+            rendererRef.render(scene, camera);
+
+            // 2. Composite: blend old (rtA) with new (rtScene) into rtB
+            compMaterial.uniforms.tOld.value = rtA.texture;
+            compMaterial.uniforms.tNew.value = rtScene.texture;
+            rendererRef.setRenderTarget(rtB);
+            rendererRef.clear();
+            rendererRef.render(compScene, compCamera);
+
+            // 3. Output rtB to screen
+            outputMaterial.uniforms.tDiffuse.value = rtB.texture;
+            rendererRef.setRenderTarget(null);
+            rendererRef.render(outputScene, compCamera);
+
+            // 4. Swap: rtB becomes the "old" for next frame
+            const tmp = rtA;
+            rtA = rtB;
+            rtB = tmp;
+          },
+          update(delta, elapsed) {
+            particleMaterial.uniforms.uTime.value = elapsed;
+            particles.rotation.z = elapsed * 0.001 * 1000 * 0.001;
+          },
+          onResize() {
+            needsResize = true;
+          },
+          dispose() {
+            rtA.dispose();
+            rtB.dispose();
+            rtScene.dispose();
+            compMaterial.dispose();
+            outputMaterial.dispose();
+            disposeObject3D(scene);
+          },
+        };
+      }
+
       function buildMultiElementsTextDemo() {
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x020711);
@@ -1823,6 +2081,7 @@
 
       function setMode(mode) {
         if (activeDemo && activeDemo.dispose) activeDemo.dispose();
+        renderer.setRenderTarget(null);
         activeMode = mode;
         if (demoNote) demoNote.style.display = "";
         if (mode === "birds") {
@@ -1839,6 +2098,7 @@
           keyframesBtn.classList.remove("is-active");
           minecraftBtn.classList.remove("is-active");
           multiTextBtn.classList.remove("is-active");
+          afterImageBtn.classList.remove("is-active");
         } else if (mode === "compute") {
           activeDemo = buildComputeParticlesDemo();
           if (demoTitle)
@@ -1854,6 +2114,7 @@
           keyframesBtn.classList.remove("is-active");
           minecraftBtn.classList.remove("is-active");
           multiTextBtn.classList.remove("is-active");
+          afterImageBtn.classList.remove("is-active");
         } else if (mode === "bloomsel") {
           activeDemo = buildSelectiveBloomDemo();
           if (demoTitle)
@@ -1869,6 +2130,7 @@
           keyframesBtn.classList.remove("is-active");
           minecraftBtn.classList.remove("is-active");
           multiTextBtn.classList.remove("is-active");
+          afterImageBtn.classList.remove("is-active");
         } else if (mode === "instancingraycast") {
           activeDemo = buildInstancingRaycastDemo();
           if (demoTitle)
@@ -1885,6 +2147,7 @@
           keyframesBtn.classList.remove("is-active");
           minecraftBtn.classList.remove("is-active");
           multiTextBtn.classList.remove("is-active");
+          afterImageBtn.classList.remove("is-active");
         } else if (mode === "keyframes") {
           activeDemo = buildKeyframesDemo();
           if (demoTitle) demoTitle.textContent = "3D Exp: Keyframes Animation";
@@ -1899,6 +2162,7 @@
           keyframesBtn.classList.add("is-active");
           minecraftBtn.classList.remove("is-active");
           multiTextBtn.classList.remove("is-active");
+          afterImageBtn.classList.remove("is-active");
         } else if (mode === "minecraft") {
           activeDemo = buildMinecraftDemo();
           if (demoTitle) demoTitle.textContent = "3D Exp: Minecraft Geometry";
@@ -1913,6 +2177,7 @@
           keyframesBtn.classList.remove("is-active");
           minecraftBtn.classList.add("is-active");
           multiTextBtn.classList.remove("is-active");
+          afterImageBtn.classList.remove("is-active");
         } else if (mode === "multitext") {
           activeDemo = buildMultiElementsTextDemo();
           if (demoTitle)
@@ -1928,6 +2193,23 @@
           keyframesBtn.classList.remove("is-active");
           minecraftBtn.classList.remove("is-active");
           multiTextBtn.classList.add("is-active");
+          afterImageBtn.classList.remove("is-active");
+        } else if (mode === "afterimage") {
+          activeDemo = buildAfterImageDemo();
+          if (demoTitle)
+            demoTitle.textContent = "3D Exp: AfterImage Post-Processing";
+          if (demoNote)
+            demoNote.textContent =
+              "Inspired by webgpu_postprocessing_afterimage: 50K particles on a sphere with feedback-loop afterimage trail effect.";
+          particlesBtn.classList.remove("is-active");
+          birdsBtn.classList.remove("is-active");
+          computeBtn.classList.remove("is-active");
+          bloomSelBtn.classList.remove("is-active");
+          instancingRaycastBtn.classList.remove("is-active");
+          keyframesBtn.classList.remove("is-active");
+          minecraftBtn.classList.remove("is-active");
+          multiTextBtn.classList.remove("is-active");
+          afterImageBtn.classList.add("is-active");
         } else {
           activeDemo = buildParticlesDemo();
           if (demoTitle) demoTitle.textContent = "3D Exp: Dynamic Particles";
@@ -1942,6 +2224,7 @@
           instancingRaycastBtn.classList.remove("is-active");
           minecraftBtn.classList.remove("is-active");
           multiTextBtn.classList.remove("is-active");
+          afterImageBtn.classList.remove("is-active");
         }
         updateTextElementsVisibility();
         if (activeDemo && activeDemo.orbit) {
@@ -2044,6 +2327,9 @@
           activeDemo.camera.aspect = window.innerWidth / window.innerHeight;
           activeDemo.camera.updateProjectionMatrix();
         }
+        if (activeDemo && activeDemo.onResize) {
+          activeDemo.onResize();
+        }
       }
 
       particlesBtn.addEventListener("click", () => setMode("particles"));
@@ -2056,6 +2342,7 @@
       keyframesBtn.addEventListener("click", () => setMode("keyframes"));
       minecraftBtn.addEventListener("click", () => setMode("minecraft"));
       multiTextBtn.addEventListener("click", () => setMode("multitext"));
+      afterImageBtn.addEventListener("click", () => setMode("afterimage"));
 
       textCards.forEach((card, idx) => {
         card.addEventListener("click", () => {
@@ -2082,6 +2369,19 @@
 
       setMode("particles");
 
+      // Enter fullscreen on first user interaction
+      function enterFullscreen() {
+        const el = document.documentElement;
+        const rfs = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+        if (rfs) {
+          rfs.call(el).catch(() => {});
+        }
+        document.removeEventListener("click", enterFullscreen);
+        document.removeEventListener("touchstart", enterFullscreen);
+      }
+      document.addEventListener("click", enterFullscreen, { once: true });
+      document.addEventListener("touchstart", enterFullscreen, { once: true });
+
       function animate() {
         window.requestAnimationFrame(animate);
         if (!activeDemo) return;
@@ -2089,7 +2389,11 @@
         const elapsed = clock.elapsedTime;
         activeDemo.update(delta, elapsed);
         applyOrbitCamera(activeDemo.camera);
-        renderer.render(activeDemo.scene, activeDemo.camera);
+        if (activeDemo.customRender) {
+          activeDemo.render(renderer);
+        } else {
+          renderer.render(activeDemo.scene, activeDemo.camera);
+        }
       }
 
       animate();
