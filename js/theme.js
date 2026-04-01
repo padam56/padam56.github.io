@@ -362,22 +362,49 @@
 
         var overlay = document.createElement("div");
         overlay.className = "project_detail_overlay";
-        overlay.innerHTML = [
-            '<div class="project_detail_popup" role="dialog" aria-modal="true" aria-label="Project details" aria-live="polite">',
-            '<button type="button" class="project_detail_close" aria-label="Close project details">Close</button>',
-            '<h4 class="project_detail_title">Project Details</h4>',
-            '<div class="project_detail_tags"></div>',
-            '<p class="project_detail_desc">Click any project tile to view the full summary.</p>',
-            '</div>'
-        ].join("");
+        // Build popup DOM safely
+        var popupDiv = document.createElement("div");
+        popupDiv.className = "project_detail_popup";
+        popupDiv.setAttribute("role", "dialog");
+        popupDiv.setAttribute("aria-modal", "true");
+        popupDiv.setAttribute("aria-label", "Project details");
+        popupDiv.setAttribute("aria-live", "polite");
+
+        var closeBtnEl = document.createElement("button");
+        closeBtnEl.type = "button";
+        closeBtnEl.className = "project_detail_close";
+        closeBtnEl.setAttribute("aria-label", "Close project details");
+        closeBtnEl.textContent = "Close";
+        popupDiv.appendChild(closeBtnEl);
+
+        var titleH4 = document.createElement("h4");
+        titleH4.className = "project_detail_title";
+        titleH4.textContent = "Project Details";
+        popupDiv.appendChild(titleH4);
+
+        var tagsDiv = document.createElement("div");
+        tagsDiv.className = "project_detail_tags";
+        popupDiv.appendChild(tagsDiv);
+
+        var descP = document.createElement("p");
+        descP.className = "project_detail_desc";
+        descP.textContent = "Click any project tile to view the full summary.";
+        popupDiv.appendChild(descP);
+
+        var linksDiv = document.createElement("div");
+        linksDiv.className = "project_detail_links";
+        popupDiv.appendChild(linksDiv);
+
+        overlay.appendChild(popupDiv);
         body.appendChild(overlay);
 
-        var popup = overlay.querySelector(".project_detail_popup");
+        var popup = popupDiv;
 
-        var titleEl = popup.querySelector(".project_detail_title");
-        var tagsEl = popup.querySelector(".project_detail_tags");
-        var descEl = popup.querySelector(".project_detail_desc");
-        var closeBtn = popup.querySelector(".project_detail_close");
+        var titleEl = titleH4;
+        var tagsEl = tagsDiv;
+        var descEl = descP;
+        var linksEl = linksDiv;
+        var closeBtn = closeBtnEl;
         var selectedCard = null;
 
         function clearSelection() {
@@ -404,13 +431,35 @@
 
             titleEl.textContent = title;
             descEl.textContent = desc;
-            tagsEl.innerHTML = "";
+            while (tagsEl.firstChild) tagsEl.removeChild(tagsEl.firstChild);
             if (tagSpans.length) {
                 Array.prototype.forEach.call(tagSpans, function(tag) {
                     var pill = document.createElement("span");
                     pill.textContent = tag.textContent;
                     tagsEl.appendChild(pill);
                 });
+            }
+
+            while (linksEl.firstChild) linksEl.removeChild(linksEl.firstChild);
+            var liveLink = card.getAttribute("data-link");
+            var ghLink = card.getAttribute("data-github");
+            if (liveLink) {
+                var a = document.createElement("a");
+                a.href = liveLink;
+                a.target = "_blank";
+                a.rel = "noopener noreferrer";
+                a.className = "project_detail_btn";
+                a.textContent = "View Live";
+                linksEl.appendChild(a);
+            }
+            if (ghLink) {
+                var g = document.createElement("a");
+                g.href = ghLink;
+                g.target = "_blank";
+                g.rel = "noopener noreferrer";
+                g.className = "project_detail_btn project_detail_btn--gh";
+                g.textContent = "GitHub";
+                linksEl.appendChild(g);
             }
 
             overlay.classList.add("is-open");
