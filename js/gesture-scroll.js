@@ -27,7 +27,14 @@
   var pinchCooldown = 0;
   var frameCount = 0;
 
-  // Sections for fist-snap
+  // Cache to avoid redundant DOM writes
+  var lastIndicatorText = "";
+  var lastIndicatorVisible = false;
+  var cursorVisible = false;
+  var cursorX = 0;
+  var cursorY = 0;
+
+  // Sections for fist-snap (cached once)
   var sectionIds = ["about", "skill", "journey", "intel-map", "ai-blueprint", "service", "contact"];
 
   // ─── Gesture Detection ───
@@ -65,7 +72,7 @@
   function isPinch(lm) {
     var dx = lm[4].x - lm[8].x;
     var dy = lm[4].y - lm[8].y;
-    return Math.sqrt(dx * dx + dy * dy) < 0.06;
+    return (dx * dx + dy * dy) < 0.0036; // 0.06^2, skip sqrt
   }
 
   // ─── Actions ───
@@ -87,25 +94,53 @@
 
   function moveCursor(x, y) {
     if (!cursor) return;
-    var px = (1 - x) * window.innerWidth;
-    var py = y * window.innerHeight;
-    cursor.style.left = px + "px";
-    cursor.style.top = py + "px";
-    cursor.style.display = "block";
+    cursorX = (1 - x) * window.innerWidth;
+    cursorY = y * window.innerHeight;
+    cursor.style.transform = "translate(" + (cursorX - 12) + "px," + (cursorY - 12) + "px)";
+    if (!cursorVisible) {
+      cursor.style.display = "block";
+      cursorVisible = true;
+    }
   }
 
   function hideCursor() {
-    if (cursor) cursor.style.display = "none";
+    if (cursorVisible) {
+      cursor.style.display = "none";
+      cursorVisible = false;
+    }
   }
 
   function clickAtCursor() {
     if (!cursor) return;
-    var px = parseFloat(cursor.style.left);
-    var py = parseFloat(cursor.style.top);
-    cursor.style.transform = "translate(-50%,-50%) scale(0.6)";
-    setTimeout(function () { cursor.style.transform = "translate(-50%,-50%) scale(1)"; }, 150);
-    var el = document.elementFromPoint(px, py);
+    // Visual pulse
+    cursor.style.transition = "box-shadow 0.1s";
+    cursor.style.boxShadow = "0 0 20px rgba(103,232,249,0.9)";
+    setTimeout(function () {
+      cursor.style.boxShadow = "0 0 12px rgba(103,232,249,0.5)";
+    }, 150);
+    var el = document.elementFromPoint(cursorX, cursorY);
     if (el) el.click();
+  }
+
+  // ─── Indicator (only write DOM when changed) ───
+
+  function showIndicator(text) {
+    if (text !== lastIndicatorText) {
+      indicator.textContent = text;
+      lastIndicatorText = text;
+    }
+    if (!lastIndicatorVisible) {
+      indicator.style.opacity = "1";
+      lastIndicatorVisible = true;
+    }
+  }
+
+  function hideIndicator() {
+    if (lastIndicatorVisible) {
+      indicator.style.opacity = "0";
+      lastIndicatorVisible = false;
+      lastIndicatorText = "";
+    }
   }
 
   // ─── UI Setup ───
@@ -114,10 +149,12 @@
     var style = document.createElement("style");
     style.textContent = [
       "#gesture-cursor {",
-      "  position: fixed; z-index: 9999998; width: 24px; height: 24px;",
+      "  position: fixed; top: 0; left: 0; z-index: 9999998;",
+      "  width: 24px; height: 24px;",
       "  border: 2px solid #67e8f9; border-radius: 50%; pointer-events: none;",
-      "  transform: translate(-50%,-50%) scale(1); transition: transform 0.1s;",
       "  box-shadow: 0 0 12px rgba(103,232,249,0.5); display: none;",
+      "  will-change: transform;",
+      "  contain: layout style paint;",
       "}",
       "#gesture-cursor::after {",
       "  content: ''; position: absolute; top: 50%; left: 50%;",
@@ -208,6 +245,7 @@
       opacity: "0",
       transition: "opacity 0.15s",
       letterSpacing: "0.5px",
+      contain: "layout style paint",
     });
     overlay.appendChild(indicator);
 
@@ -245,6 +283,9 @@
           active = true;
           lastY = null; smoothY = null;
           frameCount = 0;
+          lastIndicatorText = "";
+          lastIndicatorVisible = false;
+          cursorVisible = false;
 
           hands = new window.Hands({
             locateFile: function (file) {
@@ -260,7 +301,12 @@
           hands.onResults(onResults);
 
           cam = new window.Camera(video, {
-            onFrame: function () { return hands.send({ image: video }); },
+            onFrame: function () {
+              // Skip every other frame to halve CPU load
+              frameCount++;
+              if (frameCount & 1) return hands.send({ image: video });
+              return Promise.resolve();
+            },
             width: 320,
             height: 240,
           });
@@ -284,32 +330,31 @@
       video.srcObject.getTracks().forEach(function (t) { t.stop(); });
       video.srcObject = null;
     }
-    hands = null;
+    // Properly close MediaPipe to free WASM memory
+    if (hands) {
+      try { hands.close(); } catch (e) {}
+      hands = null;
+    }
     overlay.style.display = "none";
     toggleBtn.style.background = "rgba(2,8,23,0.75)";
     toggleBtn.style.borderColor = "rgba(103,232,249,0.4)";
     toggleBtn.style.boxShadow = "none";
-    indicator.style.opacity = "0";
+    hideIndicator();
     hideCursor();
     lastY = null; smoothY = null;
   }
 
   // ─── Results Handler ───
 
-  function showIndicator(text) {
-    indicator.textContent = text;
-    indicator.style.opacity = "1";
-  }
-
   function onResults(results) {
     if (!active) return;
-    frameCount++;
+
     if (fistCooldown > 0) fistCooldown--;
     if (pinchCooldown > 0) pinchCooldown--;
 
     if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
       lastY = null; smoothY = null;
-      indicator.style.opacity = "0";
+      hideIndicator();
       hideCursor();
       return;
     }
@@ -348,17 +393,16 @@
       var deltaY = smoothY - lastY;
 
       if (Math.abs(deltaY) > deadzone) {
-        var scrollAmt = deltaY * scrollSpeed * 100;
-        window.scrollBy({ top: scrollAmt, behavior: "auto" });
+        window.scrollBy(0, deltaY * scrollSpeed * 100);
         showIndicator(deltaY > 0 ? "\u25BC SCROLL DOWN" : "\u25B2 SCROLL UP");
       } else {
-        indicator.style.opacity = "0";
+        hideIndicator();
       }
       lastY = smoothY;
       return;
     }
 
-    indicator.style.opacity = "0";
+    hideIndicator();
     hideCursor();
     lastY = null; smoothY = null;
   }
