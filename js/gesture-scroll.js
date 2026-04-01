@@ -18,6 +18,7 @@
   var indicator = null;
   var toggleBtn = null;
   var cursor = null;
+  var helpPanel = null;
 
   // Scroll state
   var lastY = null;
@@ -216,6 +217,30 @@
       "  width: 6px; height: 6px; margin: -3px 0 0 -3px;",
       "  background: #67e8f9; border-radius: 50%;",
       "}",
+      "#gesture-help {",
+      "  position: fixed; bottom: 200px; right: 18px; z-index: 999998;",
+      "  width: 220px; padding: 14px 16px; border-radius: 12px;",
+      "  background: rgba(2,8,23,0.92); border: 1px solid rgba(103,232,249,0.25);",
+      "  backdrop-filter: blur(8px); box-shadow: 0 8px 24px rgba(0,0,0,0.5);",
+      "  font-family: Sora, Manrope, sans-serif; color: #c2d7ee; font-size: 11px;",
+      "  line-height: 1.55; display: none;",
+      "}",
+      "#gesture-help.visible { display: block; animation: gestureHelpIn 0.3s ease; }",
+      "@keyframes gestureHelpIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }",
+      "#gesture-help h5 {",
+      "  margin: 0 0 10px; font-size: 12px; font-weight: 700; color: #67e8f9;",
+      "  letter-spacing: 0.6px; text-transform: uppercase;",
+      "}",
+      "#gesture-help ul { list-style: none; margin: 0; padding: 0; }",
+      "#gesture-help li { padding: 3px 0; display: flex; align-items: baseline; gap: 8px; }",
+      "#gesture-help li span.gh-icon { flex: 0 0 22px; text-align: center; font-size: 13px; }",
+      "#gesture-help li span.gh-label { color: #e5edf7; font-weight: 600; }",
+      "#gesture-help li span.gh-desc { color: #9eb5cf; }",
+      "#gesture-help button.gh-close {",
+      "  position: absolute; top: 8px; right: 10px; background: none;",
+      "  border: none; color: #9eb5cf; font-size: 14px; cursor: pointer; padding: 0; line-height: 1;",
+      "}",
+      "#gesture-help button.gh-close:hover { color: #e5edf7; }",
     ].join("\n");
     document.head.appendChild(style);
   }
@@ -228,11 +253,57 @@
     cursor.id = "gesture-cursor";
     document.body.appendChild(cursor);
 
+    // Gesture guide panel
+    helpPanel = document.createElement("div");
+    helpPanel.id = "gesture-help";
+
+    var helpTitle = document.createElement("h5");
+    helpTitle.textContent = "Gesture Guide";
+    helpPanel.appendChild(helpTitle);
+
+    var closeHelp = document.createElement("button");
+    closeHelp.className = "gh-close";
+    closeHelp.textContent = "\u2715";
+    closeHelp.addEventListener("click", function () {
+      helpPanel.classList.remove("visible");
+    });
+    helpPanel.appendChild(closeHelp);
+
+    var gestures = [
+      ["\u270B", "Open Hand", "Move up/down to scroll"],
+      ["\u270B", "Swipe L/R", "Switch project tabs"],
+      ["\u261D\uFE0F", "Point", "Virtual cursor"],
+      ["\uD83E\uDD0F", "Pinch", "Click at cursor"],
+      ["\uD83D\uDC4D", "Thumbs Up", "Confetti!"],
+      ["\u270C\uFE0F", "Peace", "Toggle theme"],
+      ["\u270A", "Fist", "Next section"],
+    ];
+
+    var ul = document.createElement("ul");
+    gestures.forEach(function (g) {
+      var li = document.createElement("li");
+      var icon = document.createElement("span");
+      icon.className = "gh-icon";
+      icon.textContent = g[0];
+      var label = document.createElement("span");
+      label.className = "gh-label";
+      label.textContent = g[1] + " ";
+      var desc = document.createElement("span");
+      desc.className = "gh-desc";
+      desc.textContent = g[2];
+      li.appendChild(icon);
+      li.appendChild(label);
+      li.appendChild(desc);
+      ul.appendChild(li);
+    });
+    helpPanel.appendChild(ul);
+    document.body.appendChild(helpPanel);
+
     // Toggle button (fixed, bottom-right)
     toggleBtn = document.createElement("button");
     toggleBtn.id = "gesture-scroll-toggle";
     toggleBtn.setAttribute("aria-label", "Toggle gesture control");
-    toggleBtn.title = "Gesture Control (Webcam)";
+    toggleBtn.title = "Gesture Control — click to use hand gestures";
     toggleBtn.textContent = "\u270B";
     Object.assign(toggleBtn.style, {
       position: "fixed",
@@ -342,6 +413,7 @@
           lastY = null; smoothY = null;
           lastX = null; smoothX = null;
           frameCount = 0;
+          if (helpPanel) helpPanel.classList.add("visible");
 
           hands = new window.Hands({
             locateFile: function (file) {
@@ -388,6 +460,7 @@
     toggleBtn.style.boxShadow = "none";
     indicator.style.opacity = "0";
     hideCursor();
+    if (helpPanel) helpPanel.classList.remove("visible");
     lastY = null; smoothY = null;
     lastX = null; smoothX = null;
   }
