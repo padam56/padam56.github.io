@@ -197,7 +197,6 @@
               <li><a href="#journey">Journey</a></li>
               <li><a href="#service">Projects</a></li>
               <li><a href="3d-exp.html">3D Exp</a></li>
-              <li><a href="https://www.padamjungthapa.com.np/nepse-autoscan/">NEPSE</a></li>
               <li><a href="writings.html">Writings</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
@@ -1905,7 +1904,7 @@
           <div class="main_title"><h2>Projects</h2></div>
           <div class="modern_toolbar" aria-label="Project filters">
             <button
-              class="modern_filter_btn is-active"
+              class="modern_filter_btn"
               type="button"
               data-filter="security"
             >
@@ -1914,7 +1913,7 @@
             <button class="modern_filter_btn" type="button" data-filter="cv">
               Vision
             </button>
-            <button class="modern_filter_btn" type="button" data-filter="data">
+            <button class="modern_filter_btn is-active" type="button" data-filter="data">
               Data Platforms
             </button>
             <button class="modern_filter_btn" type="button" data-filter="nlp">
@@ -2087,13 +2086,12 @@
               <h3>Data Platforms and Analytics</h3>
             </div>
             <div class="col-md-6">
-              <a
-                href="https://www.padamjungthapa.com.np/nepse-autoscan/"
+              <div
                 class="service_item wow fadeIn animated"
                 data-tags="data,timeseries,ml,finance"
                 data-title="NEPSE AutoScan"
                 data-description="AI-powered stock analysis dashboard for Nepal Stock Exchange. XGBoost + LightGBM ensemble, 310 GRU models, Temporal Transformer with regime detection across 340+ stocks."
-                style="text-decoration:none;color:inherit;border-color:rgba(45,212,191,0.45)"
+                onclick="window.open('https://www.padamjungthapa.com.np/nepse-autoscan/','_blank')"
               >
                 <i class="fa fa-line-chart" aria-hidden="true"></i>
                 <h4>NEPSE AutoScan <span style="font-size:9px;letter-spacing:0.1em;padding:2px 8px;border-radius:999px;background:rgba(45,212,191,0.18);color:#2dd4bf;font-weight:700;vertical-align:middle;text-transform:uppercase">Live</span></h4>
@@ -2104,7 +2102,7 @@
                   AI-powered stock screener and signal engine for Nepal's NEPSE
                   exchange with live dashboards and ML buy/sell signals.
                 </p>
-              </a>
+              </div>
             </div>
             <div class="col-md-6">
               <div
