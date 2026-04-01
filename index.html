@@ -129,45 +129,199 @@
       aria-hidden="true"
     ></canvas>
     <div id="preloader" aria-hidden="true">
-      <div id="preloader_spinner" class="preload_core">
-        <div class="wave_container">
-          <div class="wave_line wave_line_1"></div>
-          <div class="wave_line wave_line_2"></div>
-          <div class="wave_line wave_line_3"></div>
+      <canvas id="preloader-canvas"></canvas>
+      <div class="preloader_content">
+        <div class="preloader_node_ring">
+          <div class="preloader_node_dot"></div>
+          <div class="preloader_node_dot"></div>
+          <div class="preloader_node_dot"></div>
+          <div class="preloader_node_dot"></div>
+          <div class="preloader_node_dot"></div>
+          <div class="preloader_node_dot"></div>
         </div>
-        <div class="energy_pulse energy_pulse_1"></div>
-        <div class="energy_pulse energy_pulse_2"></div>
-        <div class="energy_pulse energy_pulse_3"></div>
-        <div class="center_core"></div>
+        <h1 class="preloader_title">PADAM JUNG THAPA</h1>
+        <p class="preloader_sub">Initializing Experience...</p>
+        <div class="preloader_bar_track">
+          <div class="preloader_bar_fill" id="preloader-bar"></div>
+        </div>
+        <span class="preloader_pct" id="preloader-pct">0%</span>
       </div>
+      <button class="preloader_enter" id="preloader-enter">ENTER</button>
+      <div class="preloader_overlay" id="preloader-overlay"></div>
     </div>
     <script>
       !(function () {
         "use strict";
-        function e() {
+        function showSections() {
           document
             .querySelectorAll("body.interaction-choreo section")
-            .forEach(function (e) {
-              e.classList.add("section-visible");
+            .forEach(function (s) {
+              s.classList.add("section-visible");
             });
         }
-        function n() {
-          var e = document.getElementById("preloader");
-          (e &&
-            (e.classList.add("is-hidden"),
+
+        function dismissPreloader() {
+          var p = document.getElementById("preloader");
+          if (p) {
+            p.classList.add("is-hidden");
             window.setTimeout(function () {
-              e.style.display = "none";
-            }, 760)),
-            (document.body.style.overflowY = "visible"),
-            (document.body.style.overflowX = "hidden"));
+              p.style.display = "none";
+            }, 1200);
+          }
+          document.body.style.overflowY = "visible";
+          document.body.style.overflowX = "hidden";
         }
-        (document.addEventListener("DOMContentLoaded", e),
-          window.addEventListener("load", function () {
-            (e(), n());
-          }),
+
+        // Particle canvas behind preloader
+        var cvs = document.getElementById("preloader-canvas");
+        var ctx2d = cvs ? cvs.getContext("2d") : null;
+        var particles = [];
+        var raf;
+
+        function initParticles() {
+          if (!cvs || !ctx2d) return;
+          cvs.width = window.innerWidth;
+          cvs.height = window.innerHeight;
+          particles = [];
+          for (var i = 0; i < 80; i++) {
+            particles.push({
+              x: Math.random() * cvs.width,
+              y: Math.random() * cvs.height,
+              vx: (Math.random() - 0.5) * 0.6,
+              vy: (Math.random() - 0.5) * 0.6,
+              r: 1.5 + Math.random() * 2,
+            });
+          }
+        }
+
+        function drawParticles() {
+          if (!ctx2d) return;
+          ctx2d.clearRect(0, 0, cvs.width, cvs.height);
+          ctx2d.fillStyle = "rgba(103,232,249,0.6)";
+          ctx2d.strokeStyle = "rgba(103,232,249,0.12)";
+          ctx2d.lineWidth = 1;
+          for (var i = 0; i < particles.length; i++) {
+            var p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < 0) p.x = cvs.width;
+            if (p.x > cvs.width) p.x = 0;
+            if (p.y < 0) p.y = cvs.height;
+            if (p.y > cvs.height) p.y = 0;
+            ctx2d.beginPath();
+            ctx2d.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx2d.fill();
+            for (var j = i + 1; j < particles.length; j++) {
+              var q = particles[j];
+              var dx = p.x - q.x;
+              var dy = p.y - q.y;
+              var dist = dx * dx + dy * dy;
+              if (dist < 14400) {
+                ctx2d.globalAlpha = 1 - dist / 14400;
+                ctx2d.beginPath();
+                ctx2d.moveTo(p.x, p.y);
+                ctx2d.lineTo(q.x, q.y);
+                ctx2d.stroke();
+                ctx2d.globalAlpha = 1;
+              }
+            }
+          }
+          raf = requestAnimationFrame(drawParticles);
+        }
+
+        initParticles();
+        drawParticles();
+        window.addEventListener("resize", function () {
+          if (cvs) {
+            cvs.width = window.innerWidth;
+            cvs.height = window.innerHeight;
+          }
+        });
+
+        // Simulated loading progress
+        var bar = document.getElementById("preloader-bar");
+        var pct = document.getElementById("preloader-pct");
+        var enterBtn = document.getElementById("preloader-enter");
+        var overlay = document.getElementById("preloader-overlay");
+        var progress = 0;
+        var loaded = false;
+        var resourcesReady = false;
+
+        function tickProgress() {
+          if (progress >= 100) return;
+          var target = resourcesReady ? 100 : Math.min(progress + Math.random() * 8 + 2, resourcesReady ? 100 : 92);
+          progress = Math.min(target, 100);
+          if (bar) bar.style.width = progress + "%";
+          if (pct) pct.textContent = Math.floor(progress) + "%";
+          if (progress >= 100) {
+            showEnter();
+          } else {
+            setTimeout(tickProgress, 120 + Math.random() * 200);
+          }
+        }
+
+        function showEnter() {
+          if (loaded) return;
+          loaded = true;
+          var sub = document.querySelector(".preloader_sub");
+          if (sub) sub.style.opacity = "0";
+          if (pct) pct.style.opacity = "0";
+          var barTrack = document.querySelector(".preloader_bar_track");
+          if (barTrack) barTrack.style.opacity = "0";
           setTimeout(function () {
-            (e(), n());
-          }, 2200));
+            if (enterBtn) {
+              enterBtn.style.display = "block";
+              setTimeout(function () {
+                enterBtn.classList.add("visible");
+              }, 50);
+            }
+          }, 400);
+        }
+
+        function enter() {
+          if (enterBtn) enterBtn.classList.remove("visible");
+          if (enterBtn) enterBtn.classList.add("exit");
+          var content = document.querySelector(".preloader_content");
+          if (content) content.classList.add("exit");
+          setTimeout(function () {
+            if (overlay) overlay.classList.add("wipe");
+            setTimeout(function () {
+              cancelAnimationFrame(raf);
+              showSections();
+              dismissPreloader();
+            }, 800);
+          }, 500);
+        }
+
+        if (enterBtn) {
+          enterBtn.addEventListener("click", enter);
+          enterBtn.addEventListener("touchend", function (e) {
+            e.preventDefault();
+            enter();
+          });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+          showSections();
+          tickProgress();
+        });
+
+        window.addEventListener("load", function () {
+          resourcesReady = true;
+          showSections();
+          if (progress < 100) {
+            progress = 96;
+            tickProgress();
+          }
+        });
+
+        // Safety: auto-dismiss after 8s if something goes wrong
+        setTimeout(function () {
+          if (!loaded) {
+            progress = 100;
+            showEnter();
+          }
+        }, 8000);
       })();
     </script>
     <header class="header_area">
