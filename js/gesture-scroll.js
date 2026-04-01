@@ -2,8 +2,7 @@
   "use strict";
 
   // Gesture scroll via webcam hand tracking (MediaPipe Hands)
-  // Zone-based: hand in top zone = scroll up, bottom zone = scroll down, middle = idle.
-  // Open hand = active, closed fist = pause scrolling.
+  // Tracks palm Y position — moving hand up scrolls up, moving hand down scrolls down.
 
   var active = false;
   var video = null;
@@ -11,17 +10,12 @@
   var camera = null;
   var overlay = null;
   var indicator = null;
-  var zoneBar = null;
-  var zoneDot = null;
   var toggleBtn = null;
+  var lastY = null;
   var smoothY = null;
-  var scrollVelocity = 0;
+  var deadzone = 0.012;
+  var scrollSpeed = 18;
   var rafId = null;
-
-  // Zone thresholds (in normalized 0..1 Y space)
-  var upZone = 0.33;   // hand above this → scroll up
-  var downZone = 0.67;  // hand below this → scroll down
-  var maxSpeed = 22;    // px per frame at zone edge
 
   function createUI() {
     // Toggle button (fixed, bottom-right)
@@ -83,73 +77,21 @@
     });
     overlay.appendChild(video);
 
-    // Direction indicator (arrow on video)
+    // Direction indicator
     indicator = document.createElement("div");
     Object.assign(indicator.style, {
       position: "absolute",
-      top: "50%",
+      top: "4px",
       left: "50%",
-      transform: "translate(-50%,-50%)",
-      fontSize: "28px",
+      transform: "translateX(-50%)",
+      fontSize: "16px",
       color: "#67e8f9",
-      textShadow: "0 0 10px rgba(103,232,249,0.9)",
+      textShadow: "0 0 6px rgba(103,232,249,0.8)",
       pointerEvents: "none",
       opacity: "0",
       transition: "opacity 0.15s",
-      fontWeight: "bold",
     });
     overlay.appendChild(indicator);
-
-    // Zone bar (vertical bar on right side of preview showing hand position)
-    zoneBar = document.createElement("div");
-    Object.assign(zoneBar.style, {
-      position: "absolute",
-      top: "6px",
-      right: "6px",
-      bottom: "6px",
-      width: "6px",
-      borderRadius: "3px",
-      background: "linear-gradient(to bottom, #2dd4bf 0%, rgba(255,255,255,0.1) 33%, rgba(255,255,255,0.1) 67%, #2dd4bf 100%)",
-      pointerEvents: "none",
-      opacity: "0.7",
-    });
-    overlay.appendChild(zoneBar);
-
-    // Zone dot (shows current hand Y)
-    zoneDot = document.createElement("div");
-    Object.assign(zoneDot.style, {
-      position: "absolute",
-      right: "3px",
-      width: "12px",
-      height: "12px",
-      borderRadius: "50%",
-      background: "#67e8f9",
-      boxShadow: "0 0 8px rgba(103,232,249,0.8)",
-      transform: "translateY(-50%)",
-      top: "50%",
-      pointerEvents: "none",
-      transition: "top 0.08s ease-out",
-    });
-    overlay.appendChild(zoneDot);
-
-    // Zone labels
-    var upLabel = document.createElement("div");
-    Object.assign(upLabel.style, {
-      position: "absolute", top: "2px", left: "4px",
-      fontSize: "8px", color: "rgba(103,232,249,0.6)", pointerEvents: "none",
-      letterSpacing: "0.5px", fontWeight: "700",
-    });
-    upLabel.textContent = "\u25B2 UP";
-    overlay.appendChild(upLabel);
-
-    var downLabel = document.createElement("div");
-    Object.assign(downLabel.style, {
-      position: "absolute", bottom: "2px", left: "4px",
-      fontSize: "8px", color: "rgba(103,232,249,0.6)", pointerEvents: "none",
-      letterSpacing: "0.5px", fontWeight: "700",
-    });
-    downLabel.textContent = "\u25BC DOWN";
-    overlay.appendChild(downLabel);
 
     toggleBtn.addEventListener("click", function () {
       if (active) {
@@ -218,7 +160,6 @@
             height: 240,
           });
           camera.start();
-          scrollLoop();
         })
         .catch(function () {
           // Camera access denied or unavailable
@@ -250,26 +191,12 @@
     toggleBtn.style.borderColor = "rgba(103,232,249,0.4)";
     toggleBtn.style.boxShadow = "none";
     indicator.style.opacity = "0";
-    zoneDot.style.opacity = "0";
+    lastY = null;
     smoothY = null;
-    scrollVelocity = 0;
     if (rafId) {
       cancelAnimationFrame(rafId);
       rafId = null;
     }
-  }
-
-  function isOpenHand(landmarks) {
-    // Check if fingers are extended (open hand) by comparing fingertip Y to knuckle Y
-    // Fingertips: 8(index), 12(middle), 16(ring), 20(pinky)
-    // PIP joints: 6, 10, 14, 18
-    var extended = 0;
-    var tips = [8, 12, 16, 20];
-    var pips = [6, 10, 14, 18];
-    for (var i = 0; i < 4; i++) {
-      if (landmarks[tips[i]].y < landmarks[pips[i]].y) extended++;
-    }
-    return extended >= 3; // at least 3 fingers extended = open hand
   }
 
   function onResults(results) {
@@ -279,66 +206,44 @@
       !results.multiHandLandmarks ||
       results.multiHandLandmarks.length === 0
     ) {
+      lastY = null;
       smoothY = null;
-      scrollVelocity = 0;
       indicator.style.opacity = "0";
-      zoneDot.style.opacity = "0";
       return;
     }
 
+    // Use wrist landmark (index 0) for stable tracking
     var landmarks = results.multiHandLandmarks[0];
-
-    // Only scroll when hand is open (fist = pause)
-    if (!isOpenHand(landmarks)) {
-      scrollVelocity = 0;
-      indicator.textContent = "\u270A";
-      indicator.style.opacity = "0.5";
-      indicator.style.color = "#f59e0b";
-      return;
-    }
-    indicator.style.color = "#67e8f9";
-
-    // Use wrist (0) for Y tracking
-    var wristY = landmarks[0].y;
+    var wristY = landmarks[0].y; // 0..1, top=0, bottom=1
 
     if (smoothY === null) {
       smoothY = wristY;
+      lastY = wristY;
+      return;
     }
-    smoothY = smoothY * 0.5 + wristY * 0.5;
 
-    // Update zone dot position
-    zoneDot.style.opacity = "1";
-    var barTop = 6;
-    var barHeight = 105 - 12; // overlay height minus padding
-    zoneDot.style.top = (barTop + smoothY * barHeight) + "px";
+    // Smooth the Y value
+    smoothY = smoothY * 0.6 + wristY * 0.4;
 
-    // Zone-based scroll: position determines speed and direction
-    if (smoothY < upZone) {
-      // In UP zone — the higher the hand, the faster
-      var strength = (upZone - smoothY) / upZone; // 0..1
-      scrollVelocity = -maxSpeed * strength * strength; // quadratic for fine control
-      indicator.textContent = "\u25B2";
-      indicator.style.opacity = String(0.4 + strength * 0.6);
-    } else if (smoothY > downZone) {
-      // In DOWN zone — the lower the hand, the faster
-      var strength = (smoothY - downZone) / (1 - downZone);
-      scrollVelocity = maxSpeed * strength * strength;
-      indicator.textContent = "\u25BC";
-      indicator.style.opacity = String(0.4 + strength * 0.6);
+    var delta = smoothY - lastY;
+
+    if (Math.abs(delta) > deadzone) {
+      // Hand moved down in camera → scroll down, hand moved up → scroll up
+      var scrollAmt = delta * scrollSpeed * 100;
+      window.scrollBy({ top: scrollAmt, behavior: "auto" });
+
+      if (delta > 0) {
+        indicator.textContent = "\u25BC";
+        indicator.style.opacity = "1";
+      } else {
+        indicator.textContent = "\u25B2";
+        indicator.style.opacity = "1";
+      }
     } else {
-      // Dead zone — no scrolling
-      scrollVelocity = 0;
-      indicator.textContent = "\u2022";
-      indicator.style.opacity = "0.3";
+      indicator.style.opacity = "0";
     }
-  }
 
-  function scrollLoop() {
-    if (!active) return;
-    if (scrollVelocity !== 0) {
-      window.scrollBy(0, scrollVelocity);
-    }
-    rafId = requestAnimationFrame(scrollLoop);
+    lastY = smoothY;
   }
 
   // Init when DOM ready
