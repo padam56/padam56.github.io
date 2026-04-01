@@ -3423,6 +3423,51 @@ body.theme-light .left_contact_details .media .media-body a {
   transform: translateY(-5px);
 }
 
+/* Featured project card */
+.service_item--featured {
+  text-align: left !important;
+  padding: 22px 28px !important;
+  border-radius: 16px !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.service_item--featured::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(ellipse at 10% 50%, rgba(45, 212, 191, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.service_item--featured:hover {
+  border-color: rgba(45, 212, 191, 0.7) !important;
+  box-shadow: 0 8px 32px rgba(45, 212, 191, 0.12), 0 0 0 1px rgba(45, 212, 191, 0.15) inset;
+  transform: translateY(-4px);
+}
+
+.service_item--featured h4 {
+  min-height: unset !important;
+  font-size: 18px;
+}
+
+.service_item--featured .project_tags {
+  display: flex !important;
+}
+
+@media (max-width: 767px) {
+  .service_item--featured {
+    flex-direction: column !important;
+    gap: 14px !important;
+    text-align: center !important;
+    padding: 18px 16px !important;
+  }
+  .service_item--featured h4 {
+    font-size: 16px;
+  }
+}
+
 .service_area .service_inner .service_item h4 {
   line-height: 1.35;
   min-height: 52px;
